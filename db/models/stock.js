@@ -6,7 +6,9 @@ const stock = new mongoose.Schema({
         required: 'must include symbol/ticker'
     },
     name: String,
-    chart:{},
+    chart:{
+        daily:{}
+    },
     sector: String,
     industry: String,
     financials:{},
