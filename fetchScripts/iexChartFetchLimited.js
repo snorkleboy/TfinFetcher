@@ -32,9 +32,9 @@ const limitedChartFetch=()=>{
         .then((stocks) => {recFetch(stocks,1)})
 }
 function recFetch(stocks,i){
-    console.log('fetching 5y charts', stocks[i].symbol, `%${i / stocks.length * 100}`)
+    console.log('fetching 5y charts',i, stocks[i].symbol, `%${i / stocks.length * 100}`)
     saveDayChart(stocks[i].symbol, stocks[i].id)
-        .then(()=>{if (i==rateLimit)wait(1250)})
+        .then(()=>{if (i%rateLimit === 0){wait(1250)}})
         .then(()=>recFetch(stocks,i++))
 
 }
