@@ -8,5 +8,4 @@ const saveSymbols =()=> axios.get('https://api.iextrading.com/1.0/ref-data/symbo
             Stock.create({ "symbol": stock.symbol, "name": stock.name }, (err, saved) => console.log(err,saved));
         })
     })
-    .then(() => console.log(Stock.find({symbol:"fb"})))  
 module.exports = saveSymbols;

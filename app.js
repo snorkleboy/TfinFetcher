@@ -3,10 +3,12 @@ const app = express();
 const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const saveSymbols = require('./fetchScripts/iexSymbols.js');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 // const router = require('./routes/router');
+
+const saveSymbols = require('./fetchScripts/iexSymbols.js');
+const saveChartLimited = require('./fetchScripts/iexChartFetchLimited');
 
 
 //mongoose
@@ -19,7 +21,9 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        saveSymbols();
+        saveSymbols()
+            .then(saveChartLimited());
+
     }
 });
 
