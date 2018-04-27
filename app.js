@@ -3,13 +3,13 @@ const app = express();
 const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
+const saveSymbols = require('./fetchScripts/iexSymbols.js');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 // const router = require('./routes/router');
 
 
-//mongo
+//mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
 mongoose.connect(uristring, {
@@ -19,6 +19,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
+        saveSymbols();
     }
 });
 
