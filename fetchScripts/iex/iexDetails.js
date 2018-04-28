@@ -27,15 +27,21 @@ function getAndSave(stocks){
                 stocks.forEach(stock=>{
                     try {
                         const slice = res.data[stock.symbol]
-                        console.log(stock.symbol, res.data)
+                        console.log(stock.symbol,slice.earnings.earnings)
                         stock.set({
                             earnings: slice.earnings.earnings,
+                        })
+                        stock.set({
                             financials: slice.financials.financials,
-                            performance: slice.stats,
+                        })
+                        stock.set({
+                            performance: slice.stats,  
+                        })
+                        stock.set({
                             general: slice.company
                         })
                         stock.save()
-                            .then((el) => console.log('saved', el.symbol))
+                            .then((el) => console.log('saved', el.symbol, el.earnings));
                     } catch (error) {
                         console.log(stock, error);
                         unprocessed.push([stock, error]);
