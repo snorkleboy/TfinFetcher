@@ -27,7 +27,6 @@ function getAndSave(stocks){
                 stocks.forEach(stock=>{
                     try {
                         const slice = res.data[stock.symbol]
-                        console.log(stock.symbol,slice.earnings.earnings)
                         stock.set({
                             earnings: slice.earnings.earnings,
                         })
@@ -41,10 +40,10 @@ function getAndSave(stocks){
                             general: slice.company
                         })
                         stock.save()
-                            .then((el) => console.log('saved', el.symbol, el.earnings));
+                            .then((el) => console.log('saved', el.symbol));
                     } catch (error) {
                         console.log(stock, error);
-                        unprocessed.push([stock, error]);
+                        unprocessed.push([stock.symbol, error]);
                     }
 
                 })
@@ -55,7 +54,7 @@ function getAndSave(stocks){
 }
 
 function log(toLog) {
-    const fd = FileStream.appendFile(__dirname + 'iexDetailsFetch.log', JSON.stringify(toLog), function (err) {
+    const fd = FileStream.appendFile(__dirname + 'iexDetailsFetch.log', `\n ${JSON.stringify(toLog)}`, function (err) {
         if (err) {
             console.log('err!', err, Date.now);
             throw err;
