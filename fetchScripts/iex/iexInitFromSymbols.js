@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Stock = require('../db/models/stock')
+const Stock = require('../../db/models/stock')
 const saveSymbols =()=> axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
     .then(response => {
         response.data.forEach((stock)=>{
