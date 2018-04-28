@@ -7,7 +7,7 @@ const FetchDetails = (stocks) => axios({
 })
 unprocessed=[]
 const iexDetails = () => Stock.find().then(stocks => {log(['start fetch',Date.now()]);processAll(stocks)})
-const processAll = function (stocks, i = stocks.length-5){
+const processAll = function (stocks, i = 0){
     if(i<stocks.length){
         console.log("starting fetch and save of Stock Details",`unproccessed length=${unprocessed.length}`,`${i}/${stocks.length} fetched`)
         getAndSave(stocks.slice(i, i + 5))
