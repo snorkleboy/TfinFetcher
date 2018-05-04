@@ -18,7 +18,12 @@ function extractTodaysIndicator(data,indicatorName){
     let indicatorByDate = data[`Technical Analysis: ${indicatorName}`]
     const days = Object.keys(indicatorByDate)
     const todaysIndicator = indicatorByDate[days[0]]
-    return todaysIndicator[`${indicatorName}`]
+    
+    return todaysIndicator[`${indicatorName}`] ? 
+        todaysIndicator[`${indicatorName}`]
+    :
+        todaysIndicator
+
 }
 
 
@@ -27,27 +32,41 @@ function fetchIndicatorRanges(symbol,indicator, ranges = __ranges){
     const promises = ranges.map((range) => fetchIndicatorRange(symbol, indicator, range))
     return Promise.all(promises)
         .then(data => {
-            const SMAReturnObj = {};
-            ranges.forEach((range,i) => {
-                SMAReturnObj[range] = data[i];
-            })
-            return SMAReturnObj;
+            const reducer = (indicator, range, i) =>{ 
+                indicator[range] = data[i];
+                return indicator;
+            }
+            return ranges.reduce(reducer, {})
         });
 
 }
-function fetchRSIAndSMA(stocks,ranges=__ranges){
-    stocks.forEach(stock=>{
-        const promises = [
-            fetchIndicatorRanges(stock.symbol,"SMA",ranges),
-            fetchIndicatorRanges(stock.symbol, "RSI", ranges),
-        ]
-        return Promise.all(promises)
-            .then(res=> ({sma:res[0],rsi:res[1]}) )
+function fetchIndicators(stocks,indicators,ranges=__ranges){
+    stocks
+    .forEach(stock=>{
+        const promises = indicators.map(indicator => fetchIndicatorRanges(stock.symbol, indicator, ranges))
+        Promise.all(promises)
+        .then(data=> {
+            const reducer = (stockData, indicator, i) => {
+                stockData[indicator] = data[i];
+                return stockData
+            };
+            console.log(indicators.reduce(reducer, {}));
+        })
+
     })
 }
-// module.exports =
 
-fetchRSIAndSMA([{symbol:"FB"},{symbol:"GOOG"}])
+function fillObjFromPromiseReturnArray(keys, returnArray) {
+    const reducer = (acc, key, i) => {
+        acc[indicator] = returnArray[i];
+        return acc
+    };
+    return keys.reduce(reducer, {});
+}
+// module.exports =
+const testStocks = [{ symbol: "FB" }, { symbol: "GOOG" }]
+const indicators = ["RSI", "BBANDS", "SMA"]
+fetchIndicators(testStocks, indicators)
 
 //maybe general fetch for all apis?
 function apiFetch(request, extractor, logger) {
