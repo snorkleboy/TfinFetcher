@@ -27,18 +27,34 @@ function getAndSave(stocks){
                 stocks.forEach(stock=>{
                     try {
                         const slice = res.data[stock.symbol]
-                        stock.set({
-                            earnings: slice.earnings.earnings,
-                        })
-                        stock.set({
-                            financials: slice.financials.financials,
-                        })
-                        stock.set({
-                            performance: slice.stats,  
-                        })
-                        stock.set({
-                            general: slice.company
-                        })
+                        try {
+                            stock.set({
+                                earnings: slice.earnings.earnings,
+                            })
+                        } catch (error) {
+                            unprocessed.push([stock.symbol, "earnings not loaded"]);
+                        }
+                        try {
+                            stock.set({
+                                financials: slice.financials.financials,
+                            })
+                        } catch (error) {
+                            unprocessed.push([stock.symbol, "financials not loaded"]);
+                        }
+                        try {
+                            stock.set({
+                                performance: slice.stats,
+                            })
+                        } catch (error) {
+                            unprocessed.push([stock.symbol, "performance not loaded"]);
+                        }
+                        try {
+                            stock.set({
+                                general: slice.company
+                            })
+                        } catch (error) {
+                            unprocessed.push([stock.symbol, "general not loaded"]);
+                        }
                         stock.save()
                             .then((el) => console.log('saved', el.symbol));
                     } catch (error) {
@@ -48,7 +64,7 @@ function getAndSave(stocks){
 
                 })
             }else{
-                throw ["Fetch Failed",res]
+                log(["Fetch Failed",stocks,res])
             }
         })
 }

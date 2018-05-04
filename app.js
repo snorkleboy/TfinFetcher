@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 // const router = require('./routes/router');
 
-const getIexDetails = require("./fetchScripts/iex/iexDetails")
+// const getIexDetails = require("./fetchScripts/iex/iexDetails")
+const alphaVantageAnalytics = require('./fetchScripts/alpha/alphaVantageDetails')
 
 //mongoose
 //
@@ -20,8 +21,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        getIexDetails();
-
+        // alphaVantageAnalytics();
     }
 });
 
