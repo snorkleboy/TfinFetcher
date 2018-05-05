@@ -15,6 +15,7 @@ const stock = new mongoose.Schema({
     general:{
 
     },
+    chart:{},
     created_at: {
         type: Date,
         default: Date.now
