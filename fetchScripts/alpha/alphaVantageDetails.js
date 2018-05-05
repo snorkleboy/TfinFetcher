@@ -1,8 +1,9 @@
 const axios = require('axios');
 const Stock = require('../../db/models/stock')
-//daily as default interval instead of monthly because for some reason a serieslength of 200 does not always work with a monthly interval...
-//hopefully Alphavantage fixes something
-//05/04/2018
+const FileStream = require('fs');
+const http = require('http')
+const https = require('https')
+
 
 
 const __ranges = [20, 50, 200];
@@ -16,21 +17,31 @@ const updateAlphaVanrageAnalytics = function (indicators = __indicators, ranges 
 let averageTime = 0;
 let startTime=0
 let timeSum=0;
-function recursiveUpdate(stocks, indicators, ranges,i = 0) {
+function recursiveUpdate(stocks, indicators, ranges,i = 0,numConcurrent=1) {
     startTime = Date.now();
     if (i<stocks.length){
-        fetchIndicators(stocks[i], indicators, ranges)
-            .then(analyticsObj => {
-                stocks[i].analytics = analyticsObj
-                stocks[i].save((err,saved)=>{
-                    timeSum += (Date.now() - startTime) / (3600000)
-                    const averageTime = timeSum / (i + 1)
-                    console.log(`${stocks[i].symbol} saved`, `${(i/stocks.length)*100}%`,`est time left =${averageTime*(stocks.length-i)} hrs`)
-                    recursiveUpdate(stocks,indicators, ranges,i+1)
-                })
+        const promises = [];
+        for (let j = i; j < (i+numConcurrent);j++){
+            promises.push(
+                fetchAndSave(stocks[j],indicators, ranges)
+            )
+        }
+        Promise.all(promises)
+            .then((saved)=>{
+                timeSum += (Date.now() - startTime) / (3600000)
+                const averageTime = timeSum / (i + 1)
+                console.log(
+                    saved.map(obj => obj.symbol),
+                    `${(i / stocks.length) * 100}% finished`,
+                    `errors #${unprocessed.length}`,
+                    `est time left =${averageTime * (stocks.length - i)/numConcurrent} hrs`
+                )
+                
+                recursiveUpdate(stocks,indicators,ranges, i+numConcurrent,numConcurrent);
             })
             .catch(err => {
-                unprocessed.push([stock[i].symbol, err, Date.now()]);
+                console.log(([stocks[i].symbol, numConcurrent, err, Date.now()]))
+                unprocessed.push([stocks[i].symbol, numConcurrent, err, Date.now()]);
             })
     } else{
         log(["finished AlphavantageDetails Update", Date.now() ,unprocessed.length, unprocessed])
@@ -38,7 +49,13 @@ function recursiveUpdate(stocks, indicators, ranges,i = 0) {
     }
     
 }
-
+function fetchAndSave(stock, indicators, ranges) {
+    return fetchIndicators(stock, indicators, ranges)
+        .then(analyticsObj => {
+            stock.analytics = analyticsObj
+            return stock.save()
+        })
+}
 
 function fetchIndicators(stock,indicators,ranges = __ranges){
     const promises = indicators.map(indicator => fetchIndicatorRanges(stock.symbol, indicator, ranges))
@@ -60,20 +77,28 @@ function hashNamesToPromiseReturn(keys, returnArray) {
 
 
 
+
 function fetchIndicatorRange(symbol, indicator, seriesLength, interval = 'daily') {
     const url = `https://www.alphavantage.co/query?function=${indicator}&symbol=${symbol}&interval=${interval}&time_period=${seriesLength}&series_type=close&apikey=6UYKMBS80HT2T5WD`
     return axios({
         url,
-        method: "GET"
+        method: "GET",
+        httpAgent: new http.Agent({ keepAlive: true }),
+        httpsAgent: new https.Agent({ keepAlive: true })
     })
     .then(res => extractTodaysIndicator(res.data, indicator))
-    .catch(err => console.log("fetchError", err));
 }
 function extractTodaysIndicator(data, indicatorName) {
     let indicatorByDate = data[`Technical Analysis: ${indicatorName}`]
+        if (!indicatorByDate) {
+            throw ['extractTodaysIndicator, no indicator key in data',data,indicatorName]
+        }
     const days = Object.keys(indicatorByDate)
-    const todaysIndicator = indicatorByDate[days[0]]
 
+    const todaysIndicator = indicatorByDate[days[0]]
+        if (!todaysIndicator) {
+            throw ['extractTodaysIndicator, no todaysIndicator in data', data,indicatorByDate,indicatorName]
+        }
     return todaysIndicator[`${indicatorName}`] ?
         todaysIndicator[`${indicatorName}`] :
         todaysIndicator
