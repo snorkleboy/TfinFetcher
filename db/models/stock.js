@@ -11,16 +11,9 @@ const stock = new mongoose.Schema({
     financials:[],
     performance:{
     },
+    analytics:{},
     general:{
-        symbol:	String,
-        companyName:	String,
-        exchange:	String,
-        industry:	String,
-        website:	String,
-        description:	String,
-        CEO:	String,
-        issueType:   String,
-        sector:	String,
+
     },
     created_at: {
         type: Date,

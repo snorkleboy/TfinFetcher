@@ -5,68 +5,91 @@ const Stock = require('../../db/models/stock')
 //05/04/2018
 
 
-function fetchIndicatorRange(symbol, indicator, seriesLength, interval = 'daily'){
-    const url = `https://www.alphavantage.co/query?function=${indicator}&symbol=${symbol}&interval=${interval}&time_period=${seriesLength}&series_type=close&apikey=6UYKMBS80HT2T5WD`
-    return axios({
-            url ,
-            method: "GET"
-        })
-        .then(res => extractTodaysIndicator(res.data, indicator))
-        .catch(err=>console.log("fetchError", err));
+const __ranges = [20, 50, 200];
+const __indicators = ["RSI", "BBANDS", "SMA"];
+const unprocessed = [];
+
+const updateAlphaVanrageAnalytics = function (indicators = __indicators, ranges = __ranges) {
+    Stock.find()
+        .then(stocks=> recursiveUpdate(stocks, indicators, ranges ) )
 }
-function extractTodaysIndicator(data,indicatorName){
-    let indicatorByDate = data[`Technical Analysis: ${indicatorName}`]
-    const days = Object.keys(indicatorByDate)
-    const todaysIndicator = indicatorByDate[days[0]]
+let averageTime = 0;
+let startTime=0
+let timeSum=0;
+function recursiveUpdate(stocks, indicators, ranges,i = 0) {
+    startTime = Date.now();
+    if (i<stocks.length){
+        fetchIndicators(stocks[i], indicators, ranges)
+            .then(analyticsObj => {
+                stocks[i].analytics = analyticsObj
+                stocks[i].save((err,saved)=>{
+                    timeSum += (Date.now() - startTime) / (3600000)
+                    const averageTime = timeSum / (i + 1)
+                    console.log(`${stocks[i].symbol} saved`, `${(i/stocks.length)*100}%`,`est time left =${averageTime*(stocks.length-i)} hrs`)
+                    recursiveUpdate(stocks,indicators, ranges,i+1)
+                })
+            })
+            .catch(err => {
+                unprocessed.push([stock[i].symbol, err, Date.now()]);
+            })
+    } else{
+        log(["finished AlphavantageDetails Update", Date.now() ,unprocessed.length, unprocessed])
+        console.log("finished AlphavantageDetails Update", unprocessed.length, unprocessed)
+    }
     
-    return todaysIndicator[`${indicatorName}`] ? 
-        todaysIndicator[`${indicatorName}`]
-    :
-        todaysIndicator
-
 }
 
 
-const __ranges = [20, 50, 200]
-function fetchIndicatorRanges(symbol,indicator, ranges = __ranges){
+function fetchIndicators(stock,indicators,ranges = __ranges){
+    const promises = indicators.map(indicator => fetchIndicatorRanges(stock.symbol, indicator, ranges))
+    return Promise.all(promises)
+        .then(data => hashNamesToPromiseReturn(indicators, data))
+}
+function fetchIndicatorRanges(symbol, indicator, ranges = __ranges) {
     const promises = ranges.map((range) => fetchIndicatorRange(symbol, indicator, range))
     return Promise.all(promises)
-        .then(data => {
-            const reducer = (indicator, range, i) =>{ 
-                indicator[range] = data[i];
-                return indicator;
-            }
-            return ranges.reduce(reducer, {})
-        });
-
+        .then(data => hashNamesToPromiseReturn(ranges, data));
 }
-function fetchIndicators(stocks,indicators,ranges=__ranges){
-    stocks
-    .forEach(stock=>{
-        const promises = indicators.map(indicator => fetchIndicatorRanges(stock.symbol, indicator, ranges))
-        Promise.all(promises)
-        .then(data=> {
-            const reducer = (stockData, indicator, i) => {
-                stockData[indicator] = data[i];
-                return stockData
-            };
-            console.log(indicators.reduce(reducer, {}));
-        })
-
-    })
-}
-
-function fillObjFromPromiseReturnArray(keys, returnArray) {
+function hashNamesToPromiseReturn(keys, returnArray) {
     const reducer = (acc, key, i) => {
-        acc[indicator] = returnArray[i];
+        acc[key] = returnArray[i];
         return acc
     };
     return keys.reduce(reducer, {});
 }
-// module.exports =
-const testStocks = [{ symbol: "FB" }, { symbol: "GOOG" }]
-const indicators = ["RSI", "BBANDS", "SMA"]
-fetchIndicators(testStocks, indicators)
+
+
+
+function fetchIndicatorRange(symbol, indicator, seriesLength, interval = 'daily') {
+    const url = `https://www.alphavantage.co/query?function=${indicator}&symbol=${symbol}&interval=${interval}&time_period=${seriesLength}&series_type=close&apikey=6UYKMBS80HT2T5WD`
+    return axios({
+        url,
+        method: "GET"
+    })
+    .then(res => extractTodaysIndicator(res.data, indicator))
+    .catch(err => console.log("fetchError", err));
+}
+function extractTodaysIndicator(data, indicatorName) {
+    let indicatorByDate = data[`Technical Analysis: ${indicatorName}`]
+    const days = Object.keys(indicatorByDate)
+    const todaysIndicator = indicatorByDate[days[0]]
+
+    return todaysIndicator[`${indicatorName}`] ?
+        todaysIndicator[`${indicatorName}`] :
+        todaysIndicator
+}
+
+
+function log(toLog) {
+    const fd = FileStream.appendFile(__dirname + 'AlphavantageAnalFetch.log', `\n ${JSON.stringify(toLog)}`, function (err) {
+        if (err) {
+            console.log('err!', err, Date.now);
+            throw err;
+        }
+    });
+}
+module.exports = updateAlphaVanrageAnalytics
+
 
 //maybe general fetch for all apis?
 function apiFetch(request, extractor, logger) {
