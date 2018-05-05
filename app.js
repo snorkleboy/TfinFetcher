@@ -22,7 +22,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        getIEXCharts(3000);
+        getIEXCharts(5250,20,3);
     }
 });
 
