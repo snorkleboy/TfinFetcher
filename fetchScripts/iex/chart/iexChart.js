@@ -7,14 +7,15 @@ const FileStream = require('fs');
 let lastTime = Date.now();
 let sumTime = 0;
 let startI = 0;
-const rateGoalms = 300;
+const rateGoalms = 100;
 
 function getIEXCharts(i=0,batchLength, numConcurentReq){
     startI=i;
     Stock.find({})
+        .skip(i)
         .select("symbol")
         .exec()
-        .then((stocks) => recusiveFetchandSave(stocks, i, batchLength, numConcurentReq))
+        .then((stocks) => recusiveFetchandSave(stocks, 0, batchLength, numConcurentReq))
 }
 const unproccessed = [];
 
@@ -22,9 +23,7 @@ function recusiveFetchandSave(stocks,i=0,batchLength=10,numConcurrent=3){
     rateLimit()
     .then(()=>{
         if (i < stocks.length) {
-            sumTime += (Date.now() - lastTime) / 1000
             lastTime = Date.now();
-
             launchFetchs(stocks, i, batchLength , numConcurrent)
                 .then((saved) => recusiveFetchandSave(stocks, i + (batchLength*numConcurrent), batchLength, numConcurrent))
         } else {
@@ -45,24 +44,28 @@ function launchFetchs(stocks, i, batchLength, numConcurrent) {
         )
     }
     
-    return Promise.all(promises)    
+    return Promise.all(promises)
+            .then((saved) => {
+                stockNames = saved.map(ret=>ret.map(stock=>stock.symbol).join(','))
+                sumTime += (Date.now() - lastTime) / 1000
+                const averageTime = sumTime / (i + 1)
+                const estimatedTime = ((stocks.length - (i + 1)) / (batchLength*numConcurrent)) * averageTime / 60;
+                const percent = parseInt(((i + 1 + batchLength + startI) / (stocks.length + startI)) * 100);
+                console.log(
+                    stockNames,
+                    `${percent}% (${i+1+startI}/${stocks.length+startI}) downloaded and saved`,
+                    `errors on ${unproccessed.length} stocks`,
+                    `average time ${averageTime} sec`,
+                    `est time: ${estimatedTime} min`
+                )
+            })
 }
 function fetchSave(stocks,i,batchLength){
     const currentStocks = stocks.slice(i, i + batchLength);
     const stockNames = currentStocks.map(stock => stock.symbol);
-    const averageTime = sumTime / ((i - startI )+ 1)
-    const estimatedTime = ((stocks.length-(i+1))/batchLength) * averageTime/60;
-    const percent = parseInt(((i + batchLength) / stocks.length) * 100);
-    console.log(
-        stockNames,
-        `${percent}% (${i}/${stocks.length}) downloaded and saved`,
-        `errors on ${unproccessed.length} stocks`,
-        `average time ${averageTime} sec`,
-        `est time: ${estimatedTime} min`
-    )
-
     return fetchDayChart(stockNames)
         .then(data => mapSaveStocks(currentStocks, data))
+        
 }
 function mapSaveStocks(stocks, data) {
     const promises = [];
@@ -70,6 +73,10 @@ function mapSaveStocks(stocks, data) {
         stock.chart = data[stock.symbol]
         promises.push(
             stock.save()
+            .then(saved=>{
+                delete stock.chart;
+                return saved
+            })
             .catch(err=>{
                 err.stock = stock
                 throw err;
