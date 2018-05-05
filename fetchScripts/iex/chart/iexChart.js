@@ -4,50 +4,65 @@ const http = require('http')
 const https = require('https')
 const FileStream = require('fs');
 
-
-function getIEXCharts(){
-    Stock.find({})
-        .then((stocks) => recusiveFetchandSave(stocks))
-}
-
-const unproccessed = [];
 let lastTime = Date.now();
 let sumTime = 0;
-const goal = 500;
-function recusiveFetchandSave(stocks,i=0,numConcurrent=3){
+let startI = 0;
+const rateGoalms = 300;
+
+function getIEXCharts(i=0,batchLength, numConcurentReq){
+    startI=i;
+    Stock.find({})
+        .select("symbol")
+        .exec()
+        .then((stocks) => recusiveFetchandSave(stocks, i, batchLength, numConcurentReq))
+}
+const unproccessed = [];
+
+function recusiveFetchandSave(stocks,i=0,batchLength=10,numConcurrent=3){
     rateLimit()
     .then(()=>{
         if (i < stocks.length) {
-            fetchSave(stocks, i, numConcurrent)
-            .then((saved) => {
-                    recusiveFetchandSave(stocks, i + numConcurrent, numConcurrent)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            sumTime += (Date.now() - lastTime) / 1000
+            lastTime = Date.now();
+
+            launchFetchs(stocks, i, batchLength , numConcurrent)
+                .then((saved) => recusiveFetchandSave(stocks, i + (batchLength*numConcurrent), batchLength, numConcurrent))
         } else {
             log(["finished iex chart fetch", unproccessed.length, unproccessed])
         }
     })
     
 }
-function fetchSave(stocks,i,numConcurrent){
-    const currentStocks = stocks.slice(i, i + numConcurrent);
-    const stockNames = currentStocks.map(stock => stock.symbol);
+function launchFetchs(stocks, i, batchLength, numConcurrent) {
+    const promises = [];
 
-    const averageTime = sumTime / (i+1)
-    const estimatedTime = ((stocks.length-(i+1))/numConcurrent) * averageTime/60;
+    for (let j=0;j<numConcurrent;j++){
+        promises.push(
+            fetchSave(stocks, i + batchLength*j, batchLength)
+            .catch(err => {
+                unproccessed.push(["launch iex chart fetch error",[i,batchLength,numConcurrent]])
+            })
+        )
+    }
+    
+    return Promise.all(promises)    
+}
+function fetchSave(stocks,i,batchLength){
+    const currentStocks = stocks.slice(i, i + batchLength);
+    const stockNames = currentStocks.map(stock => stock.symbol);
+    const averageTime = sumTime / ((i - startI )+ 1)
+    const estimatedTime = ((stocks.length-(i+1))/batchLength) * averageTime/60;
+    const percent = parseInt(((i + batchLength) / stocks.length) * 100);
     console.log(
         stockNames,
-        `${((i+numConcurrent)/stocks.length)*100}% downloaded and saved`,
+        `${percent}% (${i}/${stocks.length}) downloaded and saved`,
         `errors on ${unproccessed.length} stocks`,
-        `average time ${averageTime}`,
-        `est time: ${estimatedTime}`
+        `average time ${averageTime} sec`,
+        `est time: ${estimatedTime} min`
     )
-    sumTime += (Date.now() - lastTime)/60000
-    lastTime = Date.now();
+
     return fetchDayChart(stockNames)
-        .then(data =>  mapSaveStocks(currentStocks, data))
+        .then(data => mapSaveStocks(currentStocks, data))
 }
 function mapSaveStocks(stocks, data) {
     const promises = [];
@@ -65,10 +80,11 @@ function mapSaveStocks(stocks, data) {
 }
 function rateLimit(){
     return new Promise(res=>{
-        if (Date.now() - lastTime < goal) {
+        if (Date.now() - lastTime > rateGoalms) {
             res();
         } else{
-            setTimeout(()=>res(),goal - (Date.now()-lastTime))
+            console.log("rate limited");
+            setTimeout(()=>res(),rateGoalms - (Date.now()-lastTime))
         }
     })
 }
@@ -88,11 +104,12 @@ const fetchDayChart = (symbols) => axios({
         // };
 
 function log(toLog) {
-    const fd = FileStream.appendFile(__dirname + 'AlphavantageAnalFetch.log', `\n ${JSON.stringify(toLog)}`, function (err) {
+    const fd = FileStream.appendFile(__dirname + 'IEXChartFetch.log', `\n ${JSON.stringify(toLog)}`, function (err) {
         if (err) {
             console.log('err!', err, Date.now);
             throw err;
         }
     });
 }
+
 module.exports = getIEXCharts;
