@@ -23,6 +23,8 @@ mongoose.connect(uristring, {
     } else {
         console.log('Succeeded connected to: ' + uristring);
         getIEXCharts();
+
+
     }
 });
 
