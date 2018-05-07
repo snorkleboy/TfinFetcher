@@ -7,10 +7,10 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 // const router = require('./routes/router');
 
-const getIEXCharts = require('./fetchScripts/iex/chart/iexChart');
+// const getIEXCharts = require('./fetchScripts/iex/chart/iexChart');
 // const getIEXDetails = require("./fetchScripts/iex/iexDetails")
-const alphaVantageAnalytics = require('./fetchScripts/alpha/alphaVantageDetails')
-
+// const alphaVantageAnalytics = require('./fetchScripts/alpha/alphaVantageDetails')
+const addSMARSIBBAND = require('./analysisSripts/addSMARSIBBAND');
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
@@ -22,8 +22,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        getIEXCharts();
-
+        addSMARSIBBAND()
 
     }
 });
