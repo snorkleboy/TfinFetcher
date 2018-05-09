@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const ScreenController = require('./screenController');
 router.get('/',(req,res)=>{
     res.send('stocksAPI')
 })
-router.get('/screen',  (req, res)=> {
-    res.send('GET handler for /screen route.');
-});
+router.use('/screen', ScreenController);
 
 module.exports = router;

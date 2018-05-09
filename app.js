@@ -5,7 +5,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-const router = require('./express/routes/router');
+const router = require('./express/controllers/router');
 
 // const getIEXCharts = require('./fetchScripts/iex/chart/iexChart');
 // const getIEXDetails = require("./fetchScripts/iex/iexDetails")
