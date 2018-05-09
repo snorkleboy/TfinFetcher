@@ -5,7 +5,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-// const router = require('./routes/router');
+const router = require('./express/routes/router');
 
 // const getIEXCharts = require('./fetchScripts/iex/chart/iexChart');
 // const getIEXDetails = require("./fetchScripts/iex/iexDetails")
@@ -22,7 +22,6 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        addSMARSIBBAND()
 
     }
 });
@@ -37,10 +36,11 @@ app.use(bodyParser.urlencoded({
     'extended': 'true'
 }));
 // router- all api nested under router
-// app.use(router);
+app.use('/',router);
 
 
 
 var port = process.env.PORT || process.argv[2] || '3000';
 app.set('port', port);
-const server = app.listen(port);
+function listenHandler(){console.log(`bound to port ${port} and listening`)}
+const server = app.listen(port, listenHandler);
