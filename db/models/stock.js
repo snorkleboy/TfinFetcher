@@ -1,5 +1,31 @@
 const mongoose = require('mongoose');
+const earningsSchema = new mongoose.Schema({
+    actualEPS: Number,
+    consensusEPS: Number,
+    estimatedEPS: Number,
+    announceTime: String,
+    numberOfEstimates: Number,
+    EPSSurpriseDollar: Number,
+    EPSReportDate: String,
+    fiscalPeriod: String,
+    fiscalEndDate: String,
+    yearAgo: Number,
+    yearAgoChangePercent: Number,
+    estimatedChangePercent: Number,
+    symbolId: Number
+})
+const financialSchema = new mongoose.Schema({
 
+})
+const performanceSchema = new mongoose.Schema({
+
+})
+const analyticsSchema = new mongoose.Schema({
+
+})
+const generalSchema = new mongoose.Schema({
+
+})
 const stock = new mongoose.Schema({
     symbol: {
         type: String,
@@ -7,31 +33,12 @@ const stock = new mongoose.Schema({
     },
     name: String,
     logo: String,
-    earnings:[{
-        actualEPS: Number,
-        consensusEPS: Number,
-        estimatedEPS: Number,
-        announceTime: "AMC",
-        numberOfEstimates: Number,
-        EPSSurpriseDollar: Number,
-        EPSReportDate: String,
-        fiscalPeriod: String,
-        fiscalEndDate: String,
-        yearAgo: Number,
-        yearAgoChangePercent: Number,
-        estimatedChangePercent: Number,
-        symbolId: Number
-    }],
-    financials:[],
-    performance:{
-    },
-    analytics:{},
-    general:{
-
-    },
-    chart:{
-
-    },
+    earnings: [earningsSchema],
+    financials: [financialSchema],
+    performance: performanceSchema,
+    analytics: analyticsSchema,
+    chart:[{}],
+    general: generalSchema,
     created_at: {
         type: Date,
         default: Date.now
@@ -70,6 +77,9 @@ function convertQueryToMongoose(queryString){
     }
     return query
 } 
+
+stock.index({symbol:1});
+
 const Stock = mongoose.model('Stock', stock);
 
 module.exports = Stock
