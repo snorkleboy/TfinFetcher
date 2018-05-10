@@ -31,6 +31,7 @@ const financialSchema = new mongoose.Schema({
     currentAssets: Number,
     totalAssets: Number,
     totalLiabilities: Number,
+    currentRatio: Number,
     currentCash: Number,
     currentDebt: Number,
     totalCash: Number,
@@ -44,7 +45,7 @@ const performanceSchema = new mongoose.Schema({
     ROI: {
         '20day':Number,
         '50day':Number,
-        '200day':number,
+        '200day':Number,
         '1yr':Number,
     },
     _id: String,
