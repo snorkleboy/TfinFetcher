@@ -60,7 +60,7 @@ stock.statics.screen = function (queryHash) {
         select[param] = true
     })
     console.log("SCREEN",queryHash,where, select)
-    return this.model('Stock').find(where);
+    return this.model('Stock').find(where,select);
 }
 
 const keyToParam = {
