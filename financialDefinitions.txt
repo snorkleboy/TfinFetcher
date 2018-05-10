@@ -1,0 +1,74 @@
+
+quick ratio
+https://www.investopedia.com/terms/q/quickratio.asp
+
+	The quick ratio is an indicator of a company’s short-term liquidity, and measures a 		company’s ability to meet its short-term obligations with its most liquid assets
+
+
+	Quick ratio = (current assets – inventories) / current liabilities, or
+
+	Quick ratio = (cash and equivalents + marketable securities + accounts receivable) / 		current liabilities
+
+	The quick ratio is also known as the acid-test ratio.
+
+
+
+
+current ratio
+https://www.investopedia.com/terms/c/currentratio.asp
+
+	The current ratio is a liquidity ratio that measures a company's ability to pay 	   short-term and long-term obligations
+	
+	Current Ratio = Current Assets / Current Liabilities
+
+gross margin
+//grossMargin= grossProfit/totalrevenue
+https://www.investopedia.com/terms/g/grossmargin.asp
+
+	What is 'Gross Margin'
+	Gross margin is a company's total sales revenue minus its cost of goods sold (COGS), 		divided by total sales revenue, expressed as a percentage. The gross margin represents 		the percent of total sales revenue that the company retains after incurring the direct 		costs associated with producing the goods and services it sells. The higher the 		percentage, the more the company retains on each dollar of sales, to service its 	other costs and debt obligations.
+
+	Gross Margin(%) = (revenue - cost of goods) / revenue
+
+
+
+	How to Calculate Gross Margin
+	To illustrate how to calculate gross margin, imagine a business collects $200,000 in 		sales revenue. It spends $20,000 on manufacturing supplies and $80,000 on labor costs. 		After subtracting its COGS, it has $100,000 in gross profits. Dividing gross profits by 	revenue equals 	0.5, and when multiplied by 100, that becomes 50%.
+
+
+
+operating margin
+//operatingMargin = operatingIncome/ ??sales?? operatingRevenue
+https://www.investopedia.com/terms/o/operatingmargin.asp
+
+	Operating margin measures how much profit a company makes on a dollar of sales, after 		paying for variable costs of production such as wages and raw materials, but before 		paying interest or tax. It is calculated by dividing a company’s operating profit by its 		net sales.
+
+	How to Calculate Operating Margin
+	To calculate a company's operating margin, divide its operating income by its net sales 	revenue:
+
+
+
+	Operating income is often called earnings before income and taxes (EBIT). Operating 		income or EBIT is the income that is left on the income statement, after all operating 		costs and overhead, 	such as selling costs, administration expenses and cost of goods 		sold (COGS) are 	subtracted:
+
+	Operating Profit Margin = Operating Income / Sales Revenue
+
+	Operating Income (EBIT) = Gross Income - (Operating Expenses + Depreciation & 			Amortization)
+
+
+
+Profit Margin
+//profitMargin = netIncome/operatingRevenue
+https://www.investopedia.com/terms/p/profitmargin.asp
+
+Profit Margin = Net Income / Net Sales (revenue)
+
+
+return on investment
+https://www.investopedia.com/terms/r/returnoninvestment.asp
+
+ROI = (Gain from Investment - Cost of Investment) / Cost of Investment
+
+
+
+
+

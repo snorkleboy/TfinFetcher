@@ -1,5 +1,5 @@
 const Stock = require('../db/models/stock')
-
+const StockChart = require('../db/models/stockChart')
 
 const __ranges=[20,50,200]
 const __rsiRange= 14
@@ -11,13 +11,13 @@ function addSMARSIBBAND(i=0,limit=10,ranges = __ranges, rsiRange = __rsiRange) {
 
     if (!numStocks){
         startI = i;
-        Stock.count({},(err,num)=>{
+        StockChart.count({}, (err, num) => {
             numStocks=num
             addSMARSIBBAND(i, limit, ranges, rsiRange)
         })
     } else if (i< numStocks){
         lastTime = Date.now();
-        Stock.find()
+        StockChart.find()
             .skip(i)
             .limit(10)
             .select("symbol chart")

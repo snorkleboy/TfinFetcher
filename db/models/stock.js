@@ -16,6 +16,9 @@ const earningsSchema = new mongoose.Schema({
 })
 
 const financialSchema = new mongoose.Schema({
+    profitMargin: Number,
+    operatingMargin: Number,
+    grossMargin: Number,
     reportDate: String,
     grossProfit: Number,
     costOfRevenue: Number,
@@ -38,6 +41,12 @@ const financialSchema = new mongoose.Schema({
     operatingGainsLosses: Number
 })
 const performanceSchema = new mongoose.Schema({
+    ROI: {
+        '20day':Number,
+        '50day':Number,
+        '200day':number,
+        '1yr':Number,
+    },
     _id: String,
     companyName: String,
     marketcap: Number,
@@ -145,7 +154,6 @@ stock.statics.mapScreenOptions = function mapScreenOptions(queryHash) {
         } else {
             throw `validation error: ${queryKey} not accepted key`
         }
-
         schemaQueryObj[schemaKey] = queryHash[queryKey]
     })
 

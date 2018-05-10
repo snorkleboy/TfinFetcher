@@ -10,12 +10,6 @@ let startI = 0;
 const rateGoalMS = 100;
 
 
-/*
-        // Stock.find({chart:{$exists:false}})
-        // .select("symbol")
-        // .exec()
-        // to run over agian
-*/
 function getIEXCharts(i=0,batchLength=10, numConcurentReq=1){
     startI=i;
     StockChart.find({})
@@ -116,8 +110,8 @@ function progressReport(saved){
     }
     sumTime += (Date.now() - lastTime) / 1000
     const averageTime = sumTime / (i + 1)
-    const estimatedTime = ((stocks.length - (i + 1)) / (batchLength * numConcurrent)) * averageTime / 60;
-    const percent = parseInt(((i + 1 + batchLength + startI) / (stocks.length + startI)) * 100);
+    const estimatedTime = (stocks.length - (i + 1)) * averageTime / 60;
+    const percent = parseInt(((i - startI) / (stocks.length - startI)) * 100);
     console.log(
         stockNames,
         `${percent}% (${i+1+startI}/${stocks.length+startI}) downloaded and saved`,

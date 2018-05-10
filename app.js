@@ -8,10 +8,7 @@ mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
 const moveStockCharts = require('./db/scripts/moveCharts')
-// const getIEXCharts = require('./fetchScripts/iex/chart/iexChart');
-// const getIEXDetails = require("./fetchScripts/iex/iexDetails")
-// const alphaVantageAnalytics = require('./fetchScripts/alpha/alphaVantageDetails')
-const addSMARSIBBAND = require('./analysisSripts/addSMARSIBBAND');
+
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
