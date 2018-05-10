@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Stock = require('../../../db/models/stock')
+const StockChart = require('../../../db/models/stockChart')
 const http = require('http')
 const https = require('https')
 const FileStream = require('fs');
@@ -18,7 +18,7 @@ const rateGoalMS = 100;
 */
 function getIEXCharts(i=0,batchLength=10, numConcurentReq=1){
     startI=i;
-    Stock.find({})
+    StockChart.find({})
         .skip(i)
         .select("symbol")
         .exec()

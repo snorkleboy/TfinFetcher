@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const Stock = require('../../db/models/stock');
 const StockChart = require('../../db/models/stockChart');
 StockController.get('/:symbol/:chart?', (req, res) => {
-    console.log("here");
     const symbol = req.params.symbol;
     const getChart = req.params.chart
     const returnObj = {};
