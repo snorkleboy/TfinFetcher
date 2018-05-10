@@ -2,18 +2,30 @@ const Stock = require('../models/stock')
 const StockChart = require('../models/stockChart')
 const FileStream = require('fs');
 
+//moves charts from stocks collection to a new stockCharts collection
+
 
 let stocksNum = null;
 let startI = 0;
-function moveStockCharts(i=0,limit=10) {
-    startI = i;
-    Stock.find({}).count()
-    .then(count=>{
-        stocksNum = count;
-        iterateStocks(i, limit);
-    })
+let startTime =null;
+function deleteCharts (){
+    const options = {
+        multi:true
+    }
+    const callback = ()=>console.log("done");
+    Stock.update({}, { $unset: { chart:1 }}, options, callback)
 }
-const startTime = Date.now();
+function moveStockCharts(i=0,limit=10) {
+    console.log("START");
+    deleteCharts();
+    // startI = i;
+    // Stock.find({}).count()
+    // .then(count=>{
+        // stocksNum = count;
+        // startTime = Date.now();
+        // iterateStocks(i, limit);
+    // })
+}
 function iterateStocks(i, limit) {
     const projection = {
         chart: 1,
@@ -51,11 +63,13 @@ function moveCreateCharts(stocks) {
 }
 const msToMin = 1/(60000);
 function log(i,saved){
+    i = i+1
     const elapsedTime = Date.now() - startTime
-    const averageTime = elapsedTime / (i - startI)
-    const estimatedTime = averageTime * (stocksNum - i) * msToMin
+    const averageTime = parseInt(elapsedTime / (i - startI))
+    const estimatedTime = parseInt(averageTime * (stocksNum - i) * msToMin)
     const names = saved.map(model=>model.symbol)
-    console.log(`${i/(stocksNum-startI)}%`,`${estimatedTime} minutes left`, names)
+    const percent = parseInt (100 * i / (stocksNum - startI) )
+    console.log(`${percent}%`,`averageTime:${averageTime}ms`, `${estimatedTime} minutes left`, names)
 }
 function logF(toLog) {
     const fd = FileStream.appendFile(__dirname + 'MoveChart.log', `\n ${JSON.stringify(toLog)}`, function (err) {

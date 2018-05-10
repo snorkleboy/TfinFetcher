@@ -37,7 +37,6 @@ const stock = new mongoose.Schema({
     financials: [financialSchema],
     performance: performanceSchema,
     analytics: analyticsSchema,
-    chart:[{}],
     general: generalSchema,
     created_at: {
         type: Date,
@@ -56,18 +55,21 @@ stock.statics.screen = function (queryHash) {
     const select = {'symbol':1}
     keys.forEach(key=>{
         const query = convertQueryToMongoose(queryHash[key])
-        const param = key
+        const param = keyToParam[key]
         where[param] = query
-        // select[key]=true
+        select[param] = true
     })
-    console.log("SCREEN",queryHash,keys,where)
+    console.log("SCREEN",queryHash,where, select)
     return this.model('Stock').find(where);
 }
-//eps: earnings[0].actualEPS
 
+const keyToParam = {
+    'beta':'performance.beta',
+    'symbol':'symbol',
+}
 function convertQueryToMongoose(queryString){
     let query = null;
-    let value = queryString.slice(1, queryString.length)
+    let value = parseFloat(queryString.slice(1, queryString.length))
     if (queryString[0]=='<'){
         query = {"$lt":value}
     } else if (queryString[0] == '>'){
