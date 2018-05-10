@@ -33,7 +33,7 @@ const financialSchema = new mongoose.Schema({
     totalCash: Number,
     totalDebt: Number,
     shareholderEquity: Number,
-    cashChange:  Number,
+    cashChange: Number,
     cashFlow: Number,
     operatingGainsLosses: Number
 })
@@ -42,7 +42,7 @@ const performanceSchema = new mongoose.Schema({
     companyName: String,
     marketcap: Number,
     beta: Number,
-    week52high:Number,
+    week52high: Number,
     week52low: Number,
     week52change: Number,
     shortInterest: Number,
@@ -106,6 +106,7 @@ const generalSchema = new mongoose.Schema({
 const analyticsSchema = new mongoose.Schema({
 
 })
+
 const stock = new mongoose.Schema({
     symbol: {
         type: String,
@@ -123,47 +124,78 @@ const stock = new mongoose.Schema({
     analytics: analyticsSchema,
     general: generalSchema,
 });
-//todo 
-//this should validate user inputed query string matches to keys in the stock schema and values to possible values
-stock.statics.validateScreenOptions = function(queryHash){
-    return queryHash
-}
-stock.statics.screen = function (queryHash) {
-    keys = Object.keys(queryHash);
 
-    const where = {};
-    const select = {'symbol':1}
-    keys.forEach(key=>{
-        const query = convertQueryToMongoose(queryHash[key])
-        const param = keyToParam(key)
-        where[param] = query
-        select[param] = true
+stock.statics.mapScreenOptions = function mapScreenOptions(queryHash) {
+
+    console.log('here1', Object.keys(queryHash));
+    const schemaQueryObj = {};
+    Object.keys(queryHash).forEach(queryKey => {
+
+        let schemaKey = null;
+        if (Object.keys(earningsSchema.obj).includes(queryKey)) {
+            schemaKey = `earnings.$1.${queryKey}`
+        } else if (Object.keys(financialSchema.obj).includes(queryKey)) {
+            schemaKey = `financials.$1.${queryKey}`
+        } else if (Object.keys(performanceSchema.obj).includes(queryKey)) {
+            schemaKey = `performance.${queryKey}`
+        } else if (Object.keys(generalSchema.obj).includes(queryKey)) {
+            schemaKey = `analytics.${queryKey}`
+        } else if (Object.keys(analyticsSchema.obj).includes(queryKey)) {
+            schemaKey = `general.${queryKey}`
+        } else {
+            throw `validation error: ${queryKey} not accepted key`
+        }
+
+        schemaQueryObj[schemaKey] = queryHash[queryKey]
     })
-    console.log("SCREEN",queryHash,where, select)
-    return this.model('Stock').find(where,select);
+
+    return schemaQueryObj
 }
-function keyToParam(key) {
-    if (performanceKeys.includes(key)){
-        return `performance.${key}`
+stock.statics.screen = function screen(schemaQueryObj) {
+    schemaKeys = Object.keys(schemaQueryObj);
+    const where = {};
+    const select = {
+        'symbol': 1,
+        "name": 1
     }
+    schemaKeys.forEach(key => {
+        const query = mapQueryValueToMongoose(schemaQueryObj[key])
+        where[key] = query
+        select[key] = true
+    })
+    console.log("SCREEN", schemaQueryObj, where, select)
+    return this.model('Stock').find(where, select);
 }
-function convertQueryToMongoose(queryString){
+
+
+
+function mapQueryValueToMongoose(queryString) {
     let query = null;
     let value = parseFloat(queryString.slice(1, queryString.length))
-    if (queryString[0]=='<'){
-        query = {"$lt":value}
-    } else if (queryString[0] == '>'){
-        query = {"$gt":value}
-    } else{
+    if (queryString[0] == '<') {
+        query = {
+            "$lt": value
+        }
+    } else if (queryString[0] == '>') {
+        query = {
+            "$gt": value
+        }
+    } else {
         query = queryString
     }
     return query
-} 
+}
 
-stock.index({symbol:1});
+stock.index({
+    symbol: 1
+});
 
 const Stock = mongoose.model('Stock', stock);
 
 module.exports = Stock
+
+
+
+
 
 
