@@ -35,7 +35,7 @@ function addmargins(stocks){
             report.operatingMargin = numberOrUndefinedPercent(report.operatingIncome / report.operatingRevenue);
             report.profitMargin = numberOrUndefinedPercent(report.netIncome / report.totalRevenue);
             report.currentRatio = numberOrUndefinedPercent(report.totalAssets / report.totalLiabilities);
-            report.quickRatio = numberOrUndefinedPercent(report.currentAssets / report.currentDebt);
+            report.quickRatio = numberOrUndefinedPercent(report.currentAssets / report.totalLiabilities);
 
         })
     })

@@ -67,17 +67,13 @@ const projection = {
                  "$avg": { "$multiply": [ "$financials.profitMargin", "$performance.marketcap" ] } 
              },
              "operatingMarginNumerator": {
-                 "$avg": {
-                     "$multiply": ["$financials.operatingMargin", "$performance.marketcap"]
-                 }
+                 "$avg": { "$multiply": ["$financials.operatingMargin", "$performance.marketcap"] }
              },
              "currentRatioNumerator": {
                  "$avg": { "$multiply": [ "$financials.currentRatio", "$performance.marketcap" ] } 
              },
              "quickRatioNumerator": {
-                 "$avg": {
-                     "$multiply": ["$financials.quickRatio", "$performance.marketcap"]
-                 }
+                 "$avg": { "$multiply": ["$financials.quickRatio", "$performance.marketcap"]  }
              },
              "shareholderEquityNumerator": {
                  "$avg": { "$multiply": [ "$financials.shareholderEquity", "$performance.marketcap" ] } 
@@ -92,8 +88,8 @@ const finalProjection = {
         "profitMarginAverage":{"$divide": ["$profitMarginNumerator", "$marketCapAverage"]},
         "operatingMarginAverage":{"$divide": ["$operatingMarginNumerator", "$marketCapAverage"]},
         "shareholderRatioAverage":{"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
-        "quickRatioAverage":  {"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
-        "currentRatioAverage": {"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
+        "quickRatioAverage":  {"$divide": ["$quickRatioNumerator", "$marketCapAverage"]},
+        "currentRatioAverage": {"$divide": ["$currentRatioNumerator", "$marketCapAverage"]},
         "marketCapMax":  "$marketCapMax",
         "marketCapAverage":"$marketCapAverage",
         "count":"$count",
