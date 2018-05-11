@@ -21,6 +21,7 @@ mongoose.connect(uristring, {
     } else {
         console.log('Succeeded connected to: ' + uristring);
         addSectorAverages();
+        // addmargins();
     }
 });
 

@@ -33,6 +33,7 @@ const financialSchema = new mongoose.Schema({
     totalAssets: Number,
     totalLiabilities: Number,
     currentRatio: Number,
+    quickRatio:Number,
     currentCash: Number,
     currentDebt: Number,
     totalCash: Number,

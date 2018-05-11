@@ -30,6 +30,7 @@ const validNumber = {
      "Consumer Defensive",
      "Communication Services",
  ].sort()
+
 const projection = {
     "$project": {
         "financials": {
@@ -52,7 +53,6 @@ const projection = {
          output: {
              "marketCapMax":{
                 "$max": "$performance.marketcap"
-
              },
              "marketCapAverage":{
                 "$avg": "$performance.marketcap"
@@ -65,11 +65,19 @@ const projection = {
              },
              "profitMarginNumerator": {
                  "$avg": { "$multiply": [ "$financials.profitMargin", "$performance.marketcap" ] } 
-
+             },
+             "operatingMarginNumerator": {
+                 "$avg": {
+                     "$multiply": ["$financials.operatingMargin", "$performance.marketcap"]
+                 }
              },
              "currentRatioNumerator": {
                  "$avg": { "$multiply": [ "$financials.currentRatio", "$performance.marketcap" ] } 
-
+             },
+             "quickRatioNumerator": {
+                 "$avg": {
+                     "$multiply": ["$financials.quickRatio", "$performance.marketcap"]
+                 }
              },
              "shareholderEquityNumerator": {
                  "$avg": { "$multiply": [ "$financials.shareholderEquity", "$performance.marketcap" ] } 
@@ -80,26 +88,15 @@ const projection = {
  }
 const finalProjection = {
     "$project": {
-        "grossMarginAverage": {
-            "$sum": {
-                "$divide": ["$grossMarginNumerator", "$marketCapAverage"]
-            }
-        },
-        "profitMarginAverage": {
-            "$sum": {
-                "$divide": ["$profitMarginNumerator", "$marketCapAverage"]
-            }
-        },
-        "grossMarginAverage": {
-            "$sum": {
-                "$divide": ["$currentRatioNumerator", "$marketCapAverage"]
-            }
-        },
-        "currentRatioAverage": {
-            "$sum": {
-                "$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]
-            }
-        },
+        "grossMarginAverage": {"$divide": ["$grossMarginNumerator", "$marketCapAverage"]},
+        "profitMarginAverage":{"$divide": ["$profitMarginNumerator", "$marketCapAverage"]},
+        "operatingMarginAverage":{"$divide": ["$operatingMarginNumerator", "$marketCapAverage"]},
+        "shareholderRatioAverage":{"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
+        "quickRatioAverage":  {"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
+        "currentRatioAverage": {"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
+        "marketCapMax":  "$marketCapMax",
+        "marketCapAverage":"$marketCapAverage",
+        "count":"$count",
         "sector": "$_id"
     }
 }

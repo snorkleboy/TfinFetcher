@@ -31,15 +31,17 @@ function recursiveAddandSave(i=0,batch = 100){
 function addmargins(stocks){
     stocks.forEach(stock=>{
         stock.financials.forEach(report=>{
-            report.grossMargin = numberOrUndefined(report.grossProfit / report.totalRevenue);
-            report.operatingMargin = numberOrUndefined(report.operatingIncome/report.operatingRevenue);
-            report.profitMargin =  numberOrUndefined(report.netIncome/report.operatingRevenue);
-            report.currentRatio = numberOrUndefined(report.totalAssets / report.totalLiabilities);
+            report.grossMargin = numberOrUndefinedPercent(report.grossProfit / report.totalRevenue);
+            report.operatingMargin = numberOrUndefinedPercent(report.operatingIncome / report.operatingRevenue);
+            report.profitMargin = numberOrUndefinedPercent(report.netIncome / report.totalRevenue);
+            report.currentRatio = numberOrUndefinedPercent(report.totalAssets / report.totalLiabilities);
+            report.quickRatio = numberOrUndefinedPercent(report.currentAssets / report.currentDebt);
+
         })
     })
     return stocks
 }
-function numberOrUndefined(value){
+function numberOrUndefinedPercent(value){
     if (typeof value !== "number" || isNaN(value) || value === Infinity || value === -Infinity){
         return undefined
     }
