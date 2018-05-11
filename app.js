@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
-const addIEXStockChart = require('./db/fetchScripts/iex/chart/addIEXStockChart');
+const addIEXStockChart = require('./db/fetchScripts/iex/chart/addIEXStockChartPI');
 const initStockCharts = require('./db/dbScripts/initChartsFromStocks');
 
 
@@ -23,7 +23,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        initStockCharts();
+        addIEXStockChart(50,2,900);
     }
 });
 

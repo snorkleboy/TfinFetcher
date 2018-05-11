@@ -1,31 +1,33 @@
 
 const FileStream = require('fs');
+const mongoose = require('mongoose');
 
 let startTime = 0;
-let max = null;
+let totalI = null;
 const errors = [];
 let name = "promise iterator"
 let startI=0;
 function iterateStocks(Model, modify, i=0, batch=100, stopAfter=null) {
-    name = modify.name || name
-    log(["start",modify.name, Date.now()])
-    console.log(["start", modify.name, i,batch,stopAfter]);
     return Model.find({}).count()
         .then(count => {
             startI=i;
+            totalI = stopAfter || count
+            name = modify.name || name
+
+            console.log(["start", ]);
+            log(["start", {name:modify.name, i, batch, totalI}, Date.now()])
             startTime = Date.now();
-            max = stopAfter || count
             recursiveAddandSave(Model, modify, i, batch)
         })
 }
 
 function recursiveAddandSave(Model, modify, i ,batch) {
-    if (i < max) {
+    if (i < totalI) {
         Model.find({})
             .skip(i)
             .limit(batch)
             .then(stocks => modify(stocks))
-            .then(stocks => saveStocks(stocks))
+            .then(stocks => saveStocks(stocks,Model))
             .then(saved => progressReport(saved, i))
             .catch(err => {
                 console.log(err);
@@ -39,10 +41,12 @@ function recursiveAddandSave(Model, modify, i ,batch) {
     }
 }
 
-function saveStocks(stocks) {
-    promises = [];
-    stocks.forEach(stock => promises.push(stock.save()))
-    return Promise.all(promises)
+function saveStocks(stocks, Model) {
+    // promises = [];
+    // stocks.forEach(stock => promises.push( stock.save( (err,saved)=>console.log(err,saved)) ) )
+    // return Promise.all(promises)
+
+    return Model.create(stocks);
 }
 
 function progressReport(saved, i) {
@@ -50,10 +54,10 @@ function progressReport(saved, i) {
     const elapsedTime = Date.now() - startTime;
     const numDone = i + 1 - startI;
     const averageTimeMinutes = (elapsedTime / (numDone)) / 60000;
-    const estimatedTimeMinutes = parseInt(averageTimeMinutes * (max - i));
-    const percent = parseInt((numDone) / (max - startI));
+    const estimatedTimeMinutes = parseInt(averageTimeMinutes * (totalI - i));
+    const percent = `${parseInt(1000*(numDone) / (totalI - startI))/10}%`;
 
-    console.log({batchNames,percent, estimatedTimeMinutes,i,max})
+    console.log({batchNames,percent, estimatedTimeMinutes,i,totalI})
 }
 
 function log(toLog) {
