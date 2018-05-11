@@ -9,7 +9,7 @@ const router = require('./express/controllers/router');
 
 const addIEXStockChart = require('./db/fetchScripts/iex/chart/addIEXStockChartPI');
 const initStockCharts = require('./db/dbScripts/initChartsFromStocks');
-
+const addsmarisbband = require('./db/analysisSripts/addSMARSIBBANDPI')
 
 
 //mongoose
@@ -23,7 +23,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        addIEXStockChart(50,2,900);
+        addsmarisbband(25);
     }
 });
 

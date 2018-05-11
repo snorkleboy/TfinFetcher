@@ -7,43 +7,43 @@ let totalI = null;
 const errors = [];
 let name = "promise iterator"
 let startI=0;
-function iterateStocks(Model, modify, i=0, batch=100, stopAfter=null) {
+function iterateModel(Model, modify, i=0, batchSize=100, stopAfter=null) {
     return Model.find({}).count()
         .then(count => {
             startI=i;
             totalI = stopAfter || count
             name = modify.name || name
 
-            console.log(["start", ]);
-            log(["start", {name:modify.name, i, batch, totalI}, Date.now()])
+            console.log(["start", {'name':modify.name, startI, batchSize, totalI} ]);
+            log(["start", {'name':modify.name, i, batchSize, totalI}, Date.now()])
             startTime = Date.now();
-            recursiveAddandSave(Model, modify, i, batch)
+            recursiveAddandSave(Model, modify, i, batchSize)
         })
 }
 
-function recursiveAddandSave(Model, modify, i ,batch) {
+function recursiveAddandSave(Model, modify, i ,batchSize) {
     if (i < totalI) {
         Model.find({})
             .skip(i)
-            .limit(batch)
+            .limit(batchSize)
             .then(stocks => modify(stocks))
             .then(stocks => saveStocks(stocks,Model))
             .then(saved => progressReport(saved, i))
             .catch(err => {
                 console.log(err);
                 errors.push([errors, i])
+                recursiveAddandSave(Model, modify, i + batchSize, batchSize)
             })
-            .then(() => recursiveAddandSave(Model, modify,i + batch, batch));
+            .then(() => recursiveAddandSave(Model, modify,i + batchSize, batchSize));
     } else {
         console.log("DONE",name, `errors:${errors.length}`);
-        log([name,errors])
-        log(["done",Date.now()])
+        log(["done",Date.now(),{name,errors}])
     }
 }
 
 function saveStocks(stocks, Model) {
     // promises = [];
-    // stocks.forEach(stock => promises.push( stock.save( (err,saved)=>console.log(err,saved)) ) )
+    // stocks.forEach(stock => promises.push( stock.save()))
     // return Promise.all(promises)
 
     return Model.create(stocks);
@@ -70,4 +70,4 @@ function log(toLog) {
 }
 
 
-module.exports = iterateStocks;
+module.exports = iterateModel;

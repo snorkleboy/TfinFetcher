@@ -1,6 +1,5 @@
 const axios = require('axios');
-const http = require('http')
-const https = require('https')
+
 
 const StockChart = require('../../../models/stockChart')
 const promiseIterator = require('../../../util/generalPromiseIterator')
@@ -10,7 +9,7 @@ let numConcurrent;
 let batchLength;
 
 
-function addIEXStockCharts(batchSize,numberConcurrent,startI = 0,stopAt) {
+function addIEXStockCharts(startI = 0, stopAt,batchSize = 50, numberConcurrent = 2 ) {
 numConcurrent = numberConcurrent;
 batchLength = batchSize;
     promiseIterator(
@@ -39,7 +38,8 @@ function fetchAndMapCharts(stocks) {
 }
 function mapDataIntoStocks(stockBatch, data) {
     stockBatch.forEach(stock => {
-        stock.chart = data[stock.symbol]
+        stock.chart = data[stock.symbol].chart
+        stock.markModified('chart')
     })
     return stockBatch;
 }
@@ -51,12 +51,6 @@ function fetchDayChartBatch(symbols){
     return axios({
         url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols.join(',')}&types=chart&range=5y`,
         method: "GET",
-        httpAgent: new http.Agent({
-            keepAlive: true
-        }),
-        httpsAgent: new https.Agent({
-            keepAlive: true
-        })
     })
     .then(response => response.data)
 }
