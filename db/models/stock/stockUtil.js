@@ -69,11 +69,22 @@ function mapQueryValueToMongoose(queryString) {
 }
 function listKeys(){
     return {
-        'earnings': Object.keys(earningsSchema.obj),
-        'financial': Object.keys(financialSchema.obj),
-        'performance': Object.keys(performanceSchema.obj),
-        'general': Object.keys(generalSchema.obj),
-        'analytics': Object.keys(analyticsSchema.obj)
+       "validKeys":{ 
+            'earnings': Object.keys(earningsSchema.obj),
+            'financial': Object.keys(financialSchema.obj),
+            'performance': Object.keys(performanceSchema.obj),
+            'general': Object.keys(generalSchema.obj),
+            'analytics': Object.keys(analyticsSchema.obj)
+        },
+        "validComparisons":{
+            'key=<a': "key is less than a",
+            'key=>a': "key is more than a",
+            'key=a': "key is equal to a"
+        },
+        "format":{
+            "/screen?key1=>a&key2=<b" :"screen for stocks where key1 is more than a and key2 is less than b"
+        }
+        
     }
 }
 module.exports = {
