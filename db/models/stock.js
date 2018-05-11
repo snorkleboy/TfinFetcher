@@ -143,9 +143,9 @@ stock.statics.mapScreenOptions = function mapScreenOptions(queryHash) {
 
         let schemaKey = null;
         if (Object.keys(earningsSchema.obj).includes(queryKey)) {
-            schemaKey = `earnings.$1.${queryKey}`
+            schemaKey = `earnings.0.${queryKey}`
         } else if (Object.keys(financialSchema.obj).includes(queryKey)) {
-            schemaKey = `financials.$1.${queryKey}`
+            schemaKey = `financials.0.${queryKey}`
         } else if (Object.keys(performanceSchema.obj).includes(queryKey)) {
             schemaKey = `performance.${queryKey}`
         } else if (Object.keys(generalSchema.obj).includes(queryKey)) {
@@ -160,7 +160,7 @@ stock.statics.mapScreenOptions = function mapScreenOptions(queryHash) {
 
     return schemaQueryObj
 }
-stock.statics.screen = function screen(schemaQueryObj) {
+stock.statics.screen = function screen(schemaQueryObj,limit=30) {
     schemaKeys = Object.keys(schemaQueryObj);
     const where = {};
     const select = {
@@ -170,10 +170,14 @@ stock.statics.screen = function screen(schemaQueryObj) {
     schemaKeys.forEach(key => {
         const query = mapQueryValueToMongoose(schemaQueryObj[key])
         where[key] = query
-        select[key] = true
+        select[key.split('.0').join('')] = true
     })
     console.log("SCREEN", schemaQueryObj, where, select)
-    return this.model('Stock').find(where, select);
+    return this.model('Stock')
+    .find(where)
+    .select(select)
+    .limit(limit)
+    .exec();
 }
 
 
