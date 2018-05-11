@@ -1,12 +1,13 @@
-const Stock = require('../db/models/stock')
+const Stock = require('../models/stock')
 
 
 
 
 function addSectorAverages() {
     Stock.aggregate([
-            ...projection,
-            bucket
+            projection,
+            bucket,
+            finalProjection
         ])
         .then(buckets => console.log(buckets))
 }
@@ -16,7 +17,7 @@ const validNumber = {
      "$gt": 0,
      "$ne": Infinity
  }
- sectors = [
+ const sectors = [
      "Consumer Cyclical",
      "Basic Materials",
      "Healthcare",
@@ -29,41 +30,18 @@ const validNumber = {
      "Consumer Defensive",
      "Communication Services",
  ].sort()
-// actualEPS
-// estimatedEPS
-const projection = [
-    {
-        "$project": {
-            "financials": {"$arrayElemAt": ["$financials", 0]}, 
-            'earnings': {"$arrayElemAt": ["$earnings", 0]},
-            'performance':1,
-            "sector": "$general.sector"
+const projection = {
+    "$project": {
+        "financials": {
+            "$arrayElemAt": ["$financials", 0]
         },
+        'earnings': {
+            "$arrayElemAt": ["$earnings", 0]
+        },
+        'performance': 1,
+        "sector": "$general.sector"
     },
-    {
-        "$match": {
-            "financials.grossMargin": validNumber,
-            "financials.profitMargin": validNumber,
-            "financials.operatingMargin": validNumber,
-            "financials.currentRatio": validNumber,
-            "financials.shareholderEquity": validNumber,
-            "earnings.actualEPS": validNumber,
-            "performance.week52change": validNumber,
-            "performance.consensusEPS": validNumber,
-            "performance.revenuePerShare": validNumber,
-            "performance.shortRatio": validNumber,
-            "performance.year5ChangePercent": validNumber,
-            "performance.year2ChangePercent": validNumber,
-            "performance.year1ChangePercent": validNumber,
-            "performance.ytdChangePercent": validNumber,
-            "performance.month6ChangePercent": validNumber,
-            "performance.month3ChangePercent": validNumber,
-            "performance.month1ChangePercent": validNumber,
-            "performance.day5ChangePercent.": validNumber,
-            "performance.day30ChangePercent": validNumber,
-        }
-    }
-]
+}
 
 
  const bucket = {
@@ -72,39 +50,87 @@ const projection = [
          boundaries: sectors,
          default: "other",
          output: {
+             "marketCapMax":{
+                "$max": "$performance.marketcap"
+
+             },
+             "marketCapAverage":{
+                "$avg": "$performance.marketcap"
+             },
              "count": {
                  $sum: 1
              },
-             "grossMarginAverage": {
-                 "$avg": "$report.grossMargin"
+             "grossMarginNumerator": {
+                 "$avg": { "$multiply": [ "$financials.grossMargin", "$performance.marketcap" ] }
              },
-             "profitMarginAvg": {
-                 "$avg": "$report.profitMargin"
+             "profitMarginNumerator": {
+                 "$avg": { "$multiply": [ "$financials.profitMargin", "$performance.marketcap" ] } 
 
              },
-             "operatingMarginAvg": {
-                 "$avg": "$report.operatingMargin"
+             "currentRatioNumerator": {
+                 "$avg": { "$multiply": [ "$financials.currentRatio", "$performance.marketcap" ] } 
 
              },
-             "grossMarginAvg": {
-                 "$avg": "$report.currentRatio"
-
-             },
-             "currentRatioAvg": {
-                 "$avg": "$report.shareholderEquity"
-
+             "shareholderEquityNumerator": {
+                 "$avg": { "$multiply": [ "$financials.shareholderEquity", "$performance.marketcap" ] } 
              }
 
          }
      }
  }
+const finalProjection = {
+    "$project": {
+        "grossMarginAverage": {
+            "$sum": {
+                "$divide": ["$grossMarginNumerator", "$marketCapAverage"]
+            }
+        },
+        "profitMarginAverage": {
+            "$sum": {
+                "$divide": ["$profitMarginNumerator", "$marketCapAverage"]
+            }
+        },
+        "grossMarginAverage": {
+            "$sum": {
+                "$divide": ["$currentRatioNumerator", "$marketCapAverage"]
+            }
+        },
+        "currentRatioAverage": {
+            "$sum": {
+                "$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]
+            }
+        },
+        "sector": "$_id"
+    }
+}
+
+module.exports = addSectorAverages
 
 
-module.exports = addSectorAverages()
 
-
-
-
+// const match = {
+//     "$match": {
+//         "financials.grossMargin": validNumber,
+//         "financials.profitMargin": validNumber,
+//         "financials.operatingMargin": validNumber,
+//         "financials.currentRatio": validNumber,
+//         "financials.shareholderEquity": validNumber,
+//         "earnings.actualEPS": validNumber,
+//         "performance.week52change": validNumber,
+//         "performance.consensusEPS": validNumber,
+//         "performance.revenuePerShare": validNumber,
+//         "performance.shortRatio": validNumber,
+//         "performance.year5ChangePercent": validNumber,
+//         "performance.year2ChangePercent": validNumber,
+//         "performance.year1ChangePercent": validNumber,
+//         "performance.ytdChangePercent": validNumber,
+//         "performance.month6ChangePercent": validNumber,
+//         "performance.month3ChangePercent": validNumber,
+//         "performance.month1ChangePercent": validNumber,
+//         "performance.day5ChangePercent.": validNumber,
+//         "performance.day30ChangePercent": validNumber,
+//     }
+// }
 //first way of doing it
 // const group = {
 //     "$group":{

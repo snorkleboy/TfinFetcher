@@ -40,7 +40,7 @@ function addmargins(stocks){
     return stocks
 }
 function numberOrUndefined(value){
-    if (typeof value !== "number" || isNaN(value)){
+    if (typeof value !== "number" || isNaN(value) || value === Infinity || value === -Infinity){
         return undefined
     }
     return value
