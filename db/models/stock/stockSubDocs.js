@@ -60,7 +60,7 @@ const performanceSchema = new mongoose.Schema({
     shortDate: String,
     dividendRate: Number,
     dividendYield: Number,
-    exDividendDate: Number,
+    exDividendDate: String,
     latestEPS: Number,
     latestEPSDate: String,
     sharesOutstanding: Number,

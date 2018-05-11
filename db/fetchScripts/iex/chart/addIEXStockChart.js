@@ -1,5 +1,5 @@
 const axios = require('axios');
-const StockChart = require('../../../db/models/stockChart')
+const StockChart = require('../../../models/stockChart')
 const http = require('http')
 const https = require('https')
 const FileStream = require('fs');
@@ -116,7 +116,7 @@ function progressReport(saved,i) {
     const numDone = i-startI
     const elapsedTime = Date.now() - startTime
     const averageTime = elapsedTime / numDone
-    const estimatedTimeMinutes = parseInt(((max - numDone) * averageTime)/60000));
+    const estimatedTimeMinutes = parseInt(((max - numDone) * averageTime)/60000);
     const percent = parseInt((numDone/max)*100);
     console.log({
         stockNames,
