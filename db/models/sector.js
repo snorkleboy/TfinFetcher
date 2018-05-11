@@ -104,9 +104,8 @@ const sector = new mongoose.Schema({
         type: String,
         required: 'must include sector name'
     },
-    performance:[{
-
-    }],
+    numStocks,
+    performance: performanceSchema,
     financials: [financialSchema],
     earnings: [earningsSchema],
     created_at: {
