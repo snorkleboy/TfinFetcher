@@ -3,12 +3,19 @@ const StockChart = require('../models/stockChart')
 const promiseIterator = require('../util/generalPromiseIterator')
 
 function initChartsFromstocks(){
-    promiseIterator(Stock, getStockName, 0, 1, 2)
+    promiseIterator(Stock, getStockName, 0, 100)
 }
 function getStockName(stocks) {
+    const promises = [];
     stocks.forEach(stock => {
-        console.log(stock.symbol);
+        promises.push(
+            StockChart.create({
+                "symbol": stock.symbol,
+                "name": stock.name,
+                "stock_id":stock.id
+            })
+        )
     })
-    return stocks;
+    return Promise.all(promises);
 }
 module.exports = initChartsFromstocks;
