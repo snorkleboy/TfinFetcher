@@ -7,8 +7,6 @@ const {
 } = require('./stockSubDocs');
 
 function mapScreenOptions(queryHash) {
-
-    console.log('here1', Object.keys(queryHash));
     const schemaQueryObj = {};
     Object.keys(queryHash).forEach(queryKey => {
 
@@ -28,7 +26,6 @@ function mapScreenOptions(queryHash) {
         }
         schemaQueryObj[schemaKey] = queryHash[queryKey]
     })
-
     return schemaQueryObj
 }
 
@@ -70,7 +67,17 @@ function mapQueryValueToMongoose(queryString) {
     }
     return query
 }
+function listKeys(){
+    return {
+        'earnings': Object.keys(earningsSchema.obj),
+        'financial': Object.keys(financialSchema.obj),
+        'performance': Object.keys(performanceSchema.obj),
+        'general': Object.keys(generalSchema.obj),
+        'analytics': Object.keys(analyticsSchema.obj)
+    }
+}
 module.exports = {
     mapScreenOptions,
     screen,
+    listKeys
 }

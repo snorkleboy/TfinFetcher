@@ -10,6 +10,7 @@ const {
 const {
     mapScreenOptions,
     screen,
+    listKeys
 } = require('./stock/stockUtil')
 
 const stock = new mongoose.Schema({
@@ -32,7 +33,7 @@ const stock = new mongoose.Schema({
 
 stock.statics.mapScreenOptions = mapScreenOptions
 stock.statics.screen = screen
-
+stock.statics.listKeys = listKeys
 stock.index({
     symbol: 1
 });
