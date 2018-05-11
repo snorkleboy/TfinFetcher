@@ -1,121 +1,16 @@
 const mongoose = require('mongoose');
-const earningsSchema = new mongoose.Schema({
-    actualEPS: Number,
-    consensusEPS: Number,
-    estimatedEPS: Number,
-    announceTime: String,
-    numberOfEstimates: Number,
-    EPSSurpriseDollar: Number,
-    EPSReportDate: String,
-    fiscalPeriod: String,
-    fiscalEndDate: String,
-    yearAgo: Number,
-    yearAgoChangePercent: Number,
-    estimatedChangePercent: Number,
-    symbolId: Number
-})
+const {
+    earningsSchema,
+    financialSchema,
+    performanceSchema,
+    generalSchema,
+    analyticsSchema,
+} = require('./stock/stockSubDocs');
 
-const financialSchema = new mongoose.Schema({
-    profitMargin: Number,
-    operatingMargin: Number,
-    grossMargin: Number,
-    reportDate: String,
-    grossProfit: Number,
-    costOfRevenue: Number,
-    operatingRevenue: Number,
-    totalRevenue: Number,
-    operatingIncome: Number,
-    netIncome: Number,
-    researchAndDevelopment: Number,
-    operatingExpense: Number,
-    currentAssets: Number,
-    totalAssets: Number,
-    totalLiabilities: Number,
-    currentRatio: Number,
-    currentCash: Number,
-    currentDebt: Number,
-    totalCash: Number,
-    totalDebt: Number,
-    shareholderEquity: Number,
-    cashChange: Number,
-    cashFlow: Number,
-    operatingGainsLosses: Number
-})
-const performanceSchema = new mongoose.Schema({
-    ROI: {
-        '20day':Number,
-        '50day':Number,
-        '200day':Number,
-        '1yr':Number,
-    },
-    _id: String,
-    companyName: String,
-    marketcap: Number,
-    beta: Number,
-    week52high: Number,
-    week52low: Number,
-    week52change: Number,
-    shortInterest: Number,
-    shortDate: String,
-    dividendRate: Number,
-    dividendYield: Number,
-    exDividendDate: Number,
-    latestEPS: Number,
-    latestEPSDate: String,
-    sharesOutstanding: Number,
-    float: Number,
-    returnOnEquity: Number,
-    consensusEPS: Number,
-    numberOfEstimates: Number,
-    EPSSurpriseDollar: Number,
-    EPSSurprisePercent: Number,
-    symbol: String,
-    EBITDA: Number,
-    revenue: Number,
-    grossProfit: Number,
-    cash: Number,
-    debt: Number,
-    ttmEPS: Number,
-    revenuePerShare: Number,
-    revenuePerEmployee: Number,
-    peRatioHigh: Number,
-    peRatioLow: Number,
-    returnOnAssets: Number,
-    returnOnCapital: Number,
-    profitMargin: Number,
-    priceToSales: Number,
-    priceToBook: Number,
-    day200MovingAvg: Number,
-    day50MovingAvg: Number,
-    institutionPercent: Number,
-    insiderPercent: Number,
-    shortRatio: Number,
-    year5ChangePercent: Number,
-    year2ChangePercent: Number,
-    year1ChangePercent: Number,
-    ytdChangePercent: Number,
-    month6ChangePercent: Number,
-    month3ChangePercent: Number,
-    month1ChangePercent: Number,
-    day5ChangePercent: Number,
-    day30ChangePercent: Number,
-})
-
-const generalSchema = new mongoose.Schema({
-    _id: String,
-    CEO: String,
-    companyName: String,
-    description: String,
-    exchange: String,
-    industry: String,
-    issueType: String,
-    sector: String,
-    symbol: String,
-    website: String
-})
-const analyticsSchema = new mongoose.Schema({
-
-})
+const {
+    mapScreenOptions,
+    screen,
+} = require('./stock/stockUtil')
 
 const stock = new mongoose.Schema({
     symbol: {
@@ -135,69 +30,8 @@ const stock = new mongoose.Schema({
     general: generalSchema,
 });
 
-stock.statics.mapScreenOptions = function mapScreenOptions(queryHash) {
-
-    console.log('here1', Object.keys(queryHash));
-    const schemaQueryObj = {};
-    Object.keys(queryHash).forEach(queryKey => {
-
-        let schemaKey = null;
-        if (Object.keys(earningsSchema.obj).includes(queryKey)) {
-            schemaKey = `earnings.0.${queryKey}`
-        } else if (Object.keys(financialSchema.obj).includes(queryKey)) {
-            schemaKey = `financials.0.${queryKey}`
-        } else if (Object.keys(performanceSchema.obj).includes(queryKey)) {
-            schemaKey = `performance.${queryKey}`
-        } else if (Object.keys(generalSchema.obj).includes(queryKey)) {
-            schemaKey = `analytics.${queryKey}`
-        } else if (Object.keys(analyticsSchema.obj).includes(queryKey)) {
-            schemaKey = `general.${queryKey}`
-        } else {
-            throw `validation error: ${queryKey} not accepted key`
-        }
-        schemaQueryObj[schemaKey] = queryHash[queryKey]
-    })
-
-    return schemaQueryObj
-}
-stock.statics.screen = function screen(schemaQueryObj,limit=30) {
-    schemaKeys = Object.keys(schemaQueryObj);
-    const where = {};
-    const select = {
-        'symbol': 1,
-        "name": 1
-    }
-    schemaKeys.forEach(key => {
-        const query = mapQueryValueToMongoose(schemaQueryObj[key])
-        where[key] = query
-        select[key.split('.0').join('')] = true
-    })
-    console.log("SCREEN", schemaQueryObj, where, select)
-    return this.model('Stock')
-    .find(where)
-    .select(select)
-    .limit(limit)
-    .exec();
-}
-
-
-
-function mapQueryValueToMongoose(queryString) {
-    let query = null;
-    let value = parseFloat(queryString.slice(1, queryString.length))
-    if (queryString[0] == '<') {
-        query = {
-            "$lt": value
-        }
-    } else if (queryString[0] == '>') {
-        query = {
-            "$gt": value
-        }
-    } else {
-        query = queryString
-    }
-    return query
-}
+stock.statics.mapScreenOptions = mapScreenOptions
+stock.statics.screen = screen
 
 stock.index({
     symbol: 1
