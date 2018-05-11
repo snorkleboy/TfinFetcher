@@ -5,14 +5,17 @@ let startTime = 0;
 let max = null;
 const errors = [];
 let name = "promise iterator"
+let startI=0;
 function iterateStocks(Model, modify, i=0, batch=100, stopAfter=null) {
     name = modify.name || name
     log(["start",modify.name, Date.now()])
+    console.log(["start", modify.name, i,batch,stopAfter]);
     return Model.find({}).count()
         .then(count => {
+            startI=i;
             startTime = Date.now();
-            max = stopAfter ? stopAfter + i : count
-            recursiveAddandSave(Model, modify, i = 0, batch = 0)
+            max = stopAfter || count
+            recursiveAddandSave(Model, modify, i, batch)
         })
 }
 
@@ -28,10 +31,10 @@ function recursiveAddandSave(Model, modify, i ,batch) {
                 console.log(err);
                 errors.push([errors, i])
             })
-            .then(() => recursiveAddandSave(i + batch, batch));
+            .then(() => recursiveAddandSave(Model, modify,i + batch, batch));
     } else {
-        console.log("DONE adding earnings change", `errors:${errors.length}`);
-        log(errors)
+        console.log("DONE",name, `errors:${errors.length}`);
+        log([name,errors])
         log(["done",Date.now()])
     }
 }
@@ -43,12 +46,14 @@ function saveStocks(stocks) {
 }
 
 function progressReport(saved, i) {
-    const names = saved.map(stock => stock.symbol);
+    const batchNames = saved.map(stock => stock.symbol);
     const elapsedTime = Date.now() - startTime;
-    const averageTime = elapsedTime / (i + 1);
-    const estimatedTimeMinutes = parseInt(averageTime / 60000 * (max - i));
-    const percent = parseInt(i / max);
-    console.log(names, `${percent}%`, `estimated time left:${estimatedTimeMinutes} minutes`)
+    const numDone = i + 1 - startI;
+    const averageTimeMinutes = (elapsedTime / (numDone)) / 60000;
+    const estimatedTimeMinutes = parseInt(averageTimeMinutes * (max - i));
+    const percent = parseInt((numDone) / (max - startI));
+
+    console.log({batchNames,percent, estimatedTimeMinutes,i,max})
 }
 
 function log(toLog) {

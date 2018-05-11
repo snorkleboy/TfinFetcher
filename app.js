@@ -7,7 +7,11 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
-const addmargins = require('./db/analysisSripts/financialMargins')
+const addIEXStockChart = require('./db/fetchScripts/iex/chart/addIEXStockChart');
+const initStockCharts = require('./db/dbScripts/initChartsFromStocks');
+
+
+
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
@@ -19,6 +23,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
+        denestChart();
     }
 });
 

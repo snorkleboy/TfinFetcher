@@ -6,7 +6,9 @@ const stockChart = new mongoose.Schema({
         required: 'must include symbol/ticker'
     },
     name: String,
-    chart: [{}],
+    chart: [{
+        
+    }],
     created_at: {
         type: Date,
         default: Date.now
