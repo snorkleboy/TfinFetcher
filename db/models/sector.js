@@ -14,7 +14,65 @@ const earningsSchema = new mongoose.Schema({
     estimatedChangePercent: Number,
     symbolId: Number
 })
-
+const performanceSchema = new mongoose.Schema({
+    ROI: {
+        '20day': Number,
+        '50day': Number,
+        '200day': Number,
+        '1yr': Number,
+    },
+    _id: String,
+    companyName: String,
+    marketcap: Number,
+    beta: Number,
+    week52high: Number,
+    week52low: Number,
+    week52change: Number,
+    shortInterest: Number,
+    shortDate: String,
+    dividendRate: Number,
+    dividendYield: Number,
+    exDividendDate: String,
+    latestEPS: Number,
+    latestEPSDate: String,
+    sharesOutstanding: Number,
+    float: Number,
+    returnOnEquity: Number,
+    consensusEPS: Number,
+    numberOfEstimates: Number,
+    EPSSurpriseDollar: Number,
+    EPSSurprisePercent: Number,
+    symbol: String,
+    EBITDA: Number,
+    revenue: Number,
+    grossProfit: Number,
+    cash: Number,
+    debt: Number,
+    ttmEPS: Number,
+    revenuePerShare: Number,
+    revenuePerEmployee: Number,
+    peRatioHigh: Number,
+    peRatioLow: Number,
+    returnOnAssets: Number,
+    returnOnCapital: Number,
+    profitMargin: Number,
+    priceToSales: Number,
+    priceToBook: Number,
+    day200MovingAvg: Number,
+    day50MovingAvg: Number,
+    institutionPercent: Number,
+    insiderPercent: Number,
+    shortRatio: Number,
+    year5ChangePercent: Number,
+    year2ChangePercent: Number,
+    year1ChangePercent: Number,
+    ytdChangePercent: Number,
+    month6ChangePercent: Number,
+    month3ChangePercent: Number,
+    month1ChangePercent: Number,
+    day5ChangePercent: Number,
+    day30ChangePercent: Number,
+})
 const financialSchema = new mongoose.Schema({
     profitMargin: Number,
     operatingMargin: Number,
@@ -42,7 +100,10 @@ const financialSchema = new mongoose.Schema({
     operatingGainsLosses: Number
 })
 const sector = new mongoose.Schema({
-    name:String,
+    sector: {
+        type: String,
+        required: 'must include sector name'
+    },
     performance:[{
 
     }],
@@ -52,11 +113,12 @@ const sector = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    performance:performanceSchema
 
 });
-stockChart.index({
+sector.index({
     name: 1
 });
-const Sector = mongoose.model('Sector', stockChart);
+const Sector = mongoose.model('Sector', sector);
 
 module.exports = Sector
