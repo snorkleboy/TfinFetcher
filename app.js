@@ -7,8 +7,6 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
-const addSectorAverages = require('./db/analysisSripts/addSectorAverages')
-const moveValuesToStocks = require('./db/dbScripts/moveLatestValuesFromChartsToStock')
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
@@ -20,7 +18,6 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        addSectorAverages();
     }
 });
 

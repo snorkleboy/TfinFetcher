@@ -20,7 +20,7 @@ function addSMARISBBANDToStocks(ranges, rsiRange, stocks) {
             addAnalysis(stock.chart, ranges, rsiRange)
             stock.markModified('chart')
         } catch (e) {
-            console.log(`symbol ${stock.symbol}`, 'no chart', e);
+            throw {'symbol':stock.symbol, e};
         }
     })
     return stocks;

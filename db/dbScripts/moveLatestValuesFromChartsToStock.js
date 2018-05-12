@@ -81,31 +81,5 @@ function getROI(todaysReport, chart, days) {
     }
     return val;
 }
-function promiseFiller(documents, callback) {
-    const promises = [];
-    documents.forEach(doc => promise.push(callback(doc)))
-    return Promise.all(promises);
-}
 
-
-
-const a = {
-    ROI: {
-        '20day': null,
-        '50day': null,
-        '200day': null,
-        '1yr': null,
-    },
-    RSI: null,
-    SMA: {
-        '20day': null,
-        '50day': null,
-        '200day': null,
-    },
-    stdev: {
-        '20day': null,
-        '50day': null,
-        '200day': null,
-    }
-}
 module.exports = moveValuesFromChartsToStocks
