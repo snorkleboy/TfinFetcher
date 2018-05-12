@@ -45,8 +45,6 @@ function deepIncludes(dottedKey, schema){
 }
 
 function screen(schemaQueryObj, limit = 30) {
-        console.log({"lcoation":"MODEL", sectorCache} )
-
     schemaKeys = Object.keys(schemaQueryObj);
     const where = {};
     const select = {
@@ -54,11 +52,11 @@ function screen(schemaQueryObj, limit = 30) {
         "name": 1
     }
     schemaKeys.forEach(key => {
-        const query = mapQueryValueToMongoose(schemaQueryObj[key])
+        const query = mapQueryValueToMongoose(schemaQueryObj[key], key)
         where[key] = query
         select[key.split('.0').join('')] = true
     })
-    console.log("SCREEN", schemaQueryObj, where, select)
+    console.log({"action":"SCREEN", where, select})
     return this.model('Stock')
         .find(where)
         .select(select)
@@ -66,10 +64,9 @@ function screen(schemaQueryObj, limit = 30) {
         .exec();
 }
 
-
-function mapQueryValueToMongoose(queryString) {
+function mapQueryValueToMongoose(queryString,key) {
     let query = null;
-    let value = parseFloat(queryString.slice(1, queryString.length))
+    let value = getValue(queryString, key)
     if (queryString[0] == '<') {
         query = {
             "$lt": value
@@ -79,9 +76,40 @@ function mapQueryValueToMongoose(queryString) {
             "$gt": value
         }
     } else {
-        query = queryString
+        query = value
     }
     return query
+}
+
+//queryString Types
+// peRatio=<10bsa
+// peRatio=<20
+// peRatio=20
+function getValue(queryString, key) {
+    let value;
+    const components = queryString.split(/([0-9]+)/)
+    console.log(components);
+    //relative query
+    if (components[2] && components[2].length>0) {
+        value = getRelativeValue(components[2], key)
+    //absolute query
+    } else if (components[1] && components[1].length > 0 ){
+        value = parseFloat(components[1])
+    }
+    return value;
+}
+function getRelativeValue(queryValue, key) {
+    console.log({
+        'location': "get rel val",
+        queryValue,
+        key,
+        sectors:sectorCache.sectors
+    })
+
+    //hope is to do something like 
+    // {"performance.sma.20":{"lt":sectorCache.sectors[this.general.sector]}}
+
+    return 666
 }
 function listKeys(){
     return {
@@ -122,4 +150,8 @@ module.exports = {
     mapScreenOptions,
     screen,
     listKeys
+}
+\
+function aggregationScreen(){
+    
 }
