@@ -3,7 +3,6 @@ const ScreenController = express.Router();
 const mongoose = require('mongoose');
 const Stock = require('../../db/models/stock');
 ScreenController.get('/',(req,res)=>{
-    console.log("SCREENSCONTROLLER", sectorCache.sectors)
     try {
         const query = req.query
         const queryStringExists = Object.keys(query).length > 0

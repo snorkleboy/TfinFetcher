@@ -1,18 +1,21 @@
 const Sector = require("../models/sector");
 
+let initialized = false;
 class sectorCache{
     constructor(){
-        console.log('constructor')
     }
     init(){
-        console.log("init")
+        if (initialized){
+            throw "already initialized sector cache"
+        }
         const that = this;
         return Sector.find({})
             .then(sectors => {
                 that.sectors = sectors
+                initialized=true;
             })
 
     }
 }
 
-module.exports = sectorCache;
+module.exports = new sectorCache();

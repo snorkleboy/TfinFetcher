@@ -5,6 +5,7 @@ const {
     generalSchema,
     analyticsSchema,
 } = require('./stockSubDocs');
+const sectorCache = require('../../dbScripts/sectorCache')
 
 function mapScreenOptions(queryHash) {
     const schemaQueryObj = {};
@@ -44,6 +45,8 @@ function deepIncludes(dottedKey, schema){
 }
 
 function screen(schemaQueryObj, limit = 30) {
+        console.log({"lcoation":"MODEL", sectorCache} )
+
     schemaKeys = Object.keys(schemaQueryObj);
     const where = {};
     const select = {
