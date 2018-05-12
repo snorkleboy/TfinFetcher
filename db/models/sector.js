@@ -21,9 +21,10 @@ const performanceSchema = new mongoose.Schema({
         '200day': Number,
         '1yr': Number,
     },
+    peRatio:Number,
     _id: String,
     companyName: String,
-    marketcap: Number,
+    marketCap: Number,
     beta: Number,
     week52high: Number,
     week52low: Number,
@@ -72,6 +73,9 @@ const performanceSchema = new mongoose.Schema({
     month1ChangePercent: Number,
     day5ChangePercent: Number,
     day30ChangePercent: Number,
+    marketCapMax:Number
+    
+    
 })
 const financialSchema = new mongoose.Schema({
     profitMargin: Number,
@@ -104,7 +108,7 @@ const sector = new mongoose.Schema({
         type: String,
         required: 'must include sector name'
     },
-    numStocks,
+    numStocks:Number,
     performance: performanceSchema,
     financials: [financialSchema],
     earnings: [earningsSchema],
@@ -112,11 +116,10 @@ const sector = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    performance:performanceSchema
 
 });
 sector.index({
-    name: 1
+    sector: 1
 });
 const Sector = mongoose.model('Sector', sector);
 

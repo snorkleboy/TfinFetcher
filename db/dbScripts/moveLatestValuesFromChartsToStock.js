@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const promiseIterator = require('../util/generalPromiseIterator.js')
 // const promiseFiller = require('../util/promiseFiller.js')
 
-function moveValuesFromChartsToStocks(batchSize = 10, startI = 0, stopAt) {
+function moveValuesFromChartsToStocks(batchSize = 3, startI = 0, stopAt) {
     promiseIterator(
         StockChart,
         moveValues,
@@ -24,19 +24,30 @@ function moveValues(charts){
     });
     return Stock.find({"_id":{"$in":ids}})
     .then((stocks)=>{
+        const errors = [];
         stocks.forEach(stock=>{
             const chart = chartsHash[stock.symbol].chart
             const todaysReport = chart[chart.length-1];
-
             const performance = stock.performance
 
+            
             if (performance && todaysReport) {
+                let eps = undefined;
+                if (stock.earnings[0] && stock.earnings[0].actualEPS && stock.earnings[0].actualEPS > 0) {
+                    eps = stock.earnings[0].actualEPS
+                } else if (performance.latestEPS && performance.latestEPS > 0) {
+                    eps = performance.latestEPS
+                } else if (performance.grossProfit / performance.sharesOutstanding > 0) {
+                    eps = performance.grossProfit / performance.sharesOutstanding;
+                }
                 if (isNaN(performance.revenuePerEmployee)) {
                     performance.revenuePerEmployee = undefined;
                 }
                 if (isNaN(performance.revenuePerShare)) {
                     performance.revenuePerShare = undefined;
                 }
+                // price per share / earnigns per share === price / earnigns
+                performance.peRatio = eps ? todaysReport.close / eps : undefined
                 performance.sma = todaysReport.sma
                 performance.stdev = todaysReport.stdev
                 performance.rsi = todaysReport.rsi
@@ -48,11 +59,15 @@ function moveValues(charts){
                 }
             } else{
                 const missing = todaysReport ? "performance missing" : [chart.length,chart[chart.length-2]]
-                throw {message:"NO todaysReport or performance OBJECT", missing, symbol:stock.symbol}
+                errors.push({message:"NO todaysReport or performance OBJECT", missing, symbol:stock.symbol})
+
             }
             
         })
-        
+        if (errors.length>0){
+            throw errors
+        }
+
         return stocks
     })
 }

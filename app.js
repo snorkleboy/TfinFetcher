@@ -8,7 +8,6 @@ mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
 const addSectorAverages = require('./db/analysisSripts/addSectorAverages')
-const addmargins = require('./db/analysisSripts/addFinancialMargins')
 const moveValuesToStocks = require('./db/dbScripts/moveLatestValuesFromChartsToStock')
 //mongoose
 //
@@ -21,7 +20,7 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-    moveValuesToStocks(10,300)
+        addSectorAverages();
     }
 });
 

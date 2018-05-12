@@ -1,15 +1,43 @@
 const Stock = require('../models/stock')
+const Sector = require('../models/sector');
 
 
-
-
+let sectors;
+const defaultSectorName = "other"
 function addSectorAverages() {
-    Stock.aggregate([
-            projection,
-            bucket,
-            finalProjection
-        ])
-        .then(buckets => console.log(buckets))
+    let sectorObjs;
+    Sector.find({})
+    .then(allSectors=>{
+        sectorObjs = allSectors;
+        sectors = allSectors.map(el => el.sector).sort()
+    })
+    .then(sectors=> Stock.aggregate([projection(), bucket(), finalProjection() ] ))
+    .then(aggregates => {
+        sectorHash ={};
+        sectorObjs.forEach((sector=>sectorHash[sector.sector]=sector))
+        aggregates.forEach(aggregate => {
+            if (aggregate.sector !== defaultSectorName){
+                sector = sectorHash[aggregate.sector]
+                sector.financials[0] = sector.financials[0] || {}
+                sector.performance = sector.performance || {}
+
+                sector.financials[0].grossMargin = aggregate.grossMarginAverage
+                sector.financials[0].profitMargin = aggregate.profitMarginAverage
+                sector.financials[0].operatingMargin = aggregate.operatingMarginAverage
+                sector.financials[0].shareholderRatio = aggregate.shareholderRatioAverage
+                sector.financials[0].quickRatio = aggregate.quickRatioAverage
+                sector.financials[0].currentRatio = aggregate.currentRatioAverage
+                sector.performance.marketCapMax = aggregate.marketCapMax
+                sector.performance.marketCap = aggregate.marketCapAverage
+                sector.performance.numStocks = aggregate.count
+            }
+        })        
+        return sectorObjs
+    })
+    .then(sectorsToSave=>{
+        return Promise.all(sectorsToSave.map(sector=>sector.save()));
+    })
+    .then(saved=>console.log(saved));
 }
 
 const validNumber = {
@@ -17,21 +45,8 @@ const validNumber = {
      "$gt": 0,
      "$ne": Infinity
  }
- const sectors = [
-     "Consumer Cyclical",
-     "Basic Materials",
-     "Healthcare",
-     "Financial Services",
-     "Utilities",
-     "Energy",
-     "Industrials",
-     "Technology",
-     "Real Estate",
-     "Consumer Defensive",
-     "Communication Services",
- ].sort()
 
-const projection = {
+const projection = ()=>({
     "$project": {
         "financials": {
             "$arrayElemAt": ["$financials", 0]
@@ -42,14 +57,14 @@ const projection = {
         'performance': 1,
         "sector": "$general.sector"
     },
-}
+})
 
 
- const bucket = {
+ const bucket = ()=>({
      "$bucket": {
          groupBy: "$sector",
          boundaries: sectors,
-         default: "other",
+         default: defaultSectorName,
          output: {
              "marketCapMax":{
                 "$max": "$performance.marketcap"
@@ -59,6 +74,9 @@ const projection = {
              },
              "count": {
                  $sum: 1
+             },
+             "pricePerEarningNumerator": {
+                 "$avg": { "$multiply": [ "$performance.peRatio", "$performance.marketcap" ] }
              },
              "grossMarginNumerator": {
                  "$avg": { "$multiply": [ "$financials.grossMargin", "$performance.marketcap" ] }
@@ -81,8 +99,8 @@ const projection = {
 
          }
      }
- }
-const finalProjection = {
+ })
+const finalProjection = ()=>({
     "$project": {
         "grossMarginAverage": {"$divide": ["$grossMarginNumerator", "$marketCapAverage"]},
         "profitMarginAverage":{"$divide": ["$profitMarginNumerator", "$marketCapAverage"]},
@@ -95,7 +113,7 @@ const finalProjection = {
         "count":"$count",
         "sector": "$_id"
     }
-}
+})
 
 module.exports = addSectorAverages
 
@@ -135,3 +153,4 @@ module.exports = addSectorAverages
 //         "currentRatioAvg": {"$avg": "$report.shareholderEquity"}
 //     }
 // }
+

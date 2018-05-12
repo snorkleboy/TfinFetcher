@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const earningsSchema = new mongoose.Schema({
+    
     actualEPS: Number,
     consensusEPS: Number,
     estimatedEPS: Number,
@@ -61,6 +62,7 @@ const performanceSchema = new mongoose.Schema({
         '50day': Number,
         '200day': Number,
     },
+    peRatio: Number,
     _id: String,
     companyName: String,
     marketcap: Number,
