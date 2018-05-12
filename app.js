@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
-//global scoped
 const sectorCache = require("./db/dbScripts/sectorCache")
 //mongoose
 //
