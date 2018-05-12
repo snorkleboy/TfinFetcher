@@ -7,7 +7,7 @@ const stockChart = new mongoose.Schema({
     },
     name: String,
     chart: [{ }],
-    stock_id:String,
+    stock_id: mongoose.Schema.Types.ObjectId,
     created_at: {
         type: Date,
         default: Date.now

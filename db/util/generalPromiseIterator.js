@@ -30,9 +30,8 @@ function recursiveAddandSave(Model, modify, i ,batchSize) {
             .then(stocks => saveStocks(stocks,Model))
             .then(saved => progressReport(saved, i))
             .catch(err => {
-                console.log(err);
+                console.log(err.message, err.symbol, err.missing);
                 errors.push([errors, i])
-                recursiveAddandSave(Model, modify, i + batchSize, batchSize)
             })
             .then(() => recursiveAddandSave(Model, modify,i + batchSize, batchSize));
     } else {
@@ -42,11 +41,11 @@ function recursiveAddandSave(Model, modify, i ,batchSize) {
 }
 
 function saveStocks(stocks, Model) {
-    // promises = [];
-    // stocks.forEach(stock => promises.push( stock.save()))
-    // return Promise.all(promises)
+    promises = [];
+    stocks.forEach(stock => promises.push( stock.save()))
+    return Promise.all(promises)
 
-    return Model.create(stocks);
+    // return Model.create(stocks);
 }
 
 function progressReport(saved, i) {
@@ -58,6 +57,10 @@ function progressReport(saved, i) {
     const percent = `${parseInt(1000*(numDone) / (totalI - startI))/10}%`;
 
     console.log({batchNames,percent, estimatedTimeMinutes,i,totalI})
+    if (i%200===0){
+        log({batchNames,percent, estimatedTimeMinutes,i,totalI,errors})
+        errors= [];
+    }
 }
 
 function log(toLog) {

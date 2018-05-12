@@ -44,11 +44,22 @@ const financialSchema = new mongoose.Schema({
     operatingGainsLosses: Number
 })
 const performanceSchema = new mongoose.Schema({
-    ROI: {
+    roi: {
         '20day': Number,
         '50day': Number,
         '200day': Number,
         '1yr': Number,
+    },
+    rsi:Number,
+    sma:{
+        '20day': Number,
+        '50day': Number,
+        '200day': Number,
+    },
+    stdev:{
+        '20day': Number,
+        '50day': Number,
+        '200day': Number,
     },
     _id: String,
     companyName: String,

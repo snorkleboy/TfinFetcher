@@ -3,10 +3,6 @@ const promiseIterator = require('../util/generalPromiseIterator.js')
 
 const __ranges = [20, 50, 200]
 const __rsiRange = 14
-let sumTime = 0;
-let lastTime = Date.now();
-let numStocks = null
-startI = null;
 
 function addSMARSIBBAND(batchSize = 10, startI = 0, stopAt, ranges = __ranges, rsiRange = __rsiRange) {
     promiseIterator(
@@ -110,16 +106,4 @@ function calcRSI(inc, dec, range, j) {
 }
 
 
-
-function progressReport(i, batchLength, saved) {
-    sumTime += (Date.now() - lastTime) / 1000
-    const averageTime = sumTime / (i + 1)
-    const estimatedTime = ((numStocks - (i + 1))) * averageTime / 60;
-    const percent = parseInt(((i + 1 + batchLength + startI) / (numStocks + startI)) * 100);
-    console.log(
-        `${percent}% (${i+1+startI}/${numStocks+startI}) analized and saved`,
-        `average time ${averageTime} sec`,
-        `est time: ${estimatedTime} min`
-    )
-}
 module.exports = addSMARSIBBAND;
