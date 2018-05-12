@@ -151,7 +151,35 @@ module.exports = {
     screen,
     listKeys
 }
-\
-function aggregationScreen(){
-    
-}
+// //
+db.stocks.aggregate([
+    {
+        "$lookup":{
+            from:"sectors",
+            localField:"general.sector",
+            foreignField:"sector",
+            as:"sectorAvg"
+        }
+    },
+    {
+        "$unwind":"$sectorAvg"
+    },
+    {
+        "$project":{
+            "marketcap": "$performance.marketcap",
+            "sectorAvg":"$sectorAvg.performance.marketCap",
+            "cmp":{"$cmp":["$performance.marketcap","$sectorAvg.performance.marketCap"]}
+        }
+    },
+    {
+        "$match": {
+            "cmp": {
+                "$gt": 0
+            }
+        }
+    }
+])
+
+
+
+
