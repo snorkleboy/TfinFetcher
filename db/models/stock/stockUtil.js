@@ -11,15 +11,15 @@ function mapScreenOptions(queryHash) {
     Object.keys(queryHash).forEach(queryKey => {
 
         let schemaKey = null;
-        if (Object.keys(earningsSchema.obj).includes(queryKey)) {
+        if (deepIncludes(queryKey, earningsSchema.obj)) {
             schemaKey = `earnings.0.${queryKey}`
-        } else if (Object.keys(financialSchema.obj).includes(queryKey)) {
+        } else if (deepIncludes(queryKey, financialSchema.obj)){
             schemaKey = `financials.0.${queryKey}`
-        } else if (Object.keys(performanceSchema.obj).includes(queryKey)) {
+        } else if (deepIncludes(queryKey, performanceSchema.obj)){
             schemaKey = `performance.${queryKey}`
-        } else if (Object.keys(generalSchema.obj).includes(queryKey)) {
+        } else if (deepIncludes(queryKey, generalSchema.obj)){
             schemaKey = `analytics.${queryKey}`
-        } else if (Object.keys(analyticsSchema.obj).includes(queryKey)) {
+        } else if (deepIncludes(queryKey, analyticsSchema.obj)){
             schemaKey = `general.${queryKey}`
         } else {
             throw `validation error: ${queryKey} not accepted key`
@@ -28,7 +28,20 @@ function mapScreenOptions(queryHash) {
     })
     return schemaQueryObj
 }
+function deepIncludes(dottedKey, schema){
+    const keys = dottedKey.split('.');
+    let prop = schema[keys.shift()];
+    for(let i =0;i<keys.length;i++){
+        const key = keys[i]
+        if (prop){
+            prop = prop[key]
+        } else{
+            break;
+        }
+    }
 
+    return Boolean(prop);
+}
 
 function screen(schemaQueryObj, limit = 30) {
     schemaKeys = Object.keys(schemaQueryObj);
@@ -70,11 +83,11 @@ function mapQueryValueToMongoose(queryString) {
 function listKeys(){
     return {
        "validKeys":{ 
-            'earnings': Object.keys(earningsSchema.obj),
-            'financial': Object.keys(financialSchema.obj),
-            'performance': Object.keys(performanceSchema.obj),
-            'general': Object.keys(generalSchema.obj),
-            'analytics': Object.keys(analyticsSchema.obj)
+            'earnings': keyList(earningsSchema.obj),
+            'financial': keyList(financialSchema.obj),
+            'performance': keyList(performanceSchema.obj),
+            'general': keyList(generalSchema.obj),
+            'analytics': keyList(analyticsSchema.obj)
         },
         "validComparisons":{
             'key=<a': "key is less than a",
@@ -86,6 +99,21 @@ function listKeys(){
         }
         
     }
+}
+function keyList(schema){
+    listSchema = Object.keys(schema)
+    for(let i=0;i<listSchema.length;i++){
+        const key = listSchema[i]
+        const toExpand = Boolean(typeof schema[key] === 'object')
+
+        if (toExpand){
+            schmObj = {};
+            schmObj[key] = Object.keys(schema[key])
+            listSchema[i] = schmObj
+        }
+
+    }
+    return listSchema
 }
 module.exports = {
     mapScreenOptions,
