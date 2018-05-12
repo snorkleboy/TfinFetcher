@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 let startTime = 0;
 let totalI = null;
-const errors = [];
+let errors = [];
 let name = "promise iterator"
 let startI=0;
 function iterateModel(Model, modify, i=0, batchSize=100, stopAfter=null) {
@@ -31,7 +31,7 @@ function recursiveAddandSave(Model, modify, i ,batchSize) {
             .then(saved => progressReport(saved, i))
             .catch(err => {
                 console.log(err.message, err.symbol, err.missing);
-                errors.push([errors, i])
+                errors.push([err, i])
             })
             .then(() => recursiveAddandSave(Model, modify,i + batchSize, batchSize));
     } else {
@@ -58,13 +58,26 @@ function progressReport(saved, i) {
 
     console.log({batchNames,percent, estimatedTimeMinutes,i,totalI})
     if (i%200===0){
-        log({batchNames,percent, estimatedTimeMinutes,i,totalI,errors})
+        log({percent, estimatedTimeMinutes,i,totalI,errors})
         errors= [];
     }
 }
 
 function log(toLog) {
-    const fd = FileStream.appendFile(__dirname + `${name}.log`, `\n ${JSON.stringify(toLog)}`, function (err) {
+    const cache = [];
+
+    const message = JSON.stringify(toLog, function (key, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                // Circular reference found, discard key
+                return;
+            }
+            // Store value in our collection
+            cache.push(value);
+        }
+        return value;
+    });
+    const fd = FileStream.appendFile(__dirname + `${name}.log`, `\n ${message}`, function (err) {
         if (err) {
             console.log('err!', err, Date.now);
             throw err;

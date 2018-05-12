@@ -1,12 +1,20 @@
 
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087211236]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087252039]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087530958]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087825015]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087885958]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087910908]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526087960764]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526088149955]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526088177022]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526088346117]
- ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526088459985]
+ ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526088870653]
+ {"percent":"1.3%","estimatedTimeMinutes":9,"i":400,"totalI":8048,"errors":[[null,350]]}
+ {"percent":"3.8%","estimatedTimeMinutes":8,"i":600,"totalI":8048,"errors":[[null,450],[null,460],[null,480],[null,490],[null,580],[null,590]]}
+ {"percent":"6.4%","estimatedTimeMinutes":8,"i":800,"totalI":8048,"errors":[]}
+ ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526088913035]
+ ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526089182988]
+ {"percent":"1.3%","estimatedTimeMinutes":9,"i":400,"totalI":8048,"errors":[null]}
+ {"percent":"3.8%","estimatedTimeMinutes":8,"i":600,"totalI":8048,"errors":[null,null,null,null,null,null]}
+ {"percent":"6.4%","estimatedTimeMinutes":8,"i":800,"totalI":8048,"errors":[]}
+ {"percent":"9%","estimatedTimeMinutes":8,"i":1000,"totalI":8048,"errors":[]}
+ {"percent":"11.6%","estimatedTimeMinutes":9,"i":1200,"totalI":8048,"errors":[]}
+ ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526089259681]
+ {"percent":"1.3%","estimatedTimeMinutes":10,"i":400,"totalI":8048,"errors":[[null,350]]}
+ {"percent":"3.8%","estimatedTimeMinutes":9,"i":600,"totalI":8048,"errors":[[null,450],[null,460],[null,480],[null,490],[null,580],[null,590]]}
+ {"percent":"6.4%","estimatedTimeMinutes":9,"i":800,"totalI":8048,"errors":[]}
+ {"percent":"9%","estimatedTimeMinutes":8,"i":1000,"totalI":8048,"errors":[]}
+ {"percent":"11.6%","estimatedTimeMinutes":9,"i":1200,"totalI":8048,"errors":[]}
+ ["start",{"name":"moveValues","i":300,"batchSize":10,"totalI":8048},1526089339969]
+ {"percent":"1.3%","estimatedTimeMinutes":9,"i":400,"totalI":8048,"errors":[[{"message":"NO todaysReport or performance OBJECT","missing":[0,null],"symbol":"ALZH"},350]]}
