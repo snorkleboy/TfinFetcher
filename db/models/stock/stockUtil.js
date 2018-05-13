@@ -5,7 +5,6 @@ const {
     generalSchema,
     analyticsSchema,
 } = require('./stockSubDocs');
-
 function mapScreenOptions(queryHash) {
     const schemaQueryObj = {};
     Object.keys(queryHash).forEach(queryKey => {

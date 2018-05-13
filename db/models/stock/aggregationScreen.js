@@ -73,10 +73,7 @@ function aggregationScreen(queryhash) {
     pipeline = addProjections(pipeline, where, bareKeys);
     pipeline = addMatches(pipeline, where, bareKeys);
     
-    console.log(`db.stocks.aggregate(${JSON.stringify(pipeline)})`);
-    return Stock.aggregate(pipeline)
-    .limit(2)
-    .then(stocks=>console.log(stocks))
+    return this.model('Stock').aggregate(pipeline)
 
 }
 function mapQueryValueToMongoose(queryString, key) {

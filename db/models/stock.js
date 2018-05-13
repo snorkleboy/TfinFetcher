@@ -6,7 +6,7 @@ const {
     generalSchema,
     analyticsSchema,
 } = require('./stock/stockSubDocs');
-
+const aggregateScreen = require('./stock/aggregationScreen')
 const {
     mapScreenOptions,
     screen,
@@ -33,6 +33,7 @@ const stock = new mongoose.Schema({
 
 stock.statics.mapScreenOptions = mapScreenOptions
 stock.statics.screen = screen
+stock.statics.aggregateScreen = aggregateScreen
 stock.statics.listKeys = listKeys
 stock.index({
     symbol: 1

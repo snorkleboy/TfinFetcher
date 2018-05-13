@@ -24,9 +24,7 @@ function sendSceenKeysList(response) {
     response.send(Stock.listKeys())
 }
 function sendScreenedStocks(query,response) {
-        //mapScreenOptions validates user inputed search params and either errors out or returns a query object with keys translated to model schemas keys
-    let params = Stock.mapScreenOptions(query)
-    Stock.screen(params)
+    Stock.aggregateScreen(query)
         .then(stocks => response.send(stocks))
 }
 
