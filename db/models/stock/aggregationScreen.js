@@ -1,11 +1,4 @@
-const {
-    earningsSchema,
-    financialSchema,
-    performanceSchema,
-    generalSchema,
-    analyticsSchema,
-} = require('./stockSubDocs');
-
+const Stock = require('../stock')
 function mapScreenOptions(queryHash) {
     const schemaQueryObj = {};
     Object.keys(queryHash).forEach(queryKey => {
@@ -13,13 +6,13 @@ function mapScreenOptions(queryHash) {
         let schemaKey = null;
         if (deepIncludes(queryKey, earningsSchema.obj)) {
             schemaKey = `earnings.0.${queryKey}`
-        } else if (deepIncludes(queryKey, financialSchema.obj)){
+        } else if (deepIncludes(queryKey, financialSchema.obj)) {
             schemaKey = `financials.0.${queryKey}`
-        } else if (deepIncludes(queryKey, performanceSchema.obj)){
+        } else if (deepIncludes(queryKey, performanceSchema.obj)) {
             schemaKey = `performance.${queryKey}`
-        } else if (deepIncludes(queryKey, generalSchema.obj)){
+        } else if (deepIncludes(queryKey, generalSchema.obj)) {
             schemaKey = `analytics.${queryKey}`
-        } else if (deepIncludes(queryKey, analyticsSchema.obj)){
+        } else if (deepIncludes(queryKey, analyticsSchema.obj)) {
             schemaKey = `general.${queryKey}`
         } else {
             throw `validation error: ${queryKey} not accepted key`
@@ -28,14 +21,15 @@ function mapScreenOptions(queryHash) {
     })
     return schemaQueryObj
 }
-function deepIncludes(dottedKey, schema){
+
+function deepIncludes(dottedKey, schema) {
     const keys = dottedKey.split('.');
     let prop = schema[keys.shift()];
-    for(let i =0;i<keys.length;i++){
+    for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
-        if (prop){
+        if (prop) {
             prop = prop[key]
-        } else{
+        } else {
             break;
         }
     }
@@ -55,7 +49,11 @@ function screen(schemaQueryObj, limit = 30) {
         where[key] = query
         select[key.split('.0').join('')] = true
     })
-    console.log({"action":"SCREEN", where, select})
+    console.log({
+        "action": "SCREEN",
+        where,
+        select
+    })
     return this.model('Stock')
         .find(where)
         .select(select)
@@ -63,7 +61,7 @@ function screen(schemaQueryObj, limit = 30) {
         .exec();
 }
 
-function mapQueryValueToMongoose(queryString,key) {
+function mapQueryValueToMongoose(queryString, key) {
     let query = null;
     let value = getValue(queryString, key)
     if (queryString[0] == '<') {
@@ -89,20 +87,21 @@ function getValue(queryString, key) {
     const components = queryString.split(/([0-9]+)/)
     console.log(components);
     //relative query
-    if (components[2] && components[2].length>0) {
+    if (components[2] && components[2].length > 0) {
         value = getRelativeValue(components[2], key)
-    //absolute query
-    } else if (components[1] && components[1].length > 0 ){
+        //absolute query
+    } else if (components[1] && components[1].length > 0) {
         value = parseFloat(components[1])
     }
     return value;
 }
+
 function getRelativeValue(queryValue, key) {
     console.log({
         'location': "get rel val",
         queryValue,
         key,
-        sectors:sectorCache.sectors
+        sectors: sectorCache.sectors
     })
 
     //hope is to do something like 
@@ -110,43 +109,75 @@ function getRelativeValue(queryValue, key) {
 
     return 666
 }
-function listKeys(){
-    return {
-       "validKeys":{ 
-            'earnings': keyList(earningsSchema.obj),
-            'financial': keyList(financialSchema.obj),
-            'performance': keyList(performanceSchema.obj),
-            'general': keyList(generalSchema.obj),
-            'analytics': keyList(analyticsSchema.obj)
-        },
-        "validComparisons":{
-            'key=<a': "key is less than a",
-            'key=>a': "key is more than a",
-            'key=a': "key is equal to a"
-        },
-        "format":{
-            "/screen?key1=>a&key2=<b" :"screen for stocks where key1 is more than a and key2 is less than b"
-        }
-        
-    }
-}
-function keyList(schema){
-    listSchema = Object.keys(schema)
-    for(let i=0;i<listSchema.length;i++){
-        const key = listSchema[i]
-        const toExpand = Boolean(typeof schema[key] === 'object')
 
-        if (toExpand){
-            schmObj = {};
-            schmObj[key] = Object.keys(schema[key])
-            listSchema[i] = schmObj
+function aggregationScreen(schemaQueryObj) {
+    const lookup = () => [{
+            "$lookup": {
+                from: "sectors",
+                localField: "general.sector",
+                foreignField: "sector",
+                as: "sectorAvg"
+            }
+        },
+        {
+            "$unwind": "$sectorAvg"
         }
+    ]
+    const projection = () => [{
+        "$project": {
+            "marketcap": "$performance.marketcap",
+            "sectorAvg": "$sectorAvg.performance.marketCap",
+            "cmp": {
+                "$cmp": ["$performance.marketcap", "$sectorAvg.performance.marketCap"]
+            }
+        }
+    }]
+    const match = () => [{
+        "$match": {
+            "cmp": {
+                "$gt": 0
+            }
+        }
+    }]
+    const pipeline = [
+        ...lookup(),
+        ...projection(),
+        ...match()
 
+    ]
+    return Stock.aggregate(pipeline)
+    .then(stocks=>console.log(stocks))
+
+}
+
+module.exports = aggregationScreen;
+/*
+db.stocks.aggregate([
+    {
+        "$lookup":{
+            from:"sectors",
+            localField:"general.sector",
+            foreignField:"sector",
+            as:"sectorAvg"
+        }
+    },
+    {
+        "$unwind":"$sectorAvg"
+    },
+    {
+        "$project":{
+            "marketcap": "$performance.marketcap",
+            "sectorAvg":"$sectorAvg.performance.marketCap",
+            "cmp":{"$cmp":["$performance.marketcap","$sectorAvg.performance.marketCap"]}
+        }
+    },
+    {
+        "$match": {
+            "cmp": {
+                "$gt": 0
+            }
+        }
     }
-    return listSchema
-}
-module.exports = {
-    mapScreenOptions,
-    screen,
-    listKeys
-}
+])
+
+*/

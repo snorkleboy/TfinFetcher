@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
-const sectorCache = require("./db/dbScripts/sectorCache")
+const tempScreen = require('./db/models/stock/aggregationScreen')
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
@@ -18,9 +18,8 @@ mongoose.connect(uristring, {
     if (err) {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
-        
         console.log('Succeeded connected to: ' + uristring);
-        sectorCache.init()
+        tempScreen();
     }
 });
 
