@@ -45,9 +45,6 @@ function deepIncludes(dottedKey, schema) {
     return Boolean(prop);
 }
 
-
-
-
 function aggregationScreen(queryhash) {
     const schemaKeyObj = mapScreenOptions(queryhash);
     schemaKeys = Object.keys(schemaKeyObj);
@@ -72,8 +69,9 @@ function aggregationScreen(queryhash) {
     pipeline = addLookup(pipeline, hasRelativeValue);
     pipeline = addProjections(pipeline, where, bareKeys);
     pipeline = addMatches(pipeline, where, bareKeys);
-    
-    return this.model('Stock').aggregate(pipeline)
+
+    console.log(JSON.stringify(pipeline));
+    return this.model('Stock').aggregate(pipeline).limit(20)
 
 }
 function mapQueryValueToMongoose(queryString, key) {
@@ -93,15 +91,9 @@ function mapQueryValueToMongoose(queryString, key) {
     return query
 }
 
-//queryString Types
-// peRatio=<10bsa
-// peRatio=<20
-// peRatio=20
 function getValue(queryString, key) {
     let value;
     const components = queryString.split(/([0-9\.]+)/)
-        // console.log({components, key})
-    console.log({components},key)
     //relative query
     if (components[2] && components[2].length > 0) {
         value = makeRelativeRequestObj(components, key)
@@ -137,6 +129,7 @@ function addUnArrayProjection(pipeline, where, bareKeyToPath) {
             },
             'performance': 1,
             "general": 1,
+            "symbol":1
         },
     }]
 }
@@ -163,23 +156,22 @@ const addLookup = (pipeline,hasRelativeValue) => {
 const addProjections = (pipeline, where, bareKeyToPath) => {
     const project = {}
     const returnObj = {"$project": project};
-    // console.log({
-    //     pipeline,
-    //     where,
-    //     bareKeyToPath
-    // })
-    
+    project["sector"] = "$general.sector";
+    project["symbol"]="$symbol";
+
     const bareKeys = Object.keys(bareKeyToPath);
     bareKeys.forEach(bareKey => {
         let path = bareKeyToPath[bareKey];
         project[bareKey] = '$'+path;
+        
         const thisWhere = where[bareKeyToPath[bareKey]]
         if (thisWhere.relativeValue) {
             path = path.split('.');
             if (path[0] === 'financials' || path[0] === 'earnings') {
-                path[0] = capitalize(path[0]);
-                path = 'todays' + path.join('.');
+                path[0] = 'todays' + capitalize(path[0]);
             }
+            path = path.join('.');
+            console.log({path})
             project["sector" + bareKey + "Avg"] = "$sectorAvg." + path;
             project[bareKey + "comparison"] = {
                 "$cmp": [{"$multiply": ['$'+path, thisWhere.amount/100]}, "$sectorAvg." + path]
@@ -200,9 +192,9 @@ const addMatches = (pipeline, where, bareKeyToPath) => {
         const thisWhere = where[bareKeyToPath[bareKey]]
         if (thisWhere.relativeValue){
             const comp = thisWhere.absComp === '>' ?
-                '$gt'
+                '$gte'
             :
-                '$lt'
+                '$lte'
             ;
             const compObj = {};
             compObj[comp] = 0;
@@ -216,6 +208,9 @@ const addMatches = (pipeline, where, bareKeyToPath) => {
 
 module.exports = aggregationScreen;
 /*
+{
+    path: 'performance.marketcap'
+}
 [{
     "$project": {
         "financials": {
@@ -225,7 +220,8 @@ module.exports = aggregationScreen;
             "$arrayElemAt": ["$earnings", 0]
         },
         "performance": 1,
-        "general": 1
+        "general": 1,
+        "symbol": 1
     }
 }, {
     "$lookup": {
@@ -238,15 +234,27 @@ module.exports = aggregationScreen;
     "$unwind": "$sectorAvg"
 }, {
     "$project": {
-        "grossMargin": "$financials.grossMargin",
-        "profitMargin": "$financials.profitMargin",
-        "sectorprofitMarginAvg": "$sectorAvg.todaysFinancials.profitMargin",
-        "profitMargincomparison": {
+        "sector": "$general.sector",
+        "symbol": "$symbol",
+        "beta": "$performance.beta",
+        "marketcap": "$performance.marketcap",
+        "sectormarketcapAvg": "$sectorAvg.performance.marketcap",
+        "marketcapcomparison": {
             "$cmp": [{
-                "$multiply": ["$todaysFinancials.profitMargin", 1.3]
-            }, "$sectorAvg.todaysFinancials.profitMargin"]
+                "$multiply": ["$performance.marketcap", 1.2]
+            }, "$sectorAvg.performance.marketcap"]
+        }
+    }
+}, {
+    "$match": {
+        "beta": {
+            "$gt": 8
         },
-        "peRatio": "$performance.peRatio"
+        "marketcapcomparison": {
+            "$gt": 0
+        }
+        
     }
 }]
+
 */
