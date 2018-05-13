@@ -27,8 +27,8 @@ function recursiveAddandSave(Model, modify, i ,batchSize) {
         Model.find({})
             .skip(i)
             .limit(batchSize)
-            .then(stocks => modify(stocks))
-            .then(stocks => saveStocks(stocks,Model))
+            .then(docs => modify(docs))
+            .then(docs => saveDocs(docs,Model))
             .then(saved => progressReport(saved, i, batchSize))
             .catch(err => {
                 console.log(err.message, err.symbol, err.missing);
@@ -41,12 +41,12 @@ function recursiveAddandSave(Model, modify, i ,batchSize) {
     }
 }
 
-function saveStocks(stocks, Model) {
+function saveDocs(docs, Model) {
     promises = [];
-    stocks.forEach(stock => promises.push( stock.save()))
+    docs.forEach(doc => promises.push( doc.save()))
     return Promise.all(promises)
 
-    // return Model.create(stocks);
+    // return Model.create(docs);
 }
 let lastLog=-1000;
 let lastWrite=-1000;
@@ -54,7 +54,7 @@ function progressReport(saved, i, batchSize) {
     const writeTofile = Boolean(i - lastWrite > 30 * batchSize)
     const consoleLog = Boolean(i - lastLog > 3 * batchSize)
     if (writeTofile || consoleLog){
-        const batchNames = saved.map(stock => stock.symbol);
+        const batchNames = saved.map(doc => doc.symbol);
         const elapsedTime = Date.now() - startTime;
         const numDone = i + 1 - startI;
         const averageTimeMinutes = (elapsedTime / (numDone)) / 60000;

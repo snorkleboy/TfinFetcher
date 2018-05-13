@@ -2,6 +2,8 @@ const Stock = require('../models/stock')
 const StockChart = require('../models/stockChart')
 const FileStream = require('fs');
 
+//uneeded for final init
+
 //moves charts from stocks collection to a new stockCharts collection
 
 

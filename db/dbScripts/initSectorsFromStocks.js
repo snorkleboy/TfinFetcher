@@ -13,6 +13,8 @@ function validate(sectors){
     sectors.forEach(sector=>{
         if (sector && sector.length>0){
             ans.push(sector);
+        } else {
+            ans.push("unlisted")
         }
     })
     return ans;

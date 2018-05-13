@@ -7,7 +7,7 @@ const {
     analyticsSchema,
 } = require('./stockSubDocs');
 
-function mapScreenOptions(queryHash) {
+function mapQueryToSchema(queryHash) {
     const schemaQueryObj = {};
     Object.keys(queryHash).forEach(queryKey => {
 
@@ -41,54 +41,55 @@ function deepIncludes(dottedKey, schema) {
             break;
         }
     }
-
     return Boolean(prop);
 }
 
-function aggregationScreen(queryhash) {
-    const schemaKeyObj = mapScreenOptions(queryhash);
-    schemaKeys = Object.keys(schemaKeyObj);
+function aggregationScreen(queryhash,limit=20) {
+    const pathKeyObj = mapQueryToSchema(queryhash);
+    pathKeys = Object.keys(pathKeyObj);
     const where = {};
-    const bareKeys = {
-    }
+    const keyToPath = {};
     let hasRelativeValue = false;
-    schemaKeys.forEach(key => {
-        const query = mapQueryValueToMongoose(schemaKeyObj[key], key)
-        if (query.relativeValue){
+    pathKeys.forEach(pathKey => {
+        const queryValue = mapQueryValueToMongo(pathKeyObj[pathKey], pathKey)
+        if (queryValue.relativeValue) {
             hasRelativeValue=true;
         }
-        where[key] = query
+        where[pathKey] = queryValue
         
-        let barekey = key.split('.')
+        let barekey = pathKey.split('.')
         barekey  = barekey[2] || barekey[1]
-        bareKeys[barekey] = key
+        keyToPath[barekey] = pathKey
     })
-    
     let pipeline = [];
     pipeline = addUnArrayProjection(pipeline);
     pipeline = addLookup(pipeline, hasRelativeValue);
-    pipeline = addProjections(pipeline, where, bareKeys);
-    pipeline = addMatches(pipeline, where, bareKeys);
-
-    console.log(JSON.stringify(pipeline));
+    pipeline = addProjections(pipeline, where, keyToPath);
+    pipeline = addMatches(pipeline, where, keyToPath);
+    const screen = JSON.stringify(pipeline)
+    console.log({where,screen});
     return this.model('Stock').aggregate(pipeline).limit(20)
 
 }
-function mapQueryValueToMongoose(queryString, key) {
-    let query = null;
+
+// the return of mapQueryValueToMongo will eventuall be wrapped in something like
+// {schemaKey:{queryvalue}} /==/ {actualEps:{"$lt":12}} or {actualEps:{relativeValue:true, absComp:">",amount:2.3,type:"sa"}}
+// 
+function mapQueryValueToMongo(queryString, key) {
+    let queryValue = null;
     let value = getValue(queryString, key)
     if (queryString[0] == '<' && !value.relativeValue) {
-        query = {
+        queryValue = {
             "$lt": value
         }
     } else if (queryString[0] == '>' && !value.relativeValue) {
-        query = {
+        queryValue = {
             "$gt": value
         }
     } else {
-        query = value
+        queryValue = value
     }
-    return query
+    return queryValue
 }
 
 function getValue(queryString, key) {
@@ -97,7 +98,7 @@ function getValue(queryString, key) {
     //relative query
     if (components[2] && components[2].length > 0) {
         value = makeRelativeRequestObj(components, key)
-        //absolute query
+    //absolute query
     } else if (components[1] && components[1].length > 0) {
         value = parseFloat(components[1])
     }
@@ -112,12 +113,18 @@ function makeRelativeRequestObj(components, key) {
     };
 
     const amount = parseFloat(components[1])
+    const type = components[2]
     return {
         "relativeValue":true,
         absComp,
-        amount
+        amount,
+        type
     }
 }
+
+
+
+//Pipeline
 function addUnArrayProjection(pipeline, where, bareKeyToPath) {
     return [{
         "$project": {
@@ -208,9 +215,7 @@ const addMatches = (pipeline, where, bareKeyToPath) => {
 
 module.exports = aggregationScreen;
 /*
-{
-    path: 'performance.marketcap'
-}
+example output
 [{
     "$project": {
         "financials": {

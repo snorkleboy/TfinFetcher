@@ -1,4 +1,45 @@
 const mongoose = require('mongoose');
+const {
+    earningsSchema,
+    financialSchema,
+    performanceSchema,
+    generalSchema,
+    analyticsSchema,
+} = require('./stock/stockSubDocs');
+const sector = new mongoose.Schema({
+    sector: {
+        type: String,
+        required: 'must include sector name'
+    },
+    numStocks:Number,
+    performance: performanceSchema,
+    financials: [financialSchema],
+    todaysFinancials: financialSchema,
+    earnings: [earningsSchema],
+    todaysEarnings: earningsSchema,
+    created_at: {
+        type: Date,
+        default: Date.now
+    },
+
+});
+sector.index({
+    sector: 1
+});
+
+
+
+
+
+const Sector = mongoose.model('Sector', sector);
+
+module.exports = Sector
+
+
+
+
+/*
+shouldnt need these seperately from subdocs file
 const earningsSchema = new mongoose.Schema({
     actualEPS: Number,
     consensusEPS: Number,
@@ -21,7 +62,7 @@ const performanceSchema = new mongoose.Schema({
         '200day': Number,
         '1yr': Number,
     },
-    peRatio:Number,
+    peRatio: Number,
     _id: String,
     companyName: String,
     marketcap: Number,
@@ -73,9 +114,9 @@ const performanceSchema = new mongoose.Schema({
     month1ChangePercent: Number,
     day5ChangePercent: Number,
     day30ChangePercent: Number,
-    marketcapMax:Number
-    
-    
+    marketcapMax: Number
+
+
 })
 const financialSchema = new mongoose.Schema({
     profitMargin: Number,
@@ -103,26 +144,5 @@ const financialSchema = new mongoose.Schema({
     cashFlow: Number,
     operatingGainsLosses: Number
 })
-const sector = new mongoose.Schema({
-    sector: {
-        type: String,
-        required: 'must include sector name'
-    },
-    numStocks:Number,
-    performance: performanceSchema,
-    financials: [financialSchema],
-    todaysFinancials: financialSchema,
-    earnings: [earningsSchema],
-    todaysEarnings: earningsSchema,
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
 
-});
-sector.index({
-    sector: 1
-});
-const Sector = mongoose.model('Sector', sector);
-
-module.exports = Sector
+*/

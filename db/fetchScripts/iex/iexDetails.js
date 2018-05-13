@@ -1,6 +1,10 @@
 const axios = require('axios');
 const Stock = require('../../db/models/stock')
 const FileStream = require('fs');
+
+//should be refactored to look like fetchCharts
+
+
 const FetchDetails = (stocks) => axios({
     url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stocks.join(',')}&types=logo,earnings,financials,stats,company`,
     method: "GET"
