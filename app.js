@@ -19,7 +19,12 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        tempScreen();
+
+        const __sampleReq = {
+            "peRatio": ">20",
+            "marketcap": ">10asa"
+        }
+        tempScreen(__sampleReq);
     }
 });
 

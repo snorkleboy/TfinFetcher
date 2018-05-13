@@ -1,4 +1,15 @@
 const Stock = require('../stock')
+const {
+    earningsSchema,
+    financialSchema,
+    performanceSchema,
+    generalSchema,
+    analyticsSchema,
+} = require('./stockSubDocs');
+
+
+
+
 function mapScreenOptions(queryHash) {
     const schemaQueryObj = {};
     Object.keys(queryHash).forEach(queryKey => {
@@ -37,38 +48,55 @@ function deepIncludes(dottedKey, schema) {
     return Boolean(prop);
 }
 
-function screen(schemaQueryObj, limit = 30) {
-    schemaKeys = Object.keys(schemaQueryObj);
+
+
+
+function aggregationScreen(queryhash) {
+    const schemaKeyObj = mapScreenOptions(queryhash);
+    schemaKeys = Object.keys(schemaKeyObj);
     const where = {};
     const select = {
         'symbol': 1,
         "name": 1
     }
+    const hasRelativeValue = false;
     schemaKeys.forEach(key => {
-        const query = mapQueryValueToMongoose(schemaQueryObj[key], key)
+        const query = mapQueryValueToMongoose(schemaKeyObj[key], key)
+        if (Object.values(query)[0].relativeValue){
+            hasRelativeValue=true;
+        }
         where[key] = query
-        select[key.split('.0').join('')] = true
+        
+        let barekey = key.split('.')
+        barekey  = barekey[2] || barekey[1]
+        select[barekey] = true
     })
-    console.log({
-        "action": "SCREEN",
+    console.log(Object.values(query)[0] ,{
+        hasRelativeValue,
+        schemaKeyObj,
         where,
         select
     })
-    return this.model('Stock')
-        .find(where)
-        .select(select)
-        .limit(limit)
-        .exec();
+    const pipeline = [
+        ...lookup(),
+        ...ComparisonProjection(),
+        ...match()
+    ]
+            
+    return Stock.aggregate(pipeline)
+    .limit(2)
+    .then(stocks=>console.log(stocks))
+
 }
 
 function mapQueryValueToMongoose(queryString, key) {
     let query = null;
     let value = getValue(queryString, key)
-    if (queryString[0] == '<') {
+    if (queryString[0] == '<' && !value.relativeValue) {
         query = {
             "$lt": value
         }
-    } else if (queryString[0] == '>') {
+    } else if (queryString[0] == '>' && !value.relativeValue) {
         query = {
             "$gt": value
         }
@@ -85,10 +113,9 @@ function mapQueryValueToMongoose(queryString, key) {
 function getValue(queryString, key) {
     let value;
     const components = queryString.split(/([0-9]+)/)
-    console.log(components);
     //relative query
     if (components[2] && components[2].length > 0) {
-        value = getRelativeValue(components[2], key)
+        value = makeRelativeRequestObj(components, key)
         //absolute query
     } else if (components[1] && components[1].length > 0) {
         value = parseFloat(components[1])
@@ -96,59 +123,55 @@ function getValue(queryString, key) {
     return value;
 }
 
-function getRelativeValue(queryValue, key) {
-    console.log({
-        'location': "get rel val",
-        queryValue,
-        key,
-        sectors: sectorCache.sectors
-    })
+function makeRelativeRequestObj(components, key) {
+    console.log({components, key})
+    let absComp = '=';
+    let relComp = null;
+    if (components[2][0] === 'a'){
+        relComp = '>'
+    } else if (components[2][0] === 'b'){
+        relComp = '<'
+    }
+    if (components[0].length>0 ){
+        absComp = components[0]
+    };
 
-    //hope is to do something like 
-    // {"performance.sma.20":{"lt":sectorCache.sectors[this.general.sector]}}
-
-    return 666
+    const amount = components[1]
+    return {
+        "relativeValue":true,
+        absComp,
+        relComp,
+        amount
+    }
 }
-
-function aggregationScreen(schemaQueryObj) {
-    const lookup = () => [{
-            "$lookup": {
-                from: "sectors",
-                localField: "general.sector",
-                foreignField: "sector",
-                as: "sectorAvg"
-            }
-        },
-        {
-            "$unwind": "$sectorAvg"
+const lookup = () => [{
+        "$lookup": {
+            from: "sectors",
+            localField: "general.sector",
+            foreignField: "sector",
+            as: "sectorAvg"
         }
-    ]
-    const projection = () => [{
-        "$project": {
-            "marketcap": "$performance.marketcap",
-            "sectorAvg": "$sectorAvg.performance.marketCap",
-            "cmp": {
-                "$cmp": ["$performance.marketcap", "$sectorAvg.performance.marketCap"]
-            }
+    },
+    {
+        "$unwind": "$sectorAvg"
+    }
+]
+const ComparisonProjection = () => [{
+    "$project": {
+        "marketcap": "$performance.marketcap",
+        "sectorAvg": "$sectorAvg.performance.marketCap",
+        "cmp": {
+            "$cmp": [{"$multiply":["$performance.marketcap",1]}, "$sectorAvg.performance.marketCap"]
         }
-    }]
-    const match = () => [{
-        "$match": {
-            "cmp": {
-                "$gt": 0
-            }
+    }
+}]
+const match = () => [{
+    "$match": {
+        "cmp": {
+            "$gt": 0
         }
-    }]
-    const pipeline = [
-        ...lookup(),
-        ...projection(),
-        ...match()
-
-    ]
-    return Stock.aggregate(pipeline)
-    .then(stocks=>console.log(stocks))
-
-}
+    }
+}]
 
 module.exports = aggregationScreen;
 /*
