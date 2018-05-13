@@ -24,7 +24,7 @@ const performanceSchema = new mongoose.Schema({
     peRatio:Number,
     _id: String,
     companyName: String,
-    marketCap: Number,
+    marketcap: Number,
     beta: Number,
     week52high: Number,
     week52low: Number,
@@ -73,7 +73,7 @@ const performanceSchema = new mongoose.Schema({
     month1ChangePercent: Number,
     day5ChangePercent: Number,
     day30ChangePercent: Number,
-    marketCapMax:Number
+    marketcapMax:Number
     
     
 })
@@ -111,7 +111,9 @@ const sector = new mongoose.Schema({
     numStocks:Number,
     performance: performanceSchema,
     financials: [financialSchema],
+    todaysFinancials: financialSchema,
     earnings: [earningsSchema],
+    todaysEarnings: earningsSchema,
     created_at: {
         type: Date,
         default: Date.now

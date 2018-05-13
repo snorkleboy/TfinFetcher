@@ -8,6 +8,7 @@ mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
 
 const tempScreen = require('./db/models/stock/aggregationScreen')
+const addSectorAverages = require('./db/analysisSripts/addSectorAverages')
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
@@ -19,11 +20,10 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-
         const __sampleReq = {
             "grossMargin": ">.6",
             "profitMargin": ">130sa",
-            // marketcap:">130sa"
+            'peRatio':"<20"
         }
         tempScreen(__sampleReq);
     }

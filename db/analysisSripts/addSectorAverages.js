@@ -17,8 +17,11 @@ function addSectorAverages() {
         sectorObjs.forEach((sector=>sectorHash[sector.sector]=sector))
         aggregates.forEach(aggregate => {
             if (aggregate.sector !== defaultSectorName){
-                sector = sectorHash[aggregate.sector]
+                let sector = sectorHash[aggregate.sector]
                 sector.financials[0] = sector.financials[0] || {}
+                sector.todaysFinancials = sector.financials[0] || {}
+                sector.earnings[0] = sector.earnings[0] || {}
+                sector.todaysEarnings = sector.earnings[0] || {}
                 sector.performance = sector.performance || {}
 
                 sector.financials[0].grossMargin = aggregate.grossMarginAverage
@@ -27,8 +30,10 @@ function addSectorAverages() {
                 sector.financials[0].shareholderRatio = aggregate.shareholderRatioAverage
                 sector.financials[0].quickRatio = aggregate.quickRatioAverage
                 sector.financials[0].currentRatio = aggregate.currentRatioAverage
-                sector.performance.marketCapMax = aggregate.marketCapMax
-                sector.performance.marketCap = aggregate.marketCapAverage
+
+                sector.performance.marketcapMax = aggregate.marketcapMax
+                sector.performance.marketcap = aggregate.marketcapAverage
+                sector.performance.peRatio = aggregate.peRatioAverage ;
                 sector.performance.numStocks = aggregate.count
             }
         })        
@@ -66,16 +71,16 @@ const projection = ()=>({
          boundaries: sectors,
          default: defaultSectorName,
          output: {
-             "marketCapMax":{
+             "marketcapMax":{
                 "$max": "$performance.marketcap"
              },
-             "marketCapAverage":{
+             "marketcapAverage":{
                 "$avg": "$performance.marketcap"
              },
              "count": {
                  $sum: 1
              },
-             "pricePerEarningNumerator": {
+             "peRatioNumerator": {
                  "$avg": { "$multiply": [ "$performance.peRatio", "$performance.marketcap" ] }
              },
              "grossMarginNumerator": {
@@ -102,14 +107,15 @@ const projection = ()=>({
  })
 const finalProjection = ()=>({
     "$project": {
-        "grossMarginAverage": {"$divide": ["$grossMarginNumerator", "$marketCapAverage"]},
-        "profitMarginAverage":{"$divide": ["$profitMarginNumerator", "$marketCapAverage"]},
-        "operatingMarginAverage":{"$divide": ["$operatingMarginNumerator", "$marketCapAverage"]},
-        "shareholderRatioAverage":{"$divide": ["$shareholderEquityNumerator", "$marketCapAverage"]},
-        "quickRatioAverage":  {"$divide": ["$quickRatioNumerator", "$marketCapAverage"]},
-        "currentRatioAverage": {"$divide": ["$currentRatioNumerator", "$marketCapAverage"]},
-        "marketCapMax":  "$marketCapMax",
-        "marketCapAverage":"$marketCapAverage",
+        "peRatioAverage":{"$divide": ["$peRatioNumerator", "$marketcapAverage"]},
+        "grossMarginAverage": {"$divide": ["$grossMarginNumerator", "$marketcapAverage"]},
+        "profitMarginAverage":{"$divide": ["$profitMarginNumerator", "$marketcapAverage"]},
+        "operatingMarginAverage":{"$divide": ["$operatingMarginNumerator", "$marketcapAverage"]},
+        "shareholderRatioAverage":{"$divide": ["$shareholderEquityNumerator", "$marketcapAverage"]},
+        "quickRatioAverage":  {"$divide": ["$quickRatioNumerator", "$marketcapAverage"]},
+        "currentRatioAverage": {"$divide": ["$currentRatioNumerator", "$marketcapAverage"]},
+        "marketcapMax":  "$marketcapMax",
+        "marketcapAverage":"$marketcapAverage",
         "count":"$count",
         "sector": "$_id"
     }

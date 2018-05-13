@@ -67,21 +67,11 @@ function aggregationScreen(queryhash) {
         bareKeys[barekey] = key
     })
     
-    let pipeline = [{
-        "$project": {
-            "financials": {
-                "$arrayElemAt": ["$financials", 0]
-            },
-            'earnings': {
-                "$arrayElemAt": ["$earnings", 0]
-            },
-            'performance': 1,
-            "general":1
-        },
-    }];
+    let pipeline = [];
+    pipeline = addUnArrayProjection(pipeline);
     pipeline = addLookup(pipeline, hasRelativeValue);
     pipeline = addProjections(pipeline, where, bareKeys);
-    // pipeline = addMatches(pipeline, where, bareKeys);
+    pipeline = addMatches(pipeline, where, bareKeys);
     
     console.log(`db.stocks.aggregate(${JSON.stringify(pipeline)})`);
     return Stock.aggregate(pipeline)
@@ -139,6 +129,20 @@ function makeRelativeRequestObj(components, key) {
         amount
     }
 }
+function addUnArrayProjection(pipeline, where, bareKeyToPath) {
+    return [{
+        "$project": {
+            "financials": {
+                "$arrayElemAt": ["$financials", 0]
+            },
+            'earnings': {
+                "$arrayElemAt": ["$earnings", 0]
+            },
+            'performance': 1,
+            "general": 1,
+        },
+    }]
+}
 const addLookup = (pipeline,hasRelativeValue) => {
     return hasRelativeValue? 
         [
@@ -170,19 +174,26 @@ const addProjections = (pipeline, where, bareKeyToPath) => {
     
     const bareKeys = Object.keys(bareKeyToPath);
     bareKeys.forEach(bareKey => {
-        const path = bareKeyToPath[bareKey];
+        let path = bareKeyToPath[bareKey];
         project[bareKey] = '$'+path;
         const thisWhere = where[bareKeyToPath[bareKey]]
         if (thisWhere.relativeValue) {
-            console.log(...[typeof path,typeof thisWhere.amount]);
+            path = path.split('.');
+            if (path[0] === 'financials' || path[0] === 'earnings') {
+                path[0] = capitalize(path[0]);
+                path = 'todays' + path.join('.');
+            }
             project["sector" + bareKey + "Avg"] = "$sectorAvg." + path;
             project[bareKey + "comparison"] = {
-                "$cmp": [{"$multiply": ['$'+path, thisWhere.amount]}, "$sectorAvg." + path]
+                "$cmp": [{"$multiply": ['$'+path, thisWhere.amount/100]}, "$sectorAvg." + path]
             }
         }
     })
     return [...pipeline,returnObj]
 }
+function capitalize(word) {
+        return word[0].toUpperCase() + word.substr(1);
+    }
 const addMatches = (pipeline, where, bareKeyToPath) => {
     const match = {};
     const returnObj = {"$match":match}
@@ -208,66 +219,37 @@ const addMatches = (pipeline, where, bareKeyToPath) => {
 
 module.exports = aggregationScreen;
 /*
-db.stocks.aggregate([
-    {
-        "$lookup":{
-            from:"sectors",
-            localField:"general.sector",
-            foreignField:"sector",
-            as:"sectorAvg"
-        }
-    },
-    {
-        "$unwind":"$sectorAvg"
-    },
-    {
-        "$project":{
-            "marketcap": "$performance.marketcap",
-            "sectorAvg":"$sectorAvg.performance.marketCap",
-            "cmp":{"$cmp":["$performance.marketcap","$sectorAvg.performance.marketCap"]}
-        }
-    },
-    {
-        "$match": {
-            "cmp": {
-                "$gt": 0
-            }
-        }
+[{
+    "$project": {
+        "financials": {
+            "$arrayElemAt": ["$financials", 0]
+        },
+        "earnings": {
+            "$arrayElemAt": ["$earnings", 0]
+        },
+        "performance": 1,
+        "general": 1
     }
-])
-
-
-
-([{
-        "$project": {
-            "financials": {
-                "$arrayElemAt": ["$financials", 0]
-            },
-            "earnings": {
-                "$arrayElemAt": ["$earnings", 0]
-            },
-            "performance": 1,
-            "sector": "$general.sector"
-        }
-    }, {
-        "$lookup": {
-            "from": "sectors",
-            "localField": "general.sector",
-            "foreignField": "sector",
-            "as": "sectorAvg"
-        }
-    }, {
-        "$unwind": "$sectorAvg"
-    }, {
-        "$project": {
-            "grossMargin": "$financials.grossMargin",
-            "profitMargin": "$financials.profitMargin",
-            "sectorprofitMarginAvg": "$sectorAvg.financials.profitMargin",
-            "profitMargincomparison": {
-                "$cmp": [{
-                    "$multiply": ["$financials.profitMargin", 130]
-                }, "$sectorAvg.financials.profitMargin"]
-            }
-        }
-    }]
+}, {
+    "$lookup": {
+        "from": "sectors",
+        "localField": "general.sector",
+        "foreignField": "sector",
+        "as": "sectorAvg"
+    }
+}, {
+    "$unwind": "$sectorAvg"
+}, {
+    "$project": {
+        "grossMargin": "$financials.grossMargin",
+        "profitMargin": "$financials.profitMargin",
+        "sectorprofitMarginAvg": "$sectorAvg.todaysFinancials.profitMargin",
+        "profitMargincomparison": {
+            "$cmp": [{
+                "$multiply": ["$todaysFinancials.profitMargin", 1.3]
+            }, "$sectorAvg.todaysFinancials.profitMargin"]
+        },
+        "peRatio": "$performance.peRatio"
+    }
+}]
 */
