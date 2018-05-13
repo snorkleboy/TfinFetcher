@@ -7,18 +7,15 @@ const {
     analyticsSchema,
 } = require('./stockSubDocs');
 
-
-
-
 function mapScreenOptions(queryHash) {
     const schemaQueryObj = {};
     Object.keys(queryHash).forEach(queryKey => {
 
         let schemaKey = null;
         if (deepIncludes(queryKey, earningsSchema.obj)) {
-            schemaKey = `earnings.0.${queryKey}`
+            schemaKey = `earnings.${queryKey}`
         } else if (deepIncludes(queryKey, financialSchema.obj)) {
-            schemaKey = `financials.0.${queryKey}`
+            schemaKey = `financials.${queryKey}`
         } else if (deepIncludes(queryKey, performanceSchema.obj)) {
             schemaKey = `performance.${queryKey}`
         } else if (deepIncludes(queryKey, generalSchema.obj)) {
@@ -55,40 +52,43 @@ function aggregationScreen(queryhash) {
     const schemaKeyObj = mapScreenOptions(queryhash);
     schemaKeys = Object.keys(schemaKeyObj);
     const where = {};
-    const select = {
-        'symbol': 1,
-        "name": 1
+    const bareKeys = {
     }
-    const hasRelativeValue = false;
+    let hasRelativeValue = false;
     schemaKeys.forEach(key => {
         const query = mapQueryValueToMongoose(schemaKeyObj[key], key)
-        if (Object.values(query)[0].relativeValue){
+        if (query.relativeValue){
             hasRelativeValue=true;
         }
         where[key] = query
         
         let barekey = key.split('.')
         barekey  = barekey[2] || barekey[1]
-        select[barekey] = true
+        bareKeys[barekey] = key
     })
-    console.log(Object.values(query)[0] ,{
-        hasRelativeValue,
-        schemaKeyObj,
-        where,
-        select
-    })
-    const pipeline = [
-        ...lookup(),
-        ...ComparisonProjection(),
-        ...match()
-    ]
-            
+    
+    let pipeline = [{
+        "$project": {
+            "financials": {
+                "$arrayElemAt": ["$financials", 0]
+            },
+            'earnings': {
+                "$arrayElemAt": ["$earnings", 0]
+            },
+            'performance': 1,
+            "general":1
+        },
+    }];
+    pipeline = addLookup(pipeline, hasRelativeValue);
+    pipeline = addProjections(pipeline, where, bareKeys);
+    // pipeline = addMatches(pipeline, where, bareKeys);
+    
+    console.log(`db.stocks.aggregate(${JSON.stringify(pipeline)})`);
     return Stock.aggregate(pipeline)
     .limit(2)
     .then(stocks=>console.log(stocks))
 
 }
-
 function mapQueryValueToMongoose(queryString, key) {
     let query = null;
     let value = getValue(queryString, key)
@@ -112,7 +112,9 @@ function mapQueryValueToMongoose(queryString, key) {
 // peRatio=20
 function getValue(queryString, key) {
     let value;
-    const components = queryString.split(/([0-9]+)/)
+    const components = queryString.split(/([0-9\.]+)/)
+        // console.log({components, key})
+    console.log({components},key)
     //relative query
     if (components[2] && components[2].length > 0) {
         value = makeRelativeRequestObj(components, key)
@@ -124,54 +126,85 @@ function getValue(queryString, key) {
 }
 
 function makeRelativeRequestObj(components, key) {
-    console.log({components, key})
     let absComp = '=';
-    let relComp = null;
-    if (components[2][0] === 'a'){
-        relComp = '>'
-    } else if (components[2][0] === 'b'){
-        relComp = '<'
-    }
+
     if (components[0].length>0 ){
         absComp = components[0]
     };
 
-    const amount = components[1]
+    const amount = parseFloat(components[1])
     return {
         "relativeValue":true,
         absComp,
-        relComp,
         amount
     }
 }
-const lookup = () => [{
-        "$lookup": {
-            from: "sectors",
-            localField: "general.sector",
-            foreignField: "sector",
-            as: "sectorAvg"
+const addLookup = (pipeline,hasRelativeValue) => {
+    return hasRelativeValue? 
+        [
+            ...pipeline,
+            {
+                "$lookup": {
+                    from: "sectors",
+                    localField: "general.sector",
+                    foreignField: "sector",
+                    as: "sectorAvg"
+                }
+            },
+            {
+                "$unwind": "$sectorAvg"
+            }
+        ]
+    :
+        pipeline
+    ;
+}
+const addProjections = (pipeline, where, bareKeyToPath) => {
+    const project = {}
+    const returnObj = {"$project": project};
+    // console.log({
+    //     pipeline,
+    //     where,
+    //     bareKeyToPath
+    // })
+    
+    const bareKeys = Object.keys(bareKeyToPath);
+    bareKeys.forEach(bareKey => {
+        const path = bareKeyToPath[bareKey];
+        project[bareKey] = '$'+path;
+        const thisWhere = where[bareKeyToPath[bareKey]]
+        if (thisWhere.relativeValue) {
+            console.log(...[typeof path,typeof thisWhere.amount]);
+            project["sector" + bareKey + "Avg"] = "$sectorAvg." + path;
+            project[bareKey + "comparison"] = {
+                "$cmp": [{"$multiply": ['$'+path, thisWhere.amount]}, "$sectorAvg." + path]
+            }
         }
-    },
-    {
-        "$unwind": "$sectorAvg"
-    }
-]
-const ComparisonProjection = () => [{
-    "$project": {
-        "marketcap": "$performance.marketcap",
-        "sectorAvg": "$sectorAvg.performance.marketCap",
-        "cmp": {
-            "$cmp": [{"$multiply":["$performance.marketcap",1]}, "$sectorAvg.performance.marketCap"]
+    })
+    return [...pipeline,returnObj]
+}
+const addMatches = (pipeline, where, bareKeyToPath) => {
+    const match = {};
+    const returnObj = {"$match":match}
+    const bareKeys = Object.keys(bareKeyToPath);
+
+    bareKeys.forEach(bareKey=>{
+        const thisWhere = where[bareKeyToPath[bareKey]]
+        if (thisWhere.relativeValue){
+            const comp = thisWhere.absComp === '>' ?
+                '$gt'
+            :
+                '$lt'
+            ;
+            const compObj = {};
+            compObj[comp] = 0;
+            match[bareKey + "comparison"] = compObj
+        }else{
+            match[bareKey] = thisWhere;
         }
-    }
-}]
-const match = () => [{
-    "$match": {
-        "cmp": {
-            "$gt": 0
-        }
-    }
-}]
+    })
+    return [...pipeline, returnObj]
+}
 
 module.exports = aggregationScreen;
 /*
@@ -203,4 +236,38 @@ db.stocks.aggregate([
     }
 ])
 
+
+
+([{
+        "$project": {
+            "financials": {
+                "$arrayElemAt": ["$financials", 0]
+            },
+            "earnings": {
+                "$arrayElemAt": ["$earnings", 0]
+            },
+            "performance": 1,
+            "sector": "$general.sector"
+        }
+    }, {
+        "$lookup": {
+            "from": "sectors",
+            "localField": "general.sector",
+            "foreignField": "sector",
+            "as": "sectorAvg"
+        }
+    }, {
+        "$unwind": "$sectorAvg"
+    }, {
+        "$project": {
+            "grossMargin": "$financials.grossMargin",
+            "profitMargin": "$financials.profitMargin",
+            "sectorprofitMarginAvg": "$sectorAvg.financials.profitMargin",
+            "profitMargincomparison": {
+                "$cmp": [{
+                    "$multiply": ["$financials.profitMargin", 130]
+                }, "$sectorAvg.financials.profitMargin"]
+            }
+        }
+    }]
 */

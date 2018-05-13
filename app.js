@@ -21,8 +21,9 @@ mongoose.connect(uristring, {
         console.log('Succeeded connected to: ' + uristring);
 
         const __sampleReq = {
-            "peRatio": ">20",
-            "marketcap": ">10asa"
+            "grossMargin": ">.6",
+            "profitMargin": ">130sa",
+            // marketcap:">130sa"
         }
         tempScreen(__sampleReq);
     }
