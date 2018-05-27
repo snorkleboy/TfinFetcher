@@ -11,15 +11,18 @@ const addSectorAverages = require('../analysisSripts/addSectorAverages')
 //never ran or tested, mostly for documentation
 class IexInterface{
     constructor(){
-
+        console.log("construct")
     }
-    initialize() {
-        iexInitFromSymbols()
-            .then(() => this.addDetails())
-            .then(() => this.addCharts())
-            .then(() => moveLatestvaluesFromChartsToStocks())
-            .then(() => initSectorsFromStocks())
-            .then(() => addSectorAverages())
+    init() {
+                console.log("init")
+
+        // iexInitFromSymbols()
+        //     .then(() => this.addDetails())
+        //     .then(() => this.addCharts())
+        //     .then(() => moveLatestvaluesFromChartsToStocks())
+        //     .then(() => initSectorsFromStocks())
+        //     .then(() => addSectorAverages())
+
             //mostly functional at this point, all of the previous functions need to be 
             //refactored to work like this, probably just put return into highest level function
             //todo
