@@ -15,6 +15,6 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-        // iexInterface.init();
+        iexInterface.init();
     }
 });
