@@ -14305,3 +14305,1141 @@ moving most recent stockchart info into each stock
   estimatedTimeMinutes: 12,
   'i/totalI': '5328/8023',
   totalErrors: 0 }
+{ someNames: '...',
+  percent: '66.5%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5340/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '66.7%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5352/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '66.8%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5364/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5376/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67.1%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5388/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67.3%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5400/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67.4%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5412/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67.6%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5424/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67.7%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5436/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '67.9%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5448/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5460/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68.2%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5472/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68.3%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5484/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68.5%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5496/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68.6%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5508/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68.8%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5520/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '68.9%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5532/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '69.1%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5544/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '69.2%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5556/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '69.4%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5568/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '69.5%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5580/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '69.7%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5592/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '69.8%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5604/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5616/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70.1%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5628/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70.3%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5640/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70.4%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5652/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70.6%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5664/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70.7%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5676/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '70.9%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5688/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5700/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71.2%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5712/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71.3%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5724/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71.5%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5736/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71.6%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5748/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71.8%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5760/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '71.9%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5772/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '72.1%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5784/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '72.2%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5796/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '72.4%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5808/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '72.5%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5820/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '72.7%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5832/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '72.8%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5844/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5856/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73.1%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5868/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73.3%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5880/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73.4%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5892/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73.6%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5904/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73.7%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5916/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '73.9%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5928/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '5940/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74.1%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '5952/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74.3%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '5964/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74.4%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '5976/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74.6%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '5988/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74.7%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6000/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '74.9%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6012/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6024/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75.2%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6036/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75.3%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6048/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75.5%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6060/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75.6%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6072/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75.8%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6084/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '75.9%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6096/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '76.1%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6108/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '76.2%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6120/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '76.4%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6132/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '76.5%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6144/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '76.7%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6156/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '76.8%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6168/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6180/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77.1%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6192/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77.3%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6204/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77.4%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6216/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77.6%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6228/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77.7%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6240/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '77.9%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6252/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6264/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78.2%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6276/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78.3%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6288/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78.5%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6300/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78.6%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6312/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78.8%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6324/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '78.9%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6336/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '79.1%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6348/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '79.2%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6360/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '79.4%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6372/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '79.5%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6384/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '79.7%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6396/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '79.8%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6408/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6420/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80.1%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6432/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80.3%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6444/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80.4%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6456/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80.6%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6468/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80.7%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6480/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '80.9%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6492/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6504/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81.2%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6516/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81.3%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6528/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81.5%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6540/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81.6%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6552/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81.8%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6564/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '81.9%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6576/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '82.1%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6588/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '82.2%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6600/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '82.4%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6612/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '82.5%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6624/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '82.7%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6636/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '82.8%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6648/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6660/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83.1%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6672/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83.3%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6684/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83.4%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6696/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83.6%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6708/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83.7%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6720/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '83.9%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6732/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6744/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84.2%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6756/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84.3%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6768/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84.5%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6780/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84.6%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6792/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84.8%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6804/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '84.9%',
+  estimatedTimeMinutes: 9,
+  'i/totalI': '6816/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '85.1%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6828/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '85.2%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6840/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '85.4%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6852/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '85.5%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6864/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '85.7%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6876/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '85.8%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6888/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6900/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86.1%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6912/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86.3%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6924/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86.4%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6936/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86.6%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6948/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86.7%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6960/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '86.9%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6972/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6984/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87.2%',
+  estimatedTimeMinutes: 8,
+  'i/totalI': '6996/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87.3%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7008/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87.5%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7020/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87.6%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7032/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87.8%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7044/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '87.9%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7056/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '88.1%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7068/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '88.2%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7080/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '88.4%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7092/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '88.5%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7104/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '88.7%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7116/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '88.8%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7128/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7140/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89.1%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7152/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89.3%',
+  estimatedTimeMinutes: 7,
+  'i/totalI': '7164/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89.4%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7176/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89.6%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7188/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89.7%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7200/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '89.9%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7212/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7224/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90.2%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7236/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90.3%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7248/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90.5%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7260/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90.6%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7272/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90.8%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7284/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '90.9%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7296/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.1%',
+  estimatedTimeMinutes: 6,
+  'i/totalI': '7308/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.2%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7320/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.3%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7332/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.5%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7344/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.6%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7356/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.8%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7368/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '91.9%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7380/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '92.1%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7392/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '92.2%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7404/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '92.4%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7416/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '92.5%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7428/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '92.7%',
+  estimatedTimeMinutes: 5,
+  'i/totalI': '7440/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '92.8%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7452/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7464/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93.1%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7476/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93.3%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7488/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93.4%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7500/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93.6%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7512/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93.7%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7524/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '93.9%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7536/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7548/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94.2%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7560/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94.3%',
+  estimatedTimeMinutes: 4,
+  'i/totalI': '7572/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94.5%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7584/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94.6%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7596/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94.8%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7608/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '94.9%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7620/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '95.1%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7632/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '95.2%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7644/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '95.4%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7656/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '95.5%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7668/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '95.7%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7680/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '95.8%',
+  estimatedTimeMinutes: 3,
+  'i/totalI': '7692/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7704/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96.1%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7716/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96.3%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7728/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96.4%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7740/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96.6%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7752/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96.7%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7764/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '96.9%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7776/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7788/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97.2%',
+  estimatedTimeMinutes: 2,
+  'i/totalI': '7800/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97.3%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7812/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97.5%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7824/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97.6%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7836/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97.8%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7848/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '97.9%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7860/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '98.1%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7872/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '98.2%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7884/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '98.4%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7896/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '98.5%',
+  estimatedTimeMinutes: 1,
+  'i/totalI': '7908/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '98.7%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7920/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '98.8%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7932/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7944/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99.1%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7956/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99.3%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7968/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99.4%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7980/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99.6%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '7992/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99.7%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '8004/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '99.9%',
+  estimatedTimeMinutes: 0,
+  'i/totalI': '8016/8023',
+  totalErrors: 0 }
+DONE moveValues errors:0
+garbage collecting
+latest values moved from stocks
+Starting initSectors
+garbage collecting
+made sectors
+adding sector averages
+{ MongoError: The 'boundaries' option to $bucket must be sorted, but elements 11 and 12 are not in ascending order ("unlisted" is not less than "unlisted").
+    at queryCallback (/home/snorkleboy/projects/tfinfetcher/node_modules/mongodb-core/lib/cursor.js:244:25)
+    at /home/snorkleboy/projects/tfinfetcher/node_modules/mongodb-core/lib/connection/pool.js:544:18
+    at _combinedTickCallback (internal/process/next_tick.js:131:7)
+    at process._tickCallback (internal/process/next_tick.js:180:9)
+  name: 'MongoError',
+  message: 'The \'boundaries\' option to $bucket must be sorted, but elements 11 and 12 are not in ascending order ("unlisted" is not less than "unlisted").',
+  ok: 0,
+  errmsg: 'The \'boundaries\' option to $bucket must be sorted, but elements 11 and 12 are not in ascending order ("unlisted" is not less than "unlisted").',
+  code: 40194,
+  codeName: 'Location40194' }

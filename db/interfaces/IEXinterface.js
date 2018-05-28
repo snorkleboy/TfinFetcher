@@ -15,7 +15,7 @@ module.exports = class IexInterface{
         console.log("construct")
     }
     init(options) {
-        console.log("init started")
+
         iexInitFromSymbols()
             .then(() => {forceGC();console.log("stocks instantiated")})        
             .then(() => addCharts())
