@@ -1,7 +1,7 @@
 (function(){
 const FileStream = require('fs');
 const mongoose = require('mongoose');
-
+let lastGC = 0
 let startTime = 0;
 let totalI = null;
 let errors = [];
@@ -16,7 +16,7 @@ let _options = {
 }
 options = {};
 function iterateModel(Model, modify, i=0, batchSize=100, stopAfter=null, optionsIn = {}) {
-
+    lastGC = 0
     startTime = 0;
     totalI = null;
     errors = [];
@@ -73,6 +73,7 @@ function saveDocs(docs, Model) {
     // return Model.create(docs);
 }
 
+
 function progressReport(saved, i, batchSize) {
     const writeTofile = Boolean(i - lastWrite > options.fileLogFreq)
     const consoleLog = Boolean(i - lastLog > options.consoleLogFreq)
@@ -83,8 +84,10 @@ function progressReport(saved, i, batchSize) {
         const averageTimeMinutes = (elapsedTime / (numDone)) / 60000;
         const estimatedTimeMinutes = parseInt(averageTimeMinutes * (totalI - i));
         const percent = `${parseInt(1000*(numDone) / (totalI - startI))/10}%`;
-        if (i % 800 === 0){
+
+        if (i-lastGC > 800){
             console.log('forcing GC');
+            lastGC=i;
             forceGC()
         }
         if (consoleLog){
