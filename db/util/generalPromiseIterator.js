@@ -83,7 +83,7 @@ function progressReport(saved, i, batchSize) {
         const averageTimeMinutes = (elapsedTime / (numDone)) / 60000;
         const estimatedTimeMinutes = parseInt(averageTimeMinutes * (totalI - i));
         const percent = `${parseInt(1000*(numDone) / (totalI - startI))/10}%`;
-        if (i % 1500 === 0){
+        if (i % 800 === 0){
             console.log('forcing GC');
             forceGC()
         }
