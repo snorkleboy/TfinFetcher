@@ -59,7 +59,7 @@ function progressReport(saved,i){
     const averageTime = elapsedTime/(i+1);
     const estimatedTimeMinutes = parseInt(averageTime/60000 * (numStocks - i) );
     const percent = parseInt(i/numStocks);
-    console.log(names, `${percent}%`, `estimated time left:${estimatedTimeMinutes} minutes`)
+    console.log({numNames:names.length, percent, estimatedTimeMinutes})
 }
 
 module.exports = addFinancialMargins;
