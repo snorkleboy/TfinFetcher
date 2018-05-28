@@ -83,6 +83,10 @@ function progressReport(saved, i, batchSize) {
         const averageTimeMinutes = (elapsedTime / (numDone)) / 60000;
         const estimatedTimeMinutes = parseInt(averageTimeMinutes * (totalI - i));
         const percent = `${parseInt(1000*(numDone) / (totalI - startI))/10}%`;
+        if (i % 1500 === 0){
+            console.log('forcing GC');
+            forceGC()
+        }
         if (consoleLog){
             lastLog = i
             const someNames = [batchNames[0],batchNames[batchNames.length-1]].join("...")
@@ -134,7 +138,14 @@ function log(toLog) {
         console.log(error);
     } 
 }
-
+function forceGC() {
+    if (global.gc) {
+        console.log("garbage collecting");
+        global.gc();
+    } else {
+        console.warn('No GC hook! Start your program as `node --expose-gc file.js`.');
+    }
+}
 
 module.exports = iterateModel;
 })()
