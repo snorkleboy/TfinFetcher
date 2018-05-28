@@ -55,11 +55,12 @@ function saveStocks(stocks){
 }
 function progressReport(saved,i){
     const names = saved.map(stock=>stock.symbol);
+    const somenames = [names[0],names[names.length-1]].join('...');
     const elapsedTime = Date.now()-startTime;
     const averageTime = elapsedTime/(i+1);
     const estimatedTimeMinutes = parseInt(averageTime/60000 * (numStocks - i) );
     const percent = parseInt(i/numStocks);
-    console.log({numNames:names.length, percent, estimatedTimeMinutes})
+    console.log({somenames, percent, estimatedTimeMinutes})
 }
 
 module.exports = addFinancialMargins;
