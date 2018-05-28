@@ -12,7 +12,7 @@ function validate(sectors){
     sectors.forEach(sector=>{
         if (sector && sector.length>0){
             ans.push(sector);
-        } else {
+        } else if (ans.indexOf("unlisted") > -1) {
             ans.push("unlisted")
         }
     })
