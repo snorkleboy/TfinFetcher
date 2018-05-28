@@ -17,22 +17,22 @@ module.exports = class IexInterface{
     init(options) {
         console.log("init started")
         iexInitFromSymbols()
-            .then(() => console.log("stocks instantiated"))        
-            .then(() => addDetails())
-            .then(() => console.log("stocks details fetched downloaded"))
+            .then(() => {forceGC();console.log("stocks instantiated")})        
             .then(() => addCharts())
-            .then(() => console.log("stocks charts downloaded"))
+            .then(() => {forceGC();console.log("stocks charts downloaded")})
+            .then(() => addDetails())
+            .then(() => {forceGC();console.log("stocks details fetched downloaded")})
             .then(() => addFinancialMargins())
-            .then(() => console.log("done adding Financial margins"))
+            .then(() => {forceGC();console.log("done adding Financial margins")})
             .then(() => addSMARSIBBAND())
-            .then(() => console.log("stock analysis added"))
+            .then(() => {forceGC();console.log("stock analysis added")})
             .then(() => moveLatestvaluesFromChartsToStocks())
-            .then(() => console.log("latest values moved from stocks"))            
+            .then(() => {forceGC();console.log("latest values moved from stocks")})            
             .then(() => initSectorsFromStocks())
-            .then(saved => console.log(saved.length, "made sectors"))            
+            .then(() => {forceGC();console.log( "made sectors")})            
             .then(() => addSectorAverages())
-            .then(saved => console.log(saved.length, "added sector average aggregates"))            
-            .then(()=>console.log("init done"))
+            .then(() => {forceGC();console.log( "added sector average aggregates")})            
+            .then(() => console.log("init done"))
             .catch(e=>console.log(e))
             
 
@@ -48,4 +48,13 @@ module.exports = class IexInterface{
 
     }
     
+}
+
+function forceGC(){
+    if (global.gc) {
+        console.log("garbage collecting");
+        global.gc();
+    } else {
+        console.warn('No GC hook! Start your program as `node --expose-gc file.js`.');
+    }
 }
