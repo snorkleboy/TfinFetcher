@@ -324,3 +324,13 @@ started fetching charts
   estimatedTimeMinutes: 12,
   'i/totalI': '6200/8023',
   totalErrors: 0 }
+{ someNames: 'RGT...SDEM',
+  percent: '78.5%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '6300/8023',
+  totalErrors: 0 }
+{ someNames: 'SDOW...SHOP',
+  percent: '79.7%',
+  estimatedTimeMinutes: 10,
+  'i/totalI': '6400/8023',
+  totalErrors: 0 }
