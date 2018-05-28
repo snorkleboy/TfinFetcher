@@ -426,3 +426,9 @@
  {"time":1527489337507,"batchNames":[],"percent":"62.9%","estimatedTimeMinutes":11,"i":5052,"totalI":8023,"totalErrors":0,"errors":[]}
  {"time":1527489347477,"batchNames":[],"percent":"63.1%","estimatedTimeMinutes":11,"i":5064,"totalI":8023,"totalErrors":0,"errors":[]}
  {"time":1527489357346,"batchNames":[],"percent":"63.2%","estimatedTimeMinutes":11,"i":5076,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489366915,"batchNames":[],"percent":"63.4%","estimatedTimeMinutes":11,"i":5088,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489376273,"batchNames":[],"percent":"63.5%","estimatedTimeMinutes":11,"i":5100,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489385718,"batchNames":[],"percent":"63.7%","estimatedTimeMinutes":11,"i":5112,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489395535,"batchNames":[],"percent":"63.8%","estimatedTimeMinutes":11,"i":5124,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489406174,"batchNames":[],"percent":"64%","estimatedTimeMinutes":12,"i":5136,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489416591,"batchNames":[],"percent":"64.1%","estimatedTimeMinutes":12,"i":5148,"totalI":8023,"totalErrors":0,"errors":[]}
