@@ -412,3 +412,17 @@
  {"time":1527489217097,"batchNames":[],"percent":"60.8%","estimatedTimeMinutes":11,"i":4884,"totalI":8023,"totalErrors":0,"errors":[]}
  {"time":1527489225064,"batchNames":[],"percent":"61%","estimatedTimeMinutes":11,"i":4896,"totalI":8023,"totalErrors":0,"errors":[]}
  {"time":1527489233504,"batchNames":[],"percent":"61.1%","estimatedTimeMinutes":11,"i":4908,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489241864,"batchNames":[],"percent":"61.3%","estimatedTimeMinutes":11,"i":4920,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489249997,"batchNames":[],"percent":"61.4%","estimatedTimeMinutes":11,"i":4932,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489258166,"batchNames":[],"percent":"61.6%","estimatedTimeMinutes":11,"i":4944,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489266536,"batchNames":[],"percent":"61.7%","estimatedTimeMinutes":11,"i":4956,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489274874,"batchNames":[],"percent":"61.9%","estimatedTimeMinutes":11,"i":4968,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489283145,"batchNames":[],"percent":"62%","estimatedTimeMinutes":11,"i":4980,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489291715,"batchNames":[],"percent":"62.2%","estimatedTimeMinutes":11,"i":4992,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489300370,"batchNames":[],"percent":"62.3%","estimatedTimeMinutes":11,"i":5004,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489309075,"batchNames":[],"percent":"62.5%","estimatedTimeMinutes":11,"i":5016,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489318108,"batchNames":[],"percent":"62.6%","estimatedTimeMinutes":11,"i":5028,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489328014,"batchNames":[],"percent":"62.8%","estimatedTimeMinutes":11,"i":5040,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489337507,"batchNames":[],"percent":"62.9%","estimatedTimeMinutes":11,"i":5052,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489347477,"batchNames":[],"percent":"63.1%","estimatedTimeMinutes":11,"i":5064,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489357346,"batchNames":[],"percent":"63.2%","estimatedTimeMinutes":11,"i":5076,"totalI":8023,"totalErrors":0,"errors":[]}
