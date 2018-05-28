@@ -4,7 +4,7 @@ mongoose.Promise = require('bluebird');
 const IexInterface = require('./IEXinterface')
 const iexInterface = new IexInterface()
 
-const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/test1`;
+const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/test`;
 
 const moveLatestvaluesFromChartsToStocks = require('../dbScripts/moveLatestValuesFromChartsToStockPI')
 

@@ -70,8 +70,6 @@ module.exports = class IexInterface{
         //     .then(() => addSMARSIBBAND())
         //     .then(() => {forceGC();console.log("stock analysis added")})
             // .then(() => moveLatestvaluesFromChartsToStocks())
-
-            // moveLatestvaluesFromChartsToStocks()
             // .then(() => {forceGC();console.log("latest values moved from stocks")})            
             // .then(() => initSectorsFromStocks())
             // .then(() => {forceGC();console.log( "made sectors")})            
