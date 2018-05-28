@@ -58,6 +58,7 @@ function moveValues(charts){
                     '200day': getROI(todaysReport, chart, 200),
                     '1yr': getROI(todaysReport, chart, 365),
                 }
+                stock.markModified('performance');
             } else{
                 const missing = todaysReport ? "performance missing" : [chart.length,chart[chart.length-2]]
                 errors.push({message:"NO todaysReport or performance OBJECT", missing, symbol:stock.symbol})
