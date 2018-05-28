@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const promiseIterator = require('../util/generalPromiseIterator.js')
 // const promiseFiller = require('../util/promiseFiller.js')
 
-function moveValuesFromChartsToStocks(batchSize = 20, startI = 0, stopAt) {
+function moveValuesFromChartsToStocks(batchSize = 20, startI = 3000, stopAt) {
     console.log("moving most recent stockchart info into each stock ")
     return promiseIterator(
         StockChart,
