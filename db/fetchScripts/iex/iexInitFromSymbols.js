@@ -3,7 +3,6 @@ const Stock = require('../../models/stock')
 const StockChart = require('../../models/stockChart')
 const saveSymbols =()=> axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
     .then(response => {
-        console.log("here", response);
         const promises = [];
         response.data.forEach((stock)=>{
             if (!stock.symbol.match(/[\*\-\+\#\^\.\~]/)) {

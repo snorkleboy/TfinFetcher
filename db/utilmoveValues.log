@@ -401,3 +401,14 @@
  {"time":1527489126468,"batchNames":[],"percent":"59.2%","estimatedTimeMinutes":11,"i":4752,"totalI":8023,"totalErrors":0,"errors":[]}
  {"time":1527489134441,"batchNames":[],"percent":"59.3%","estimatedTimeMinutes":11,"i":4764,"totalI":8023,"totalErrors":0,"errors":[]}
  {"time":1527489142234,"batchNames":[],"percent":"59.5%","estimatedTimeMinutes":11,"i":4776,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489150313,"batchNames":[],"percent":"59.6%","estimatedTimeMinutes":11,"i":4788,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489158233,"batchNames":[],"percent":"59.8%","estimatedTimeMinutes":11,"i":4800,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489166488,"batchNames":[],"percent":"59.9%","estimatedTimeMinutes":11,"i":4812,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489174588,"batchNames":[],"percent":"60.1%","estimatedTimeMinutes":11,"i":4824,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489183047,"batchNames":[],"percent":"60.2%","estimatedTimeMinutes":11,"i":4836,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489191107,"batchNames":[],"percent":"60.4%","estimatedTimeMinutes":11,"i":4848,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489199201,"batchNames":[],"percent":"60.5%","estimatedTimeMinutes":11,"i":4860,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489209144,"batchNames":[],"percent":"60.7%","estimatedTimeMinutes":11,"i":4872,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489217097,"batchNames":[],"percent":"60.8%","estimatedTimeMinutes":11,"i":4884,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489225064,"batchNames":[],"percent":"61%","estimatedTimeMinutes":11,"i":4896,"totalI":8023,"totalErrors":0,"errors":[]}
+ {"time":1527489233504,"batchNames":[],"percent":"61.1%","estimatedTimeMinutes":11,"i":4908,"totalI":8023,"totalErrors":0,"errors":[]}

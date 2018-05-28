@@ -14075,3 +14075,58 @@ moving most recent stockchart info into each stock
   estimatedTimeMinutes: 11,
   'i/totalI': '4776/8023',
   totalErrors: 0 }
+{ someNames: '...',
+  percent: '59.6%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4788/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '59.8%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4800/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '59.9%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4812/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '60.1%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4824/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '60.2%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4836/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '60.4%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4848/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '60.5%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4860/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '60.7%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4872/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '60.8%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4884/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '61%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4896/8023',
+  totalErrors: 0 }
+{ someNames: '...',
+  percent: '61.1%',
+  estimatedTimeMinutes: 11,
+  'i/totalI': '4908/8023',
+  totalErrors: 0 }
