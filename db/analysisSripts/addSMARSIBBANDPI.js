@@ -5,7 +5,8 @@ const __ranges = [20, 50, 200]
 const __rsiRange = 14
 
 function addSMARSIBBAND(batchSize = 10, startI = 0, stopAt, ranges = __ranges, rsiRange = __rsiRange) {
-    promiseIterator(
+    console.log("started adding chart analysis");
+    return promiseIterator(
         StockChart,
         addSMARISBBANDToStocks.bind(null, ranges, rsiRange),
         startI,

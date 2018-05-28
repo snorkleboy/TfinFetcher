@@ -1,9 +1,4 @@
 
- ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":1,"totalI":2},1526061210444]
- ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":1,"totalI":2},1526061251152]
- ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":1,"totalI":2},1526061273683]
- ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":1,"totalI":2},1526061294705]
- ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":1,"totalI":2},1526061322655]
- ["done",1526061323064,{"name":"bound addSMARISBBANDToStocks","errors":[]}]
- ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":25,"totalI":8048},1526061392045]
- ["done",1526062919414,{"name":"bound addSMARISBBANDToStocks","errors":[]}]
+ ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":10,"totalI":0},1527474885648]
+ ["done",1527474885648,{"name":"bound addSMARISBBANDToStocks","errors":[]}]
+ ["start",{"name":"bound addSMARISBBANDToStocks","i":0,"batchSize":10,"totalI":8023},1527480236173]

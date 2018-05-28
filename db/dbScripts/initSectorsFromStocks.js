@@ -3,10 +3,9 @@ const Sector = require('../models/sector')
 
 function initSectorsFromStocks() {
     console.log("Starting initSectors")
-    Stock.distinct("general.sector")
+    return Stock.distinct("general.sector")
     .then(sectors=> validate(sectors))
     .then(sectors=>createSectors(sectors))
-    .then(saved=>console.log(saved));
 }
 function validate(sectors){
     const ans = [];

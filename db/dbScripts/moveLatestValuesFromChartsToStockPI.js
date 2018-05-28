@@ -6,7 +6,8 @@ const promiseIterator = require('../util/generalPromiseIterator.js')
 // const promiseFiller = require('../util/promiseFiller.js')
 
 function moveValuesFromChartsToStocks(batchSize = 3, startI = 0, stopAt) {
-    promiseIterator(
+    console.log("moving most recent stockchart info into each stock ")
+    return promiseIterator(
         StockChart,
         moveValues,
         startI,

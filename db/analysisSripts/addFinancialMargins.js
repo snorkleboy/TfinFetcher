@@ -5,7 +5,8 @@ let startTime = 0;
 let numStocks=null;
 const errors = [];
 function addFinancialMargins(){
-    Stock.find({}).count()
+    console.log("adding financial margin information")
+    return Stock.find({}).count()
     .then(count=>{
         startTime = Date.now();
         numStocks = count
@@ -15,7 +16,7 @@ function addFinancialMargins(){
 
 function recursiveAddandSave(i=0,batch = 100){
     if (i < numStocks){
-        Stock.find({},{symbol:true,financials:true})
+        return Stock.find({},{symbol:true,financials:true})
         .skip(i)
         .limit(batch)
             .then(stocks=>addmargins(stocks))

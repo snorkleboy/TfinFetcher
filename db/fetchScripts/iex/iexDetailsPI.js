@@ -2,77 +2,76 @@ const axios = require('axios');
 const Stock = require('../../models/stock')
 const FileStream = require('fs');
 
-//should be refactored to look like fetchCharts
+const promiseIterator = require('../../util/generalPromiseIterator')
+const unprocessed = [];
 
 
+function iexDetails(startI = 0, batchSize = 25, stopAt = null) {
+    console.log("started fetching details");
+    return promiseIterator(
+            Stock,
+            fetchStockDetails,
+            startI,
+            batchSize,
+            stopAt
+        )
+        // .then(() => log(unprocessed))
+}
+
+function fetchStockDetails(stocks){
+    return FetchDetails(stocks.map(stock=>stock.symbol))
+        .then((res)=>{
+            if (res.status == 200){
+                return processStocks(stocks,res)
+            }else{
+                throw (["Fetch Failed",stocks,res])
+            }
+        })
+}
+function processStocks(stocks,res){
+    stocks.forEach(stock => {
+        try {
+            const slice = res.data[stock.symbol]
+            try {
+                stock.set({
+                    earnings: slice.earnings.earnings,
+                })
+            } catch (error) {
+                unprocessed.push([stock.symbol, "earnings not loaded"]);
+            }
+            try {
+                stock.set({
+                    financials: slice.financials.financials,
+                })
+            } catch (error) {
+                unprocessed.push([stock.symbol, "financials not loaded"]);
+            }
+            try {
+                stock.set({
+                    performance: slice.stats,
+                })
+            } catch (error) {
+                unprocessed.push([stock.symbol, "performance not loaded"]);
+            }
+            try {
+                stock.set({
+                    general: slice.company
+                })
+            } catch (error) {
+                unprocessed.push([stock.symbol, "general not loaded"]);
+            }
+        } catch (error) {
+            console.log(stock, error);
+            unprocessed.push([stock.symbol, error]);
+        }
+
+    })
+    return stocks;
+}
 const FetchDetails = (stocks) => axios({
     url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${stocks.join(',')}&types=logo,earnings,financials,stats,company`,
     method: "GET"
 })
-unprocessed=[]
-const iexDetails = () => Stock.find().then(stocks => {log(['start fetch',Date.now()]); return processAll(stocks)})
-const processAll = function (stocks, i = 0){
-    if(i<stocks.length){
-        console.log("starting fetch and save of Stock Details",`unproccessed length=${unprocessed.length}`,`${i}/${stocks.length} fetched`)
-        return getAndSave(stocks.slice(i, i + 5))
-            .then(() => processAll(stocks,i+5))
-            .catch(err => console.log(err));
-    } else{
-        log(unprocessed)
-        return stocks;
-    }
-}
-
-function getAndSave(stocks){
-    console.log('starting request')
-    return FetchDetails(stocks.map(stock=>stock.symbol))
-        .then((res)=>{
-            if (res.status == 200){
-                stocks.forEach(stock=>{
-                    try {
-                        const slice = res.data[stock.symbol]
-                        try {
-                            stock.set({
-                                earnings: slice.earnings.earnings,
-                            })
-                        } catch (error) {
-                            unprocessed.push([stock.symbol, "earnings not loaded"]);
-                        }
-                        try {
-                            stock.set({
-                                financials: slice.financials.financials,
-                            })
-                        } catch (error) {
-                            unprocessed.push([stock.symbol, "financials not loaded"]);
-                        }
-                        try {
-                            stock.set({
-                                performance: slice.stats,
-                            })
-                        } catch (error) {
-                            unprocessed.push([stock.symbol, "performance not loaded"]);
-                        }
-                        try {
-                            stock.set({
-                                general: slice.company
-                            })
-                        } catch (error) {
-                            unprocessed.push([stock.symbol, "general not loaded"]);
-                        }
-                        stock.save()
-                            .then((el) => console.log('saved', el.symbol));
-                    } catch (error) {
-                        console.log(stock, error);
-                        unprocessed.push([stock.symbol, error]);
-                    }
-
-                })
-            }else{
-                console.log(["Fetch Failed",stocks,res])
-            }
-        })
-}
-
 function log(toLog) {
     const fd = FileStream.appendFile(__dirname + 'iexDetailsFetch.log', `\n ${JSON.stringify(toLog)}`, function (err) {
         if (err) {

@@ -5,8 +5,9 @@ const Sector = require('../models/sector');
 let sectors;
 const defaultSectorName = "other"
 function addSectorAverages() {
+    console.log("adding sector averages");
     let sectorObjs;
-    Sector.find({})
+    return Sector.find({})
     .then(allSectors=>{
         sectorObjs = allSectors;
         sectors = allSectors.map(el => el.sector).sort()
@@ -42,7 +43,6 @@ function addSectorAverages() {
     .then(sectorsToSave=>{
         return Promise.all(sectorsToSave.map(sector=>sector.save()));
     })
-    .then(saved=>console.log(saved));
 }
 
 const validNumber = {

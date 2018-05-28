@@ -1,4 +1,4 @@
-
+(function(){
 const FileStream = require('fs');
 const mongoose = require('mongoose');
 
@@ -8,23 +8,47 @@ let errors = [];
 let totalErrors = 0;
 let name = "promise iterator"
 let startI=0;
-function iterateModel(Model, modify, i=0, batchSize=100, stopAfter=null) {
+let lastLog = -1000;
+let lastWrite = -1000;
+let _options = {
+    fileLogFreq: 10,
+    consoleLogFreq:10
+}
+options = {};
+function iterateModel(Model, modify, i=0, batchSize=100, stopAfter=null, optionsIn = {}) {
+
+    startTime = 0;
+    totalI = null;
+    errors = [];
+    totalErrors = 0;
+    name = "promise iterator"
+    startI = 0;
+    lastLog = -1000;
+    lastWrite = -1000;
+    _options = {
+        fileLogFreq: 10,
+        consoleLogFreq: 10
+    }
+
+
+    options = Object.assign({}, _options, optionsIn);
     return Model.find({}).count()
         .then(count => {
             startI=i;
             totalI = stopAfter || count
             name = modify.name || name
 
-            console.log(["start", {'name':modify.name, startI, batchSize, totalI} ]);
+            console.log(["start", {'name':modify.name, startI, batchSize, totalI, time: Date.now()} ]);
             log(["start", {'name':modify.name, i, batchSize, totalI}, Date.now()])
             startTime = Date.now();
-            recursiveAddandSave(Model, modify, i, batchSize)
         })
+        .then(() => recursiveAddandSave(Model, modify, i, batchSize))
+        
 }
 
 function recursiveAddandSave(Model, modify, i ,batchSize) {
     if (i < totalI) {
-        Model.find({})
+        return Model.find({})
             .skip(i)
             .limit(batchSize)
             .then(docs => modify(docs))
@@ -48,11 +72,10 @@ function saveDocs(docs, Model) {
 
     // return Model.create(docs);
 }
-let lastLog=-1000;
-let lastWrite=-1000;
+
 function progressReport(saved, i, batchSize) {
-    const writeTofile = Boolean(i - lastWrite > 30 * batchSize)
-    const consoleLog = Boolean(i - lastLog > 3 * batchSize)
+    const writeTofile = Boolean(i - lastWrite > options.fileLogFreq)
+    const consoleLog = Boolean(i - lastLog > options.consoleLogFreq)
     if (writeTofile || consoleLog){
         const batchNames = saved.map(doc => doc.symbol);
         const elapsedTime = Date.now() - startTime;
@@ -62,11 +85,30 @@ function progressReport(saved, i, batchSize) {
         const percent = `${parseInt(1000*(numDone) / (totalI - startI))/10}%`;
         if (consoleLog){
             lastLog = i
-            console.log({batchNames,percent, estimatedTimeMinutes,'i/totalI':`${i}/${totalI}`,'totalErrors':(totalErrors+errors.length)})
+            const someNames = [batchNames[0],batchNames[batchNames.length-1]].join("...")
+            console.log({
+                someNames,
+                percent,
+                estimatedTimeMinutes,
+                'i/totalI': `${i}/${totalI}`,
+                averageTimeMinutes,
+                'totalErrors': (totalErrors + errors.length)
+            })
         }
         if (writeTofile) {
             lastWrite = i
-            log({time:Date.now(),percent, estimatedTimeMinutes,i,totalI,totalErrors,errors})
+
+                log({
+                    time: Date.now(),
+                    batchNames,
+                    percent,
+                    estimatedTimeMinutes,
+                    i,
+                    totalI,
+                    totalErrors,
+                    errors
+                })
+
             totalErrors += errors.length;
             errors= [];
         }
@@ -75,24 +117,24 @@ function progressReport(saved, i, batchSize) {
 }
 
 function log(toLog) {
-    const cache = [];
-
-    const message = JSON.stringify(toLog, function (key, value) {
-        if (typeof value === 'object' && value !== null) {
-            if (cache.indexOf(value) !== -1) {
-                return;
+    try {
+        const cache = [];
+        const message = JSON.stringify(toLog, function (key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                    return;
+                }
+                cache.push(value);
             }
-            cache.push(value);
-        }
-        return value;
-    });
-    const fd = FileStream.appendFile(__dirname + `${name}.log`, `\n ${message}`, function (err) {
-        if (err) {
-            console.log('err!', err, Date.now);
-            throw err;
-        }
-    });
+            return value;
+        });
+        const fd = FileStream.appendFileSync(__dirname + `${name}.log`, `\n ${message}`);
+
+    } catch (error) {
+        console.log(error);
+    } 
 }
 
 
 module.exports = iterateModel;
+})()

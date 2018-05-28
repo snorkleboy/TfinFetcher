@@ -1,8 +1,0 @@
-
- ["start",{"name":"getStockName","i":0,"batchSize":100,"totalI":8048},1526055065947]
- ["start",{"name":"getStockName","i":0,"batchSize":100,"totalI":8048},1526055162023]
- ["start",{"name":"getStockName","i":0,"batchSize":100,"totalI":8048},1526055170036]
- ["start",{"name":"getStockName","i":0,"batchSize":100,"totalI":8048},1526055210686]
- ["start",{"name":"getStockName","i":0,"batchSize":100,"totalI":8048},1526055262930]
- ["start",{"name":"getStockName","i":0,"batchSize":100,"totalI":8048},1526055342214]
- ["done",1526055370756,{"name":"getStockName","errors":[]}]

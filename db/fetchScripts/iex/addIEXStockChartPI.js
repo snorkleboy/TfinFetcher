@@ -1,8 +1,8 @@
 const axios = require('axios');
 
 
-const StockChart = require('../../../models/stockChart')
-const promiseIterator = require('../../../util/generalPromiseIterator')
+const StockChart = require("../../models/stockChart")
+const promiseIterator = require('../../util/generalPromiseIterator')
 
 
 let numConcurrent;
@@ -10,9 +10,10 @@ let batchLength;
 
 
 function addIEXStockCharts(startI = 0, stopAt,batchSize = 50, numberConcurrent = 2 ) {
-numConcurrent = numberConcurrent;
-batchLength = batchSize;
-    promiseIterator(
+    numConcurrent = numberConcurrent;
+    batchLength = batchSize;
+    console.log("started fetching charts");
+    return promiseIterator(
         StockChart, 
         fetchAndMapCharts,
         startI,
@@ -34,12 +35,16 @@ function fetchAndMapCharts(stocks) {
     }
     return Promise.all(promises)
         .then(multiArray => flatten(multiArray))
-        .then(flat => {return flat})
 }
 function mapDataIntoStocks(stockBatch, data) {
     stockBatch.forEach(stock => {
-        stock.chart = data[stock.symbol].chart
-        stock.markModified('chart')
+        try {
+            stock.chart = data[stock.symbol].chart
+            stock.markModified('chart')
+        } catch (error) {
+            console.log(stock.symbol,error);
+        }
+        
     })
     return stockBatch;
 }

@@ -314,3 +314,13 @@ started fetching charts
   estimatedTimeMinutes: 13,
   'i/totalI': '6000/8023',
   totalErrors: 0 }
+{ someNames: 'PZC...PILL',
+  percent: '76%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '6100/8023',
+  totalErrors: 0 }
+{ someNames: 'PIR...RGLS',
+  percent: '77.2%',
+  estimatedTimeMinutes: 12,
+  'i/totalI': '6200/8023',
+  totalErrors: 0 }
