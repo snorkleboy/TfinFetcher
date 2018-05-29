@@ -110,6 +110,7 @@ function getRelativeValue(queryValue, key) {
     return 666
 }
 function listKeys(){
+    console.log("here", keyList(earningsSchema.obj), [...keyList(earningsSchema.obj), ...keyList(financialSchema.obj)])
     return {
        "validKeys":{ 
             'earnings': keyList(earningsSchema.obj),
@@ -133,7 +134,7 @@ function keyList(schema){
     listSchema = Object.keys(schema)
     for(let i=0;i<listSchema.length;i++){
         const key = listSchema[i]
-        const toExpand = Boolean(typeof schema[key] === 'object')
+        const toExpand = Boolean(typeof schema[key] === 'object' && !schema[key].set)
 
         if (toExpand){
             schmObj = {};
