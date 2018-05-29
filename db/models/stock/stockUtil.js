@@ -112,6 +112,10 @@ function getRelativeValue(queryValue, key) {
 function listKeys(){
     console.log("here", keyList(earningsSchema.obj), [...keyList(earningsSchema.obj), ...keyList(financialSchema.obj)])
     return {
+        "format": {
+            "/screen?key1=>a&key2=<b": "screen for stocks where key1 is more than a and key2 is less than b",
+            "/screen?peRatio=<.8sa&profitMargin=>.1": "screen for stocks where the peRatio is less than .8* sector average peRatio and the profit margin is mroe than .1",
+        },
        "validKeys":{ 
             'earnings': keyList(earningsSchema.obj),
             'financial': keyList(financialSchema.obj),
@@ -122,10 +126,9 @@ function listKeys(){
         "validComparisons":{
             'key=<a': "key is less than a",
             'key=>a': "key is more than a",
-            'key=a': "key is equal to a"
-        },
-        "format":{
-            "/screen?key1=>a&key2=<b" :"screen for stocks where key1 is more than a and key2 is less than b"
+            'key=a': "key is equal to a",
+            'key=>xsa':"key is more than x * the sector average",
+            'preRatio=>1.2sa': 'key is more than 1.2* sector average preRatio'
         }
         
     }
