@@ -4,7 +4,7 @@ mongoose.Promise = require('bluebird');
 const IexInterface = require('./IEXinterface')
 const iexInterface = new IexInterface()
 
-const uristring = `mongodb://tfindb:y0VePVh17nXkUXH9HVn3BZ8svCmS9JJadyIfLdLDmFk3zGFj1Yc3rYHtAt7QeCgxDJChx6foiePvgdDOQwD41A==@tfindb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb`
+const uristring = "mongodb://tfindb:y0VePVh17nXkUXH9HVn3BZ8svCmS9JJadyIfLdLDmFk3zGFj1Yc3rYHtAt7QeCgxDJChx6foiePvgdDOQwD41A%3D%3D@tfindb.documents.azure.com:10255/?ssl=true"
 || `mongodb://localhost/test`;
 const moveLatestvaluesFromChartsToStocks = require('../dbScripts/moveLatestValuesFromChartsToStockPI')
 
