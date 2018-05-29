@@ -17,9 +17,10 @@ _options = {
 module.exports = class IexInterface{
     constructor(options){
         this.options = Object.assign({},_options, options);
-        console.log("construct")
     }
     init(InitOptions = {}) {
+                console.log("construct")
+
         const options = Object.assign({}, this.options, InitOptions);
         const steps = options.steps ||[
             iexInitFromSymbols,
