@@ -25,7 +25,11 @@ function sendSceenKeysList(response) {
 }
 function sendScreenedStocks(query,response) {
     Stock.aggregateScreen(query)
+        .then(stocks => addUrlToStocks(stocks))
         .then(stocks => response.send(stocks))
 }
-
+function addUrlToStocks(stocks){
+    stocks.forEach(stock => stock.url = `http://tfin.artemkharshan.com/#/stocks/${stock.symbol}`)
+    return stocks;
+}
 module.exports = ScreenController;
