@@ -173,6 +173,7 @@ const addProjections = (pipeline, where, bareKeyToPath) => {
         
         const thisWhere = where[bareKeyToPath[bareKey]]
         if (thisWhere.relativeValue) {
+            const originalPath = path;
             path = path.split('.');
             if (path[0] === 'financials' || path[0] === 'earnings') {
                 path[0] = 'todays' + capitalize(path[0]);
@@ -180,8 +181,9 @@ const addProjections = (pipeline, where, bareKeyToPath) => {
             path = path.join('.');
             console.log({path})
             project["sector" + bareKey + "Avg"] = "$sectorAvg." + path;
+            project["multipliedValue"]={"$multiply": ['$'+"sectorAvg." + path, thisWhere.amount/100]}
             project[bareKey + "comparison"] = {
-                "$cmp": [{"$multiply": ['$'+path, thisWhere.amount/100]}, "$sectorAvg." + path]
+                "$cmp": ["$"+originalPath,{"$multiply": ['$'+"sectorAvg." + path, thisWhere.amount/100]}]
             }
         }
     })
@@ -214,8 +216,6 @@ const addMatches = (pipeline, where, bareKeyToPath) => {
 }
 
 module.exports = aggregationScreen;
-/*
-example output
 [{
     "$project": {
         "financials": {
@@ -241,25 +241,21 @@ example output
     "$project": {
         "sector": "$general.sector",
         "symbol": "$symbol",
-        "beta": "$performance.beta",
-        "marketcap": "$performance.marketcap",
-        "sectormarketcapAvg": "$sectorAvg.performance.marketcap",
-        "marketcapcomparison": {
-            "$cmp": [{
-                "$multiply": ["$performance.marketcap", 1.2]
-            }, "$sectorAvg.performance.marketcap"]
+        "grossMargin": "$financials.grossMargin",
+        "sectorgrossMarginAvg": "$sectorAvg.todaysFinancials.grossMargin",
+        "multipliedValue": {
+            "$multiply": ["$sectorAvg.todaysFinancials.grossMargin", 5]
+        },
+        "grossMargincomparison": {
+            "$cmp": ["$financials.grossMargin", {
+                "$multiply": ["$sectorAvg.todaysFinancials.grossMargin", 5]
+            }]
         }
     }
 }, {
     "$match": {
-        "beta": {
-            "$gt": 8
-        },
-        "marketcapcomparison": {
-            "$gt": 0
+        "grossMargincomparison": {
+            "$lte": 0
         }
-        
     }
 }]
-
-*/

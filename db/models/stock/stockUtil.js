@@ -129,6 +129,13 @@ function listKeys(){
             'key=a': "key is equal to a",
             'key=>xsa':"key is more than x * the sector average",
             'preRatio=>1.2sa': 'key is more than 1.2* sector average preRatio'
+        },
+        "current working sector averages":{
+            'grossMargin': true,
+            'profitMargin': true,
+            'operatingMargin':true,
+            'quickRatio':true,
+            'currentRatio': true,
         }
         
     }

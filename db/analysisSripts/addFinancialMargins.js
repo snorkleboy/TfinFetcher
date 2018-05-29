@@ -63,4 +63,5 @@ function progressReport(saved,i){
     console.log({somenames, percent, estimatedTimeMinutes})
 }
 
+
 module.exports = addFinancialMargins;

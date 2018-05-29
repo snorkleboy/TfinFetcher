@@ -6,8 +6,7 @@ const iexInterface = new IexInterface()
 
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/test`;
 
-const moveLatestvaluesFromChartsToStocks = require('../dbScripts/moveLatestValuesFromChartsToStockPI')
-
+const addSectorAverages = require('../analysisSripts/addSectorAverages')
 mongoose.connect(uristring, {
     promiseLibrary: require('bluebird'),
     keepAlive: 120
@@ -17,7 +16,7 @@ mongoose.connect(uristring, {
     } else {
         console.log('Succeeded connected to: ' + uristring);
         options = {
-            startFunction: moveLatestvaluesFromChartsToStocks
+            startFunction: addSectorAverages
         }
         iexInterface.init(options);
     }
