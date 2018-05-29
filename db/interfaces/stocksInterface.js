@@ -4,8 +4,9 @@ mongoose.Promise = require('bluebird');
 const IexInterface = require('./IEXinterface')
 const iexInterface = new IexInterface()
 
-const uristring = "mongodb://tfindb:y0VePVh17nXkUXH9HVn3BZ8svCmS9JJadyIfLdLDmFk3zGFj1Yc3rYHtAt7QeCgxDJChx6foiePvgdDOQwD41A%3D%3D@tfindb.documents.azure.com:10255/?ssl=true"
-|| `mongodb://localhost/test`;
+const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/test`;
+
+const moveLatestvaluesFromChartsToStocks = require('../dbScripts/moveLatestValuesFromChartsToStockPI')
 
 mongoose.connect(uristring, {
     promiseLibrary: require('bluebird'),
@@ -15,7 +16,9 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-
-        iexInterface.init();
+        options = {
+            startFunction: moveLatestvaluesFromChartsToStocks
+        }
+        iexInterface.init(options);
     }
 });

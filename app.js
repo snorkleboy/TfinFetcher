@@ -11,7 +11,7 @@ const tempScreen = require('./db/models/stock/aggregationScreen')
 const addSectorAverages = require('./db/analysisSripts/addSectorAverages')
 //mongoose
 //
-const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/stocks';
+const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/test';
 mongoose.connect(uristring, {
     promiseLibrary: require('bluebird'),
     keepAlive: 120 

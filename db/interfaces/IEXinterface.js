@@ -51,8 +51,8 @@ module.exports = class IexInterface{
             console.log(steps, i, steps[i], steps[i].name)
             doFunctionThenclean(steps[i], steps[i].name)
             .then(() => {
+                    i = i + 1;
                 if (i < steps.length) {
-                    i=i+1;
                     return doSteps()
                 }
             })
