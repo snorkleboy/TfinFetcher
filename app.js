@@ -9,6 +9,8 @@ const router = require('./express/controllers/router');
 
 const tempScreen = require('./db/models/stock/aggregationScreen')
 const addSectorAverages = require('./db/analysisSripts/addSectorAverages')
+
+const IexInterface = require('./db/interfaces/IEXinterface')
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/test';
@@ -20,7 +22,8 @@ mongoose.connect(uristring, {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
         console.log('Succeeded connected to: ' + uristring);
-
+        const iex = new IexInterface();
+        iex.init();
     }
 });
 

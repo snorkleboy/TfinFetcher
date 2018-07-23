@@ -6,7 +6,7 @@ const saveSymbols =()=> axios.get('https://api.iextrading.com/1.0/ref-data/symbo
         const promises = [];
         response.data.forEach((stock)=>{
             if (!stock.symbol.match(/[\*\-\+\#\^\.\~]/)) {
-                promises.push(Stock.create({ "symbol": stock.symbol, "name": stock.name },()=> console.log(stock.symbol)));
+                promises.push(Stock.create({ "symbol": stock.symbol, "name": stock.name }));
                 promises.push(StockChart.create({ "symbol": stock.symbol, "name": stock.name }) );
             }
         })

@@ -9,26 +9,27 @@ let numConcurrent;
 let batchLength;
 
 
-function addIEXStockCharts(startI = 0, stopAt,batchSize = 50, numberConcurrent = 2 ) {
+function addIEXStockCharts(startI = 0, stopAt,batchSize = 50, numberConcurrent = 2, range='5y' ) {
     numConcurrent = numberConcurrent;
     batchLength = batchSize;
     console.log("started fetching charts");
     return promiseIterator(
         StockChart, 
-        fetchAndMapCharts,
+        fetchAndMapCharts.bind(null,range),
         startI,
         batchSize * numConcurrent,
         stopAt
     )
 }
-function fetchAndMapCharts(stocks) {
+
+function fetchAndMapCharts(range,stocks) {
     const promises = [];
     for (let j = 0; j < numConcurrent; j++) {
         const stockBatch = stocks.slice(j * batchLength, (j + 1) * batchLength);
         if (stockBatch.length > 0){
             let stockBatchNames = stockBatch.map(stock => stock.symbol);
             promises.push(
-                fetchDayChartBatch(stockBatchNames)
+                fetchDayChartBatch(stockBatchNames,range)
                 .then(data => mapDataIntoStocks(stockBatch, data))
             )
         }
@@ -52,9 +53,9 @@ function flatten(multiArray) {
     return [].concat(...multiArray)
 }
 
-function fetchDayChartBatch(symbols){
+function fetchDayChartBatch(symbols,range){
     return axios({
-        url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols.join(',')}&types=chart&range=5y`,
+        url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols.join(',')}&types=chart&range=${range}`,
         method: "GET",
     })
     .then(response => response.data)
