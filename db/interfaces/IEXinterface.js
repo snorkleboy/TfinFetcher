@@ -14,13 +14,15 @@ const addSectorAverages = require('../analysisSripts/addSectorAverages')
 _options = {
 
 }
+_updateOptions={
+
+}
 module.exports = class IexInterface{
     constructor(options){
         this.options = Object.assign({},_options, options);
+        this.updateTime=12+5;
     }
     init(InitOptions = {}) {
-                console.log("construct")
-
         const options = Object.assign({}, this.options, InitOptions);
         const steps = options.steps ||[
             iexInitFromSymbols,
@@ -38,15 +40,6 @@ module.exports = class IexInterface{
         }
         
         let i = options.startI || funIndex || 0;
-
-        const doFunctionThenclean = (fun, message) => {
-            console.log("start",{message})
-            return fun()
-                .then(() => {
-                    forceGC();
-                    console.log("finished",{message})
-                })
-        }
         function doSteps(){
             console.log(steps, i, steps[i], steps[i].name)
             doFunctionThenclean(steps[i], steps[i].name)
@@ -56,39 +49,51 @@ module.exports = class IexInterface{
                     return doSteps()
                 }
             })
-            .then(()=>console.log("init done"));
+           
         }
-        doSteps();
-
-        // iexInitFromSymbols()
-        //     .then(() => {forceGC();console.log("stocks instantiated")})        
-        //     .then(() => addCharts())
-        //     .then(() => {forceGC();console.log("stocks charts downloaded")})
-        //     .then(() => addDetails())
-        //     .then(() => {forceGC();console.log("stocks details fetched downloaded")})
-        //     .then(() => addFinancialMargins())
-        //     .then(() => {forceGC();console.log("done adding Financial margins")})
-        //     .then(() => addSMARSIBBAND())
-        //     .then(() => {forceGC();console.log("stock analysis added")})
-            // .then(() => moveLatestvaluesFromChartsToStocks())
-            // .then(() => {forceGC();console.log("latest values moved from stocks")})            
-            // .then(() => initSectorsFromStocks())
-            // .then(() => {forceGC();console.log( "made sectors")})            
-            // .then(() => addSectorAverages())
-            // .then(() => {forceGC();console.log( "added sector average aggregates")})            
-            // .then(() => console.log("init done"))
-            // .catch(e=>console.log(e))
-            
-
-            //mostly functional at this point, all of the previous functions need to be 
-            //refactored to work like this, probably just put return into highest level function
-            //todo
-            // .then(()=> cleanup())
-            // .then(()=> ensure())
+        const doFunctionThenclean = (fun, message) => {
+            console.log("start",{message})
+            return fun()
+                .then(() => {
+                    forceGC();
+                    console.log("finished",{message})
+                })
+        }
+        
+        return doSteps().then(()=>{console.log("init done");"init done"});
     }
-
-    //to do 
-    update(){
+    update(daysSince,options={}){
+        const theseOptions = Object.assign({},this.options,_updateOptions,options); 
+        const steps = options.steps ||[
+            addCharts.bind(null,{range=daysSince+"d"}),
+            addDetails,
+            addFinancialMargins,
+            addSMARSIBBAND.bind(null,{range=daysSince}),
+            moveLatestvaluesFromChartsToStocks,
+            addSectorAverages,
+        ];
+        
+        let i = options.startI || 0;
+        function doSteps(){
+            console.log(steps, i, steps[i], steps[i].name)
+            doFunctionThenclean(steps[i], steps[i].name)
+            .then(() => {
+                    i = i + 1;
+                if (i < steps.length) {
+                    return doSteps()
+                }
+            })
+        }
+        const doFunctionThenclean = (fun, message) => {
+            console.log("start",{message})
+            return fun()
+                .then(() => {
+                    forceGC();
+                    console.log("finished",{message})
+                })
+        }
+        
+        return doSteps().then(()=>{console.log("update done",daysSince,Date.now());"update done "+ daysSince + "   " + Date.now()});
 
     }
     

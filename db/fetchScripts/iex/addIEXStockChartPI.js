@@ -9,7 +9,7 @@ let numConcurrent;
 let batchLength;
 
 
-function addIEXStockCharts(startI = 0, stopAt,batchSize = 50, numberConcurrent = 2, range='5y' ) {
+function addIEXStockCharts({startI = 0, stopAt,batchSize = 50, numberConcurrent = 2, range='5y' }) {
     numConcurrent = numberConcurrent;
     batchLength = batchSize;
     console.log("started fetching charts");

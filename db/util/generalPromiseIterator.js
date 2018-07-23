@@ -135,7 +135,7 @@ function log(toLog) {
             }
             return value;
         });
-        const fd = FileStream.appendFileSync(__dirname + `${name}.log`, `\n ${message}`);
+        const fd = FileStream.appendFile(__dirname + `${name}.log`, `\n ${message}`);
 
     } catch (error) {
         console.log(error);
