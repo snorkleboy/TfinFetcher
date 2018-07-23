@@ -4,21 +4,21 @@ const promiseIterator = require('../util/generalPromiseIterator.js')
 const __ranges = [20, 50, 200]
 const __rsiRange = 14
 
-function addSMARSIBBAND(batchSize = 10, startI = 0, stopAt, ranges = __ranges, rsiRange = __rsiRange) {
+function addSMARSIBBAND(batchSize = 10, startI = 0, stopAt, ranges = __ranges, rsiRange = __rsiRange,updateRange="all") {
     console.log("started adding chart analysis");
     return promiseIterator(
         StockChart,
-        addSMARISBBANDToStocks.bind(null, ranges, rsiRange),
+        addSMARISBBANDToStocks.bind(null, ranges, rsiRange,updateRange),
         startI,
         batchSize,
         stopAt
     )
 }
 
-function addSMARISBBANDToStocks(ranges, rsiRange, stocks) {
+function addSMARISBBANDToStocks(ranges, rsiRange,updateRange, stocks) {
     stocks.forEach(stock => {
         try {
-            addAnalysis(stock.chart, ranges, rsiRange)
+            addAnalysis(stock.chart, ranges, rsiRange,updateRange)
             stock.markModified('chart')
         } catch (e) {
             throw {'symbol':stock.symbol, e};
@@ -28,7 +28,10 @@ function addSMARISBBANDToStocks(ranges, rsiRange, stocks) {
 }
 
 
-function addAnalysis(chartData, ranges, rsiRange) {
+function addAnalysis(chartData, ranges, rsiRange,updateRange) {
+    if(updateRange!== "all"){
+        chartData=chartData.slice(chartData.length-updateRange,updateRange);   
+    }
     const sums = {}
     const sqSums = {}
     ranges.forEach(range => {
