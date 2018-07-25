@@ -10,6 +10,7 @@ const saveSymbols =()=> axios.get('https://api.iextrading.com/1.0/ref-data/symbo
                 promises.push(StockChart.create({ "symbol": stock.symbol, "name": stock.name }) );
             }
         })
+        console.log(`received response with all Symbols, making ${promises.length/2} entries for stockcharts and stocks`);
         return Promise.all(promises);
     })
 module.exports = saveSymbols;

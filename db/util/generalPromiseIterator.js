@@ -1,6 +1,7 @@
 (function(){
 const FileStream = require('fs');
 const mongoose = require('mongoose');
+const os = require('os');
 let lastGC = 0
 let startTime = 0;
 let totalI = null;
@@ -135,7 +136,7 @@ function log(toLog) {
             }
             return value;
         });
-        const fd = FileStream.appendFile(__dirname + `${name}.log`, `\n ${message}`);
+        const fd = FileStream.appendFile(os.homedir()+'/tfinLogs/' + `${name}.log`, `\n ${message}`,(err)=>{console.log({err})});
 
     } catch (error) {
         console.log(error);

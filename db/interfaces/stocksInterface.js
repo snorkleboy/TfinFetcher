@@ -1,7 +1,6 @@
-import { BADFLAGS } from 'dns';
-
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
+const os = require('os');
 
 const Iex = require('./IEXinterface')
 const FileStream = require('fs');
@@ -15,7 +14,7 @@ const _options = {
 };
 let connected = false;
 
-export default class StocksInterface{
+class StocksInterface{
     constructor(options){
         this.Interface = new Iex();
         this.options = Object.assign([],_options,options);
@@ -23,14 +22,17 @@ export default class StocksInterface{
         connectToMongoose();
     }
     run(){
-        const daysSince = checkUpdate();
-        if (daysSince && daysSince>0){
-            return this.update(daysSince);
-        }else if (daysSince>0){
-            return this.init();
-        }else{
-            return "up to date"+ Date.now();
-        }
+        return new Promise((res,rej)=>{
+            const daysSince = this.checkUpdate();
+            console.log("Run stocksinterface", {daysSince})
+            if (daysSince && daysSince>.8){
+                res(this.update(daysSince))
+            }else if (!daysSince){
+                res(this.init())
+            }else{
+                res( "up to date"+ Date.now())
+            }
+        })
     }
     init(){
         this.busy=true;
@@ -52,7 +54,7 @@ export default class StocksInterface{
     }
 
     writeDate(){
-        fs.writeFile(__dirname+'/stocksInterFaceUpdate.log', Date.now(), function (err) {
+        FileStream.writeFile(os.homedir()+'/tfinLogs/interface/stocksInterfaceUpdate.log', Date.now(), function (err) {
             if (err) {
                 console.log("STOCKS INTERFACE DID NOT SAVE ITS LAST UPDATE TIME");
                 throw err;
@@ -63,6 +65,7 @@ export default class StocksInterface{
         const lastRan = getLastRan();
         if (lastRan){
             const now = new Date(Date.now());
+            console.log("CHECK UPDATE", {lastRan,now})
             const daysSince = getDays(lastRan,now);
             return daysSince;
         }else{
@@ -71,30 +74,21 @@ export default class StocksInterface{
 
     }
 }
+module.exports = StocksInterface;
 function getLastRan(){
-    const lastRan = readLastRan();
-    if (lastRan){
+    const lastRan = readLastRan()
+    console.log("raw date",{lastRan})
+    if (lastRan && lastRan !== ""){
         return new Date(lastRan)
     }else{
         undefined;
     }
 }
 function readLastRan(){
-    return Promise(function (res,rej){
-        fs.readFile(__dirname+'/stocksInterFaceUpdate.log', function(err, data){
-            if(err){
-                console.log("STOCKS INTERFACE DID NOT READ LAST LOG FILE");
-                rej(err);
-            }else{
-                resolve(data);
-            }
-        });
-    })
+    return FileStream.readFileSync(os.homedir()+'/tfinLogs/interface/stocksInterFaceUpdate.log',{flag:'w+'}).toString();
 }
-StocksInterface.prototype.afterStockUpdate = function afterStockUpdate(){
-    Boolean(now.getHours() > this.Interface.updateTime);
-}
-function connectToMongoose(uristring  = uristring || process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/test`){
+
+function connectToMongoose(uristring  = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/development`){
     mongoose.connect(uristring, {
         promiseLibrary: require('bluebird'),
         keepAlive: 120

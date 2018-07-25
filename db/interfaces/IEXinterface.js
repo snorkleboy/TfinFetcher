@@ -26,10 +26,10 @@ module.exports = class IexInterface{
         const options = Object.assign({}, this.options, InitOptions);
         const steps = options.steps ||[
             iexInitFromSymbols,
-            addCharts,
+            addCharts.bind(null,{}),
             addDetails,
             addFinancialMargins,
-            addSMARSIBBAND,
+            addSMARSIBBAND.bind(null,{}),
             moveLatestvaluesFromChartsToStocks,
             initSectorsFromStocks,
             addSectorAverages,
@@ -39,20 +39,19 @@ module.exports = class IexInterface{
             funIndex = findFunctionByName(steps,options.startFunction);
         }
         
-        let i = options.startI || funIndex || 0;
-        function doSteps(){
+        function doSteps(i=options.startI || funIndex || 0){
             console.log(steps, i, steps[i], steps[i].name)
-            doFunctionThenclean(steps[i], steps[i].name)
+            return doFunctionThenclean(steps[i], "starting="+steps[i].name)
             .then(() => {
-                    i = i + 1;
+                    
                 if (i < steps.length) {
-                    return doSteps()
+                    return doSteps(i + 1)
                 }
             })
            
         }
         const doFunctionThenclean = (fun, message) => {
-            console.log("start",{message})
+            console.log({message})
             return fun()
                 .then(() => {
                     forceGC();
@@ -60,15 +59,15 @@ module.exports = class IexInterface{
                 })
         }
         
-        return doSteps().then(()=>{console.log("init done");"init done"});
+        return doSteps().then(()=>{console.log("init done");return "init done"});
     }
     update(daysSince,options={}){
         const theseOptions = Object.assign({},this.options,_updateOptions,options); 
         const steps = options.steps ||[
-            addCharts.bind(null,{range=daysSince+"d"}),
+            addCharts.bind(null,{range:daysSince+"d"}),
             addDetails,
             addFinancialMargins,
-            addSMARSIBBAND.bind(null,{range=daysSince}),
+            addSMARSIBBAND.bind(null,{range:daysSince}),
             moveLatestvaluesFromChartsToStocks,
             addSectorAverages,
         ];

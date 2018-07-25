@@ -40,7 +40,11 @@ function fetchAndMapCharts(range,stocks) {
 function mapDataIntoStocks(stockBatch, data) {
     stockBatch.forEach(stock => {
         try {
-            stock.chart = data[stock.symbol].chart
+            if(stock.chart === undefined){
+                stock.chart = data[stock.symbol].chart
+            }else{
+                stock.chart = stock.chart.concat(data[stock.symbol].chart)
+            }
             stock.markModified('chart')
         } catch (error) {
             console.log(stock.symbol,error);
