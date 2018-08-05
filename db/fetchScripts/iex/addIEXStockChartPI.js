@@ -9,7 +9,7 @@ let numConcurrent;
 let batchLength;
 
 
-function addIEXStockCharts({startI = 0, stopAt,batchSize = 50, numberConcurrent = 2, range='5y' }) {
+function addIEXStockCharts({startI = 0, stopAt,batchSize = 50, numberConcurrent = 2, range=null }) {
     numConcurrent = numberConcurrent;
     batchLength = batchSize;
     console.log("started fetching charts");
@@ -59,7 +59,7 @@ function flatten(multiArray) {
 
 function fetchDayChartBatch(symbols,range){
     return axios({
-        url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols.join(',')}&types=chart&range=${range}`,
+        url: `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols.join(',')}&types=chart&range=${range? "1m" :"5y"}${range? `&chartLast=${range}`:""}`,
         method: "GET",
     })
     .then(response => response.data)

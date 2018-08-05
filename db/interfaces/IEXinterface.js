@@ -64,18 +64,18 @@ module.exports = class IexInterface{
     update(daysSince,options={}){
         const theseOptions = Object.assign({},this.options,_updateOptions,options); 
         const steps = options.steps ||[
-            addCharts.bind(null,{range:daysSince+"d"}),
+            addCharts.bind(null,{range:daysSince}),
             addDetails,
             addFinancialMargins,
             addSMARSIBBAND.bind(null,{range:daysSince}),
             moveLatestvaluesFromChartsToStocks,
             addSectorAverages,
         ];
-        
+        console.log("Started update",{daysSince});
         let i = options.startI || 0;
         function doSteps(){
             console.log(steps, i, steps[i], steps[i].name)
-            doFunctionThenclean(steps[i], steps[i].name)
+            return doFunctionThenclean(steps[i], steps[i].name)
             .then(() => {
                     i = i + 1;
                 if (i < steps.length) {

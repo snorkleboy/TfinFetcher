@@ -6,11 +6,11 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const router = require('./express/controllers/router');
-
+const cronSetup = require('./cron/cron')
 const tempScreen = require('./db/models/stock/aggregationScreen')
 const addSectorAverages = require('./db/analysisSripts/addSectorAverages')
+const axios = require('axios');
 
-const IexInterface = require('./db/interfaces/IEXinterface')
 //mongoose
 //
 const uristring = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/development';
@@ -21,6 +21,7 @@ mongoose.connect(uristring, {
     if (err) {
         console.log('ERROR connecting to: ' + uristring + '. ' + err);
     } else {
+        cronSetup();
         console.log('Succeeded connected to: ' + uristring);
     }
 });

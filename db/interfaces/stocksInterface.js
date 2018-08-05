@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const os = require('os');
+var cmd=require('node-cmd');
+const axios = require('axios');
+const moment = require('moment');
 
 const Iex = require('./IEXinterface')
 const FileStream = require('fs');
-
+const StockChart = require('../models/stockChart')
 
 const addSectorAverages = require('../analysisSripts/addSectorAverages')
 
@@ -23,15 +26,17 @@ class StocksInterface{
     }
     run(){
         return new Promise((res,rej)=>{
-            const daysSince = this.checkUpdate();
-            console.log("Run stocksinterface", {daysSince})
-            if (daysSince && daysSince>.8){
-                res(this.update(daysSince))
-            }else if (!daysSince){
-                res(this.init())
-            }else{
-                res( "up to date"+ Date.now())
-            }
+            this.checkUpdate()
+            .then(daysSince=>{
+                console.log("Run stocksinterface", {daysSince})
+                if (daysSince && daysSince>.9){
+                    res(this.update(daysSince))
+                }else if (!daysSince){
+                    res(this.init())
+                }else{
+                    res( "up to date"+ Date.now())
+                }
+            })
         })
     }
     init(){
@@ -52,6 +57,30 @@ class StocksInterface{
             that.busy=false;
         });
     }
+    checkTimeAndConnection(){
+        const FetchDetails = (stocks) => axios({
+            url: `http://worldclockapi.com/api/json/est/now`,
+            method: "GET"
+        })
+        .then(res=>{
+            if (res.status == 200){
+                const time = new Date(res.data.currentDateTime);
+                const dayofWeek = res.data.dayOfTheWeek;
+                const timeZone = res.data.timeZoneName;
+                const message = `starting tfin database update in 15min. current time from worldclockapi is \n${time} ${dayofWeek}  ${timeZone}\n current system time is ${new Date()}`
+
+                const toField = "To:someone@txt.att.net"
+                const fromField = "From:timkharshan@hotmail.com"
+                const subjectField = "Subject: TFINUPDATE"
+                const ssmtp = "ssmtp 9253305948@txt.att.net"
+                const command = `echo ${toField}\n${fromField}\n${subjectField}\n\n${message}'| ${ssmtp} ` 
+                cmd.run(command);
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
 
     writeDate(){
         FileStream.writeFile(os.homedir()+'/tfinLogs/interface/stocksInterfaceUpdate.log', Date.now(), function (err) {
@@ -62,30 +91,57 @@ class StocksInterface{
         });
     }
     checkUpdate(){
-        const lastRan = getLastRan();
-        if (lastRan){
-            const now = new Date(Date.now());
-            console.log("CHECK UPDATE", {lastRan,now})
-            const daysSince = getDays(lastRan,now);
-            return daysSince;
-        }else{
-            return false;
-        }
-
+        console.log("checking update");
+        return getLastRan()
+        .then(lastRan=>{
+            if (lastRan){
+                const now = new Date(Date.now());
+                console.log("CHECK UPDATE", {lastRan,now})
+                const daysSince = workday_count(moment(lastRan),moment(now));
+                console.log(daysSince);
+                return daysSince;
+            }else{
+                return false;
+            }
+        })
     }
 }
+
 module.exports = StocksInterface;
+
+
+function workday_count(start,end) {
+    var first = start.clone().endOf('week'); // end of first week
+    var last = end.clone().startOf('week'); // start of last week
+    var days = last.diff(first,'days') * 5 / 7; // this will always multiply of 7
+    var wfirst = first.day() - start.day(); // check first week
+    if(start.day() == 0) --wfirst; // -1 if start with sunday 
+    var wlast = end.day() - last.day(); // check last week
+    if(end.day() == 6) --wlast; // -1 if end with saturday
+    return wfirst + days + wlast; // get the total
+  }
 function getLastRan(){
-    const lastRan = readLastRan()
-    console.log("raw date",{lastRan})
-    if (lastRan && lastRan !== ""){
-        return new Date(lastRan)
-    }else{
-        undefined;
-    }
+    return readLastRan()
+    .then(lastRan=>{
+        console.log("raw date",{lastRan})
+        if (lastRan && lastRan !== ""){
+            return new Date(lastRan)
+        }else{
+            undefined;
+        }
+    })
 }
 function readLastRan(){
-    return FileStream.readFileSync(os.homedir()+'/tfinLogs/interface/stocksInterFaceUpdate.log',{flag:'w+'}).toString();
+    return StockChart.find().limit(1)
+    .then(docs=>{
+        const doc = docs[0]
+        const date = doc.chart[doc.chart.length-1].date
+        if (date.includes("T")){
+            return date
+        }else{
+            return date+"T12:00";
+        }
+    })
 }
 
 function connectToMongoose(uristring  = process.env.MONGOLAB_URI || process.env.MONGODB_URI || process.env.MONGOHQ_URL || `mongodb://localhost/development`){
@@ -101,7 +157,4 @@ function connectToMongoose(uristring  = process.env.MONGOLAB_URI || process.env.
         }
     });
 }
-const getDays =(dateA,dateB)=> msToDays(dateB-dateA);
 
-const msToDays = (val)=>val/(1000*3600*24);
-const daysFromNow = (days)=>new Date(new Date().setDate(new Date().getDate()+days))

@@ -94,7 +94,10 @@ function progressReport(saved, i, batchSize) {
         if (consoleLog){
             lastLog = i
             const someNames = [batchNames[0],batchNames[batchNames.length-1]].join("...")
+            let used = process.memoryUsage().heapUsed / 1024 / 1024;
+            used = `The script uses approximately ${Math.round(used * 100) / 100} MB`
             console.log({
+                used,
                 someNames,
                 percent,
                 estimatedTimeMinutes,
@@ -136,7 +139,7 @@ function log(toLog) {
             }
             return value;
         });
-        const fd = FileStream.appendFile(os.homedir()+'/tfinLogs/' + `${name}.log`, `\n ${message}`,(err)=>{console.log({err})});
+        const fd = FileStream.appendFile(os.homedir()+'/tfinLogs/' + `${name}.log`, `\n ${message}`,(err)=>{if (err)console.log({err})});
 
     } catch (error) {
         console.log(error);
