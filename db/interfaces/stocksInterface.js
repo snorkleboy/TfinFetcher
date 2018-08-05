@@ -58,27 +58,38 @@ class StocksInterface{
         });
     }
     checkTimeAndConnection(){
-        const FetchDetails = (stocks) => axios({
-            url: `http://worldclockapi.com/api/json/est/now`,
-            method: "GET"
-        })
+         
+        const promises = [
+            axios({
+                url: `http://worldclockapi.com/api/json/est/now`,
+                method: "GET"
+            })
+            .then(res=>{
+                if (res.status == 200){
+                    const time = new Date(res.data.currentDateTime);
+                    const dayofWeek = res.data.dayOfTheWeek;
+                    const timeZone = res.data.timeZoneName;
+                    return `starting tfin database update in 15min. current time from worldclockapi is \n${time} ${dayofWeek}  ${timeZone}\n current system time is ${new Date()}`
+                }
+            }),
+            this.checkUpdate()
+        ]
+        return Promise.all(promises)
         .then(res=>{
-            if (res.status == 200){
-                const time = new Date(res.data.currentDateTime);
-                const dayofWeek = res.data.dayOfTheWeek;
-                const timeZone = res.data.timeZoneName;
-                const message = `starting tfin database update in 15min. current time from worldclockapi is \n${time} ${dayofWeek}  ${timeZone}\n current system time is ${new Date()}`
-
-                const toField = "To:someone@txt.att.net"
-                const fromField = "From:timkharshan@hotmail.com"
-                const subjectField = "Subject: TFINUPDATE"
-                const ssmtp = "ssmtp 9253305948@txt.att.net"
-                const command = `echo ${toField}\n${fromField}\n${subjectField}\n\n${message}'| ${ssmtp} ` 
-                cmd.run(command);
-            }
+            let message = res[0]
+            const daysSince = res[1]; 
+            message +=message + `\n\n daysSince last ran:${daysSince}`
+            const toField = "To:someone@txt.att.net"
+            const fromField = "From:timkharshan@hotmail.com"
+            const subjectField = "Subject: TFINUPDATE"
+            const ssmtp = "ssmtp 9253305948@txt.att.net"
+            const command = `echo ${toField}\n${fromField}\n${subjectField}\n\n${message}'| ${ssmtp} ` 
+            cmd.run(command);
+            return time;
         })
         .catch(err=>{
-            console.log(err);
+            console.log("NO CONNECTION OR CANNOT GET DATE",err);
+            throw err;
         })
     }
 
@@ -134,13 +145,18 @@ function getLastRan(){
 function readLastRan(){
     return StockChart.find().limit(1)
     .then(docs=>{
-        const doc = docs[0]
-        const date = doc.chart[doc.chart.length-1].date
-        if (date.includes("T")){
-            return date
+        if (docs.length>0){
+            const doc = docs[0]
+            const date = doc.chart[doc.chart.length-1].date
+            if (date.includes("T")){
+                return date
+            }else{
+                return date+"T12:00";
+            }
         }else{
-            return date+"T12:00";
+            return false;
         }
+
     })
 }
 
