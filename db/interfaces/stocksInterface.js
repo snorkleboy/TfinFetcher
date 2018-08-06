@@ -69,14 +69,18 @@ class StocksInterface{
                     const time = new Date(res.data.currentDateTime);
                     const dayofWeek = res.data.dayOfTheWeek;
                     const timeZone = res.data.timeZoneName;
-                    return `starting tfin database update in 15min. current time from worldclockapi is \n${time} ${dayofWeek}  ${timeZone}\n current system time is ${new Date()}`
+                    const message =  `starting tfin database update in 15min. current time from worldclockapi is \n${time} ${dayofWeek}  ${timeZone}\n current system time is ${new Date()}`
+                    console.log({message});
+                    return {message,time}
+                
                 }
             }),
             this.checkUpdate()
         ]
         return Promise.all(promises)
         .then(res=>{
-            let message = res[0]
+            let message = res[0].message;
+            const time = res[0].time
             const daysSince = res[1]; 
             message +=message + `\n\n daysSince last ran:${daysSince}`
             const toField = "To:someone@txt.att.net"
